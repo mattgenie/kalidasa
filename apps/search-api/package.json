@@ -1,0 +1,30 @@
+{
+    "name": "@kalidasa/search-api",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "./dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsx watch src/index.ts",
+        "start": "node dist/index.js",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@kalidasa/cao-generator": "workspace:*",
+        "@kalidasa/enrichment": "workspace:*",
+        "@kalidasa/facet-libraries": "workspace:*",
+        "@kalidasa/merger": "workspace:*",
+        "@kalidasa/types": "workspace:*",
+        "dotenv": "^16.3.0",
+        "express": "^4.18.2",
+        "zod": "^3.22.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/express-serve-static-core": "^5.1.1",
+        "@types/node": "^20.10.0",
+        "tsx": "^4.7.0",
+        "typescript": "^5.3.0"
+    }
+}
