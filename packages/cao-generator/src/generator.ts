@@ -1,7 +1,9 @@
 /**
  * CAO Generator
  * 
- * Uses Gemini with native grounding to generate structured candidates.
+ * Uses Gemini with adaptive grounding based on query temporality.
+ * - Current/temporal queries: Use google_search grounding
+ * - Evergreen queries: Use model knowledge (faster, no grounding)
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -9,10 +11,12 @@ import type { KalidasaSearchRequest, RawCAO, Domain } from '@kalidasa/types';
 import { FacetRegistry } from '@kalidasa/facet-libraries';
 import { buildPrompt } from './prompt-builder.js';
 import { parseCAO } from './parser.js';
+import { classifyTemporality, type TemporalityResult } from './temporality.js';
 
 export interface CAOGeneratorOptions {
     apiKey?: string;
     model?: string;
+    modelUngrounded?: string;  // Model for evergreen queries
     temperature?: number;
     maxCandidates?: number;
 }
@@ -21,6 +25,7 @@ export class CAOGenerator {
     private genAI: GoogleGenerativeAI;
     private facetRegistry: FacetRegistry;
     private model: string;
+    private modelUngrounded: string;
     private temperature: number;
     private maxCandidates: number;
 
@@ -33,6 +38,7 @@ export class CAOGenerator {
         this.genAI = new GoogleGenerativeAI(apiKey);
         this.facetRegistry = new FacetRegistry();
         this.model = options.model || 'gemini-2.5-flash';
+        this.modelUngrounded = options.modelUngrounded || 'gemini-2.0-flash';
         this.temperature = options.temperature || 0.7;
         this.maxCandidates = options.maxCandidates || 10;
     }
@@ -44,27 +50,28 @@ export class CAOGenerator {
         cao: RawCAO;
         latencyMs: number;
         groundingSources?: string[];
+        temporality?: TemporalityResult;
     }> {
         const startTime = Date.now();
 
-        // Build prompt with facets
+        // Classify query temporality to decide grounding strategy
+        const temporality = classifyTemporality(
+            request.query.text,
+            request.query.domain
+        );
+
+        console.log(
+            `[CAOGenerator] Temporality: ${temporality.type} (${temporality.confidence}) - ` +
+            `${temporality.useGrounding ? 'using grounding' : 'no grounding'}`
+        );
+
+        // Build prompt
         const prompt = buildPrompt(request, this.facetRegistry, this.maxCandidates);
 
-        // Get Gemini model with grounding
-        const model = this.genAI.getGenerativeModel({
-            model: this.model,
-            generationConfig: {
-                // Note: responseMimeType not supported with google_search in 2.5-flash
-                temperature: this.temperature,
-            },
-            // Enable native grounding (google_search for Gemini 3)
-            tools: [
-                {
-                    // @ts-expect-error - Gemini SDK types may not include this yet
-                    google_search: {},
-                },
-            ],
-        });
+        // Get appropriate model based on temporality
+        const model = temporality.useGrounding
+            ? this.getGroundedModel()
+            : this.getUngroundedModel();
 
         try {
             const result = await model.generateContent(prompt);
@@ -81,11 +88,43 @@ export class CAOGenerator {
                 cao,
                 latencyMs: Date.now() - startTime,
                 groundingSources,
+                temporality,
             };
         } catch (error) {
             console.error('[CAOGenerator] Error generating CAO:', error);
             throw error;
         }
+    }
+
+    /**
+     * Get model with grounding enabled (for current/temporal queries)
+     */
+    private getGroundedModel() {
+        return this.genAI.getGenerativeModel({
+            model: this.model,
+            generationConfig: {
+                temperature: this.temperature,
+            },
+            tools: [
+                {
+                    // @ts-expect-error - Gemini SDK types may not include this yet
+                    google_search: {},
+                },
+            ],
+        });
+    }
+
+    /**
+     * Get model without grounding (for evergreen queries - faster)
+     */
+    private getUngroundedModel() {
+        return this.genAI.getGenerativeModel({
+            model: this.modelUngrounded,
+            generationConfig: {
+                responseMimeType: 'application/json',
+                temperature: this.temperature,
+            },
+        });
     }
 
     /**

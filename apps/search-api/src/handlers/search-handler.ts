@@ -5,6 +5,7 @@
  * 1. CAO Generation (Gemini with grounding)
  * 2. Parallel Enrichment
  * 3. Merging & Formatting
+ * 4. Cache results for prior search retrieval
  */
 
 import type { Request, Response } from 'express';
@@ -12,6 +13,7 @@ import type { KalidasaSearchRequest, KalidasaSearchResponse } from '@kalidasa/ty
 import { CAOGenerator } from '@kalidasa/cao-generator';
 import { EnrichmentExecutor, createHookRegistry } from '@kalidasa/enrichment';
 import { Merger } from '@kalidasa/merger';
+import { searchCache } from '../cache.js';
 
 // Initialize services (singleton pattern)
 let caoGenerator: CAOGenerator | null = null;
@@ -47,6 +49,9 @@ export async function searchHandler(req: Request, res: Response): Promise<void> 
         console.log(`[${requestId}] Stage 1: Generating CAO with Gemini...`);
         const caoResult = await caoGenerator!.generate(searchRequest);
         console.log(`[${requestId}] ✓ CAO generated: ${caoResult.cao.candidates.length} candidates (${caoResult.latencyMs}ms)`);
+        if (caoResult.temporality) {
+            console.log(`[${requestId}]   Temporality: ${caoResult.temporality.type} (${caoResult.temporality.useGrounding ? 'grounded' : 'ungrounded'})`);
+        }
 
         // Stage 2: Parallel Enrichment
         console.log(`[${requestId}] Stage 2: Enriching candidates...`);
@@ -87,8 +92,19 @@ export async function searchHandler(req: Request, res: Response): Promise<void> 
                     hookSuccessRates: enrichmentResult.stats.hookSuccessRates,
                 },
                 groundingSources: caoResult.groundingSources,
+                temporality: caoResult.temporality,
             };
         }
+
+        // Cache results for prior search retrieval
+        searchCache.set(
+            requestId,
+            searchRequest.query.text,
+            searchRequest.query.domain,
+            mergeResult.results,
+            mergeResult.answerBundle,
+            mergeResult.renderHints
+        );
 
         const totalMs = Date.now() - startTime;
         console.log(`[${requestId}] ✅ Search complete: ${response.results.length} results (${totalMs}ms total)`);

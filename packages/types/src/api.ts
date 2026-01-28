@@ -106,4 +106,11 @@ export interface SearchDebug {
         hookSuccessRates: Record<string, number>;
     };
     groundingSources?: string[];
+    temporality?: {
+        type: 'current' | 'evergreen' | 'historical';
+        confidence: 'high' | 'medium' | 'low';
+        useGrounding: boolean;
+        reason: string;
+    };
+    error?: string;
 }

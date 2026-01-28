@@ -7,3 +7,5 @@
 export { CAOGenerator } from './generator.js';
 export { buildPrompt } from './prompt-builder.js';
 export { parseCAO } from './parser.js';
+export { classifyTemporality, needsGrounding, type TemporalityResult, type TemporalityType } from './temporality.js';
+
