@@ -29,11 +29,11 @@ function getIdentifierSpec(domain: string): string {
 function getDefaultHooks(domain: string): string[] {
     const hooks: Record<string, string[]> = {
         places: ['google_places'],
-        movies: ['tmdb', 'wikipedia'],
-        music: ['apple_music'],
-        articles: ['newsapi'],
+        movies: ['tmdb'],
+        music: ['apple_music', 'musicbrainz'],
+        articles: ['newsapi', 'wikipedia'],
         videos: ['youtube'],
-        events: ['eventbrite', 'ticketmaster'],
+        events: ['ticketmaster', 'eventbrite'],
         general: ['wikipedia'],
     };
     return hooks[domain] || hooks.general;

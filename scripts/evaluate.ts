@@ -238,8 +238,8 @@ async function runEvaluation(): Promise<void> {
             const startTime = Date.now();
             const response = await runSearch(query);
             const latencyMs = Date.now() - startTime;
-
-            const verifiedCount = response.results.filter(r => r.verified).length;
+            // Check verified in enrichment (where API puts it)
+            const verifiedCount = response.results.filter(r => r.enrichment?.verified === true).length;
 
             console.log(`   → ${response.results.length} results, ${verifiedCount} verified (${latencyMs}ms)`);
 
@@ -258,7 +258,7 @@ async function runEvaluation(): Promise<void> {
                 domain: query.domain,
                 resultCount: response.results.length,
                 verifiedCount,
-                verificationRate: verifiedCount / response.results.length,
+                verificationRate: response.results.length > 0 ? verifiedCount / response.results.length : 0,
                 latencyMs,
                 llmScore: scores,
                 issues,

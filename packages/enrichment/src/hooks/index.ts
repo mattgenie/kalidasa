@@ -13,6 +13,7 @@ import { OMDbHook } from './omdb.js';
 import { YouTubeHook } from './youtube.js';
 import { VimeoHook } from './vimeo.js';
 import { AppleMusicHook } from './apple-music.js';
+import { MusicBrainzHook } from './musicbrainz.js';
 import { EventbriteHook } from './eventbrite.js';
 import { TicketmasterHook } from './ticketmaster.js';
 import { NewsAPIHook } from './newsapi.js';
@@ -36,6 +37,7 @@ export function createHookRegistry(): HookRegistry {
 
     // Music
     registry.register(new AppleMusicHook());
+    registry.register(new MusicBrainzHook());
 
     // Events
     registry.register(new EventbriteHook());
@@ -63,9 +65,11 @@ export { OMDbHook } from './omdb.js';
 export { YouTubeHook } from './youtube.js';
 export { VimeoHook } from './vimeo.js';
 export { AppleMusicHook } from './apple-music.js';
+export { MusicBrainzHook } from './musicbrainz.js';
 export { EventbriteHook } from './eventbrite.js';
 export { TicketmasterHook } from './ticketmaster.js';
 export { NewsAPIHook } from './newsapi.js';
 export { DiffbotHook } from './diffbot.js';
 export { NewsMeshHook } from './newsmesh.js';
 export { WikipediaHook } from './wikipedia.js';
+

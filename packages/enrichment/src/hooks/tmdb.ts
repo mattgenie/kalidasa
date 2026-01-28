@@ -18,7 +18,6 @@ export class TMDBHook implements EnrichmentHook {
     priority = 100;
 
     private lbBaseUrl: string;
-    private tmdbUrl = 'https://api.themoviedb.org/3/search/multi';
 
     constructor(lbBaseUrl?: string) {
         this.lbBaseUrl = lbBaseUrl || process.env.TMDB_LB_BASE_URL || 'http://54.147.132.243:8080';
@@ -29,10 +28,17 @@ export class TMDBHook implements EnrichmentHook {
         context: EnrichmentContext
     ): Promise<EnrichmentData | null> {
         const query = candidate.search_hint || candidate.name;
+        const year = candidate.identifiers?.year;
 
         try {
-            const serviceUrl = encodeURIComponent(`${this.tmdbUrl}?query=${encodeURIComponent(query)}`);
-            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${serviceUrl}&provider=tmdb`;
+            // Build TMDB search URL
+            let tmdbUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
+            if (year) {
+                tmdbUrl += `&year=${year}`;
+            }
+
+            // Route through load balancer
+            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(tmdbUrl)}&provider=tmdb`;
 
             const response = await fetch(url);
 
@@ -45,39 +51,55 @@ export class TMDBHook implements EnrichmentHook {
             const result = data.results?.[0];
 
             if (!result) {
+                // Try multi-search as fallback
+                const multiUrl = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}`;
+                const multiProxyUrl = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(multiUrl)}&provider=tmdb`;
+                const multiResponse = await fetch(multiProxyUrl);
+
+                if (multiResponse.ok) {
+                    const multiData = await multiResponse.json();
+                    const multiResult = multiData.results?.[0];
+                    if (multiResult) {
+                        return this.formatResult(multiResult);
+                    }
+                }
                 return null;
             }
 
-            return {
-                verified: true,
-                source: 'tmdb',
-                canonical: {
-                    type: 'tmdb_id',
-                    value: String(result.id),
-                },
-                movies: {
-                    rating: result.vote_average,
-                    year: result.release_date?.substring(0, 4) || result.first_air_date?.substring(0, 4),
-                    genres: result.genre_ids,
-                    posterUrl: result.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
-                        : undefined,
-                    backdropUrl: result.backdrop_path
-                        ? `https://image.tmdb.org/t/p/w1280${result.backdrop_path}`
-                        : undefined,
-                    overview: result.overview,
-                },
-            };
+            return this.formatResult(result);
         } catch (error) {
             console.error('[TMDBHook] Error:', error);
             return null;
         }
     }
 
+    private formatResult(result: any): EnrichmentData {
+        return {
+            verified: true,
+            source: 'tmdb',
+            canonical: {
+                type: 'tmdb_id',
+                value: String(result.id),
+            },
+            movies: {
+                rating: result.vote_average,
+                year: (result.release_date || result.first_air_date)?.substring(0, 4),
+                genres: result.genre_ids?.map((id: number) => String(id)),
+                posterUrl: result.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+                    : undefined,
+                backdropUrl: result.backdrop_path
+                    ? `https://image.tmdb.org/t/p/w1280${result.backdrop_path}`
+                    : undefined,
+                overview: result.overview,
+            },
+        };
+    }
+
     async healthCheck(): Promise<boolean> {
         try {
-            const serviceUrl = encodeURIComponent(`${this.tmdbUrl}?query=test`);
-            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${serviceUrl}&provider=tmdb`;
+            const testUrl = 'https://api.themoviedb.org/3/search/movie?query=test';
+            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(testUrl)}&provider=tmdb`;
             const response = await fetch(url);
             return response.ok;
         } catch {
