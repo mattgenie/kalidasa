@@ -32,9 +32,9 @@ export class CAOGenerator {
 
         this.genAI = new GoogleGenerativeAI(apiKey);
         this.facetRegistry = new FacetRegistry();
-        this.model = options.model || 'gemini-3-flash-preview';
+        this.model = options.model || 'gemini-2.5-flash';
         this.temperature = options.temperature || 0.7;
-        this.maxCandidates = options.maxCandidates || 18;
+        this.maxCandidates = options.maxCandidates || 10;
     }
 
     /**
@@ -54,7 +54,7 @@ export class CAOGenerator {
         const model = this.genAI.getGenerativeModel({
             model: this.model,
             generationConfig: {
-                responseMimeType: 'application/json',
+                // Note: responseMimeType not supported with google_search in 2.5-flash
                 temperature: this.temperature,
             },
             // Enable native grounding (google_search for Gemini 3)

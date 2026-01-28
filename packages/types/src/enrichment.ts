@@ -31,15 +31,17 @@ export interface RawCAOCandidate {
     type: 'entity' | 'article' | 'video' | 'track' | 'event';
     /** Summary description */
     summary: string;
-    /** Reasoning from Gemini */
-    reasoning: {
+    /** Domain-specific identifiers for unique identification */
+    identifiers?: Record<string, string | number>;
+    /** Reasoning from Gemini (optional in leaner schema) */
+    reasoning?: {
         whyRecommended: string;
         pros: string[];
         cons: string[];
     };
-    /** Personalization notes */
+    /** Personalization notes (supports both simple and complex formats) */
     personalization?: {
-        forUser?: { text: string; basis: string; confidence: string };
+        forUser?: string | { text: string; basis: string; confidence: string };
         forGroup?: Array<{ memberId: string; memberName: string; note: { text: string; basis: string; confidence: string } }>;
         groupNotes?: string[];
     };

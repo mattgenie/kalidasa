@@ -75,9 +75,9 @@ export class Merger {
                 }
                 : undefined,
             reasoning: {
-                whyRecommended: candidate.reasoning.whyRecommended,
-                pros: candidate.reasoning.pros,
-                cons: candidate.reasoning.cons,
+                whyRecommended: candidate.reasoning?.whyRecommended || '',
+                pros: candidate.reasoning?.pros || [],
+                cons: candidate.reasoning?.cons || [],
             },
             personalization: {
                 forUser: candidate.personalization?.forUser as any,

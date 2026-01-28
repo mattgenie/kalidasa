@@ -2,192 +2,106 @@
  * Prompt Builder
  * 
  * Builds structured prompts for CAO generation.
+ * Optimized for latency with domain-specific identifiers.
  */
 
 import type { KalidasaSearchRequest } from '@kalidasa/types';
 import type { FacetRegistry } from '@kalidasa/facet-libraries';
 
 /**
- * Build the CAO generation prompt
+ * Get domain-specific identifier requirements
  */
-export function buildPrompt(
-    request: KalidasaSearchRequest,
-    facetRegistry: FacetRegistry,
-    maxCandidates: number
-): string {
-    const domainFacets = getDomainFacets(request.query.domain, facetRegistry);
-    const capsuleJson = JSON.stringify(request.capsule, null, 2);
-    const logisticsJson = JSON.stringify(request.logistics, null, 2);
-    const conversationContext = formatConversationContext(request.conversation);
-    const excludesText = request.query.excludes?.length
-        ? `\n\nEXCLUDE these from results:\n${request.query.excludes.map(e => `- ${e}`).join('\n')}`
-        : '';
-
-    return `# Kalidasa Search
-
-You are an expert curator generating personalized recommendations. Use web grounding to find real, current options.
-
-## Query
-"${request.query.text}"
-
-## Domain
-${request.query.domain}${request.query.intent ? ` (Intent: ${request.query.intent})` : ''}${excludesText}
-
-## Personalization Capsule
-Who is searching and their preferences:
-${capsuleJson}
-
-## Logistics Context
-When, where, and practical constraints:
-${logisticsJson}
-${conversationContext}
-## Available Facets
-Consider these quality signals when recommending:
-${domainFacets}
-
-## Task
-Generate ${maxCandidates} high-quality recommendations that match this query.
-
-IMPORTANT:
-1. Use web grounding to find REAL, CURRENTLY EXISTING options
-2. Include specific, verifiable details (exact names, locations)
-3. Tailor recommendations to the personalization capsule
-4. Consider all logistics constraints
-5. Each recommendation must specify which enrichment_hooks to call
-
-## Enrichment Hooks
-For each result, specify which APIs should verify it:
-- "google_places" - for restaurants, bars, cafes, venues
-- "tmdb" - for movies and TV shows
-- "omdb" - alternative for movies (use as backup to tmdb)
-- "apple_music" - for songs and artists
-- "youtube" - for videos
-- "vimeo" - for videos (use as backup to youtube)
-- "eventbrite" - for events and tickets
-- "ticketmaster" - for concerts and shows
-- "newsapi" - for news articles
-- "wikipedia" - for general knowledge and people
-
-## Output Format
-Return valid JSON:
-{
-  "candidates": [
-    {
-      "name": "Exact, specific name",
-      "type": "entity",
-      "summary": "2-3 sentence description explaining what this is and why it's relevant",
-      "reasoning": {
-        "whyRecommended": "Why this specifically matches the query and user preferences",
-        "pros": ["Specific positive aspect 1", "Specific positive aspect 2"],
-        "cons": ["Honest limitation or caveat"]
-      },
-      "personalization": {
-        "forGroup": [
-          {
-            "memberId": "member-id-from-capsule",
-            "memberName": "Member Name",
-            "note": {
-              "text": "Why this is good for this specific member",
-              "basis": "capsule",
-              "confidence": "high"
-            }
-          }
-        ],
-        "groupNotes": ["How this satisfies the group as a whole"]
-      },
-      "enrichment_hooks": ["google_places"],
-      "search_hint": "Specific search query to find this in external APIs",
-      "facetScores": {
-        "fit.budget": 0.9,
-        "experience.vibe": 0.8
-      }
-    }
-  ],
-  "answerBundle": {
-    "headline": "Brief summary of results, e.g., '${maxCandidates} Italian restaurants in SoHo'",
-    "summary": "2-3 sentences describing what was found and key themes",
-    "facetsApplied": ["fit.budget", "experience.vibe"]
-  },
-  "renderHints": {
-    "componentType": "search_grid",
-    "itemRenderer": "${getItemRenderer(request.query.domain)}"
-  }
-}`;
+function getIdentifierSpec(domain: string): string {
+  const specs: Record<string, string> = {
+    places: '"identifiers": {"address": "...", "city": "..."}',
+    movies: '"identifiers": {"year": 2024, "director": "..."}',
+    music: '"identifiers": {"artist": "...", "album": "..."}',
+    articles: '"identifiers": {"source": "...", "date": "YYYY-MM-DD", "url": "..."}',
+    videos: '"identifiers": {"channel": "...", "url": "..."}',
+    events: '"identifiers": {"venue": "...", "date": "YYYY-MM-DD", "city": "..."}',
+    general: '"identifiers": {"wikipedia_title": "..."}',
+  };
+  return specs[domain] || specs.general;
 }
 
 /**
- * Get facets formatted for the prompt
+ * Build the CAO generation prompt
  */
-function getDomainFacets(domain: string, registry: FacetRegistry): string {
-    // Map API domains to facet library domains
-    const domainMapping: Record<string, string[]> = {
-        places: ['places'],
-        movies: ['movies-tv'],
-        music: ['music'],
-        events: ['temporal'],
-        videos: ['videos'],
-        articles: ['articles', 'knowledge'],
-        general: ['knowledge', 'authority'],
-    };
+export function buildPrompt(
+  request: KalidasaSearchRequest,
+  facetRegistry: FacetRegistry,
+  maxCandidates: number
+): string {
+  const capsuleJson = JSON.stringify(request.capsule, null, 2);
+  const logisticsJson = JSON.stringify(request.logistics, null, 2);
+  const conversationContext = formatConversationContext(request.conversation);
+  const excludesText = request.query.excludes?.length
+    ? `\nEXCLUDE: ${request.query.excludes.join(', ')}`
+    : '';
+  const identifierSpec = getIdentifierSpec(request.query.domain);
 
-    const facetDomains = domainMapping[domain] || ['knowledge'];
-    const facets = facetDomains.flatMap(d => registry.getFacetsForDomain(d));
+  return `# Kalidasa Search
 
-    if (facets.length === 0) {
-        return 'No specific facets defined for this domain.';
+You are a curator generating personalized recommendations. Use web grounding to find real, current options.
+
+## Query: "${request.query.text}"
+## Domain: ${request.query.domain}${excludesText}
+
+## User Preferences
+${capsuleJson}
+
+## Context
+${logisticsJson}${conversationContext}
+
+## Task
+Generate ${maxCandidates} high-quality recommendations. Use web grounding for real, verifiable results.
+
+For personalization: Think about why each result matches the user's preferences. Include personalization notes in output.
+
+## Enrichment Hooks (specify which API verifies each result)
+- google_places (restaurants/venues) | tmdb/omdb (movies) | apple_music (songs)
+- youtube/vimeo (videos) | eventbrite/ticketmaster (events) | newsapi (articles) | wikipedia (general)
+
+## Output Format
+Return ONLY valid JSON (no markdown, no explanation):
+{
+  "candidates": [
+    {
+      "name": "Exact name",
+      ${identifierSpec},
+      "summary": "Brief description",
+      "personalization": {"forUser": "Why this is good for the user based on their preferences"},
+      "enrichment_hooks": ["hook_name"],
+      "search_hint": "search query for enrichment API"
     }
-
-    return facets
-        .slice(0, 15) // Limit to avoid prompt bloat
-        .map(f => `- ${f.id}: ${f.label}`)
-        .join('\n');
+  ],
+  "answerBundle": {"headline": "N results found", "summary": "Brief summary of what was found"}
+}`;
 }
 
 /**
  * Format conversation context for the prompt
  */
 function formatConversationContext(
-    conversation?: KalidasaSearchRequest['conversation']
+  conversation?: KalidasaSearchRequest['conversation']
 ): string {
-    if (!conversation) return '';
+  if (!conversation) return '';
 
-    const parts: string[] = [];
+  const parts: string[] = [];
 
-    if (conversation.recentMessages?.length) {
-        const messages = conversation.recentMessages
-            .slice(-5) // Last 5 messages
-            .map(m => `${m.speaker}: ${m.content}`)
-            .join('\n');
-        parts.push(`\n## Recent Conversation\n${messages}`);
-    }
+  if (conversation.recentMessages?.length) {
+    const messages = conversation.recentMessages
+      .slice(-3) // Last 3 messages
+      .map(m => `${m.speaker}: ${m.content}`)
+      .join('\n');
+    parts.push(`\n## Recent Conversation\n${messages}`);
+  }
 
-    if (conversation.previousSearches?.length) {
-        parts.push(
-            `\n## Previous Searches This Session\n${conversation.previousSearches.map(s => `- ${s}`).join('\n')}`
-        );
-    }
+  if (conversation.previousSearches?.length) {
+    parts.push(
+      `\n## Previous Searches\n${conversation.previousSearches.slice(-3).map(s => `- ${s}`).join('\n')}`
+    );
+  }
 
-    if (conversation.corrections?.length) {
-        parts.push(
-            `\n## User Corrections (avoid repeating these issues)\n${conversation.corrections.map(c => `- ${c}`).join('\n')}`
-        );
-    }
-
-    return parts.join('\n');
-}
-
-/**
- * Get the appropriate item renderer for a domain
- */
-function getItemRenderer(domain: string): string {
-    const renderers: Record<string, string> = {
-        places: 'place_card',
-        movies: 'movie_card',
-        music: 'music_card',
-        events: 'event_card',
-        videos: 'video_card',
-        articles: 'article_card',
-        general: 'generic_card',
-    };
-    return renderers[domain] || 'generic_card';
+  return parts.join('\n');
 }

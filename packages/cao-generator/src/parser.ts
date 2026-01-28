@@ -85,22 +85,41 @@ function normalizeCandidate(candidate: any): RawCAOCandidate | null {
         return null;
     }
 
+    // Handle both old and new personalization formats
+    let personalization = undefined;
+    if (candidate.personalization) {
+        if (typeof candidate.personalization === 'string') {
+            // New simple format: just a string
+            personalization = { forUser: candidate.personalization };
+        } else if (candidate.personalization.forUser) {
+            // New format with forUser string
+            personalization = {
+                forUser: candidate.personalization.forUser,
+                forGroup: candidate.personalization.forGroup,
+                groupNotes: candidate.personalization.groupNotes,
+            };
+        } else {
+            // Old format with nested structure
+            personalization = {
+                forUser: candidate.personalization.forUser,
+                forGroup: candidate.personalization.forGroup,
+                groupNotes: candidate.personalization.groupNotes,
+            };
+        }
+    }
+
     return {
         name: candidate.name.trim(),
         type: candidate.type || 'entity',
         summary: candidate.summary || '',
-        reasoning: {
+        // New identifiers field for unique identification
+        identifiers: candidate.identifiers,
+        reasoning: candidate.reasoning ? {
             whyRecommended: candidate.reasoning?.whyRecommended || '',
             pros: Array.isArray(candidate.reasoning?.pros) ? candidate.reasoning.pros : [],
             cons: Array.isArray(candidate.reasoning?.cons) ? candidate.reasoning.cons : [],
-        },
-        personalization: candidate.personalization
-            ? {
-                forUser: candidate.personalization.forUser,
-                forGroup: candidate.personalization.forGroup,
-                groupNotes: candidate.personalization.groupNotes,
-            }
-            : undefined,
+        } : undefined,
+        personalization,
         enrichment_hooks: Array.isArray(candidate.enrichment_hooks)
             ? candidate.enrichment_hooks
             : [],
