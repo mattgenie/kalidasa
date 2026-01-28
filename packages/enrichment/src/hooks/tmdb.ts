@@ -31,36 +31,48 @@ export class TMDBHook implements EnrichmentHook {
         const year = candidate.identifiers?.year;
 
         try {
-            // Build TMDB search URL
-            let tmdbUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
+            // Build TMDB search URL - DON'T encode the query here
+            // URL.searchParams.set will encode the entire service_url once
+            let tmdbUrl = `https://api.themoviedb.org/3/search/movie?query=${query.replace(/ /g, '+')}`;
             if (year) {
                 tmdbUrl += `&year=${year}`;
             }
 
-            // Route through load balancer
-            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(tmdbUrl)}&provider=tmdb`;
+            // Use URL object - it will encode service_url properly
+            const url = new URL(`${this.lbBaseUrl}/api/v1/load-balancer/proxy`);
+            url.searchParams.set('service_url', tmdbUrl);
+            url.searchParams.set('provider', 'tmdb');
+
+            console.log(`[TMDBHook] URL: ${url.toString()}`);
 
             const response = await fetch(url);
 
             if (!response.ok) {
-                console.warn(`[TMDBHook] API error: ${response.status}`);
+                console.warn(`[TMDBHook] API error for ${candidate.name}: ${response.status}`);
                 return null;
             }
 
             const data = await response.json();
-            const result = data.results?.[0];
+            // LB wraps: {success: true, data: {page, results: [...]}}
+            const results = data.data?.results || data.results || [];
+            console.log(`[TMDBHook] Response for ${candidate.name}: success=${data.success}, resultsCount=${results.length}`);
+
+            const result = results[0];
 
             if (!result) {
                 // Try multi-search as fallback
-                const multiUrl = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}`;
-                const multiProxyUrl = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(multiUrl)}&provider=tmdb`;
-                const multiResponse = await fetch(multiProxyUrl);
+                const multiTmdbUrl = `https://api.themoviedb.org/3/search/multi?query=${query.replace(/ /g, '+')}`;
+                const multiUrl = new URL(`${this.lbBaseUrl}/api/v1/load-balancer/proxy`);
+                multiUrl.searchParams.set('service_url', multiTmdbUrl);
+                multiUrl.searchParams.set('provider', 'tmdb');
+
+                const multiResponse = await fetch(multiUrl);
 
                 if (multiResponse.ok) {
                     const multiData = await multiResponse.json();
-                    const multiResult = multiData.results?.[0];
-                    if (multiResult) {
-                        return this.formatResult(multiResult);
+                    const multiResults = multiData.data?.results || multiData.results || [];
+                    if (multiResults[0]) {
+                        return this.formatResult(multiResults[0]);
                     }
                 }
                 return null;
@@ -98,8 +110,10 @@ export class TMDBHook implements EnrichmentHook {
 
     async healthCheck(): Promise<boolean> {
         try {
-            const testUrl = 'https://api.themoviedb.org/3/search/movie?query=test';
-            const url = `${this.lbBaseUrl}/api/v1/load-balancer/proxy?service_url=${encodeURIComponent(testUrl)}&provider=tmdb`;
+            const testTmdbUrl = 'https://api.themoviedb.org/3/search/movie?query=test';
+            const url = new URL(`${this.lbBaseUrl}/api/v1/load-balancer/proxy`);
+            url.searchParams.set('service_url', testTmdbUrl);
+            url.searchParams.set('provider', 'tmdb');
             const response = await fetch(url);
             return response.ok;
         } catch {

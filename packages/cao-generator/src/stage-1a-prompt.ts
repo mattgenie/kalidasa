@@ -52,6 +52,11 @@ export function buildStage1aPrompt(
         ? `\nEXCLUDE: ${request.query.excludes.join(', ')}`
         : '';
 
+    // Domain-specific search hint guidance
+    const searchHintGuidance = request.query.domain === 'movies'
+        ? '"search_hint": "movie_title year" (e.g., "Brazil 1985", "Akira 1988") - just title and year, no extra words'
+        : '"search_hint": "search query for external API"';
+
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${request.query.domain}${excludesText}
 Location: ${request.logistics.searchLocation?.city || 'any'}
@@ -61,7 +66,7 @@ Return ONLY JSON array - no explanation:
   {
     "name": "exact name",
     "identifiers": ${identifierSpec},
-    "search_hint": "search query for external API",
+    ${searchHintGuidance},
     "enrichment_hooks": ${JSON.stringify(defaultHooks)}
   }
 ]`;

@@ -99,7 +99,7 @@ export class TwoStageGenerator {
         const parallelStart = Date.now();
         const [enrichResult, personalization] = await Promise.all([
             enrichFn(rawCandidates, {
-                timeout: 2000,
+                timeout: 5000,  // 5s timeout for external APIs
                 requestId: `two-stage-${Date.now()}`,
                 searchLocation: request.logistics.searchLocation,
             }),

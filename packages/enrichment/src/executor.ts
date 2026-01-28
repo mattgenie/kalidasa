@@ -88,7 +88,10 @@ export class EnrichmentExecutor {
     ): Promise<EnrichedCandidate> {
         const hooksToTry = candidate.enrichment_hooks || [];
 
+        console.log(`[Executor] Enriching "${candidate.name}" with hooks: [${hooksToTry.join(', ')}]`);
+
         if (hooksToTry.length === 0) {
+            console.log(`[Executor] No hooks specified for "${candidate.name}"`);
             return { ...candidate, verified: false };
         }
 
