@@ -21,8 +21,7 @@ export class YouTubeHook implements EnrichmentHook {
     private baseUrl = 'https://www.googleapis.com/youtube/v3';
 
     constructor(apiKey?: string) {
-        // Uses same Google API key as Places
-        this.apiKey = apiKey || process.env.GOOGLE_PLACES_API_KEY || '';
+        this.apiKey = apiKey || process.env.YOUTUBE_API_KEY || '';
     }
 
     async enrich(
