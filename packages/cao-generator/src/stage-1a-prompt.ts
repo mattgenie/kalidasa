@@ -53,8 +53,9 @@ export function buildStage1aPrompt(
         : '';
 
     // Domain-specific search hint guidance
+    // For movies: don't include year in search_hint - it's passed separately via identifiers.year
     const searchHintGuidance = request.query.domain === 'movies'
-        ? '"search_hint": "movie_title year" (e.g., "Brazil 1985", "Akira 1988") - just title and year, no extra words'
+        ? '"search_hint": "exact movie title only" (e.g., "Amélie", "The 400 Blows") - no year, no extra words'
         : '"search_hint": "search query for external API"';
 
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"

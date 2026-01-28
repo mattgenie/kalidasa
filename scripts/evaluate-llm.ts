@@ -175,7 +175,7 @@ async function evaluateResults(
 
     const userPrefs = JSON.stringify(SAMPLE_CAPSULE.members[0].preferences);
 
-    const prompt = `Evaluate search results quality.
+    const prompt = `Evaluate search results quality. IMPORTANT: Evaluate RELATIVE TO THE QUERY, not the user's general preferences.
 
 Query: "${query}"
 Domain: ${domain}
@@ -184,12 +184,18 @@ User preferences: ${userPrefs}
 Results (first 5):
 ${resultsJson}
 
+SCORING GUIDELINES:
+- RELEVANCE: Do results match the QUERY INTENT? If user searches for "Italian restaurants", Italian results are relevant even if their preferences say Thai.
+- DIVERSITY: Within the query constraints, is there variety? (different price points, vibes, styles, subgenres)
+- PERSONALIZATION: Do the notes acknowledge both query fit AND user preference alignment/tension?
+- OVERALL: Holistic quality considering the above
+
 Score 1-5 and list issues:
 {
   "scores": {
-    "relevance": <1-5>,      // Results match query intent?
-    "diversity": <1-5>,      // Good variety, not repetitive?
-    "personalization": <1-5>,// Notes reference user's actual preferences?
+    "relevance": <1-5>,
+    "diversity": <1-5>,
+    "personalization": <1-5>,
     "overall": <1-5>
   },
   "issues": ["list problems found"]
