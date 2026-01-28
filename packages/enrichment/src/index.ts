@@ -6,6 +6,7 @@
 
 export { HookRegistry } from './registry.js';
 export { EnrichmentExecutor } from './executor.js';
+export { StreamingEnricher } from './streaming-enricher.js';
 export { createHookRegistry } from './hooks/index.js';
 
 // Re-export hook implementations for direct access if needed
@@ -21,3 +22,4 @@ export { NewsAPIHook } from './hooks/newsapi.js';
 export { DiffbotHook } from './hooks/diffbot.js';
 export { NewsMeshHook } from './hooks/newsmesh.js';
 export { WikipediaHook } from './hooks/wikipedia.js';
+

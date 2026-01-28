@@ -20,6 +20,9 @@ importers:
 
   apps/search-api:
     dependencies:
+      '@google/generative-ai':
+        specifier: ^0.21.0
+        version: 0.21.0
       '@kalidasa/cao-generator':
         specifier: workspace:*
         version: link:../../packages/cao-generator
