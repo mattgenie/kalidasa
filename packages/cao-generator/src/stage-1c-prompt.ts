@@ -24,13 +24,18 @@ export function buildStage1cPrompt(
 User: ${userName}
 Preferences: ${prefs}
 
-For each item, write one sentence why it's good for ${userName}:
-${candidateNames}
+For each item, write WHY it fits or doesn't fit ${userName}'s preferences.
+- Be specific: reference actual preferences (cuisines, genres, vibes, etc.)
+- Vary your phrasing: don't start every note the same way
+- Include both strengths AND potential concerns when relevant
+- Prioritize matches with rarer/niche interests - those are more valuable than common ones
+
+Items: ${candidateNames}
 
 Return ONLY JSON:
 {
-  "personalizations": {"ItemName": {"forUser": "why good for ${userName}"}},
-  "answerBundle": {"headline": "${candidates.length} results", "summary": "Brief summary"}
+  "personalizations": {"ItemName": {"forUser": "specific fit/challenge for ${userName}"}},
+  "answerBundle": {"headline": "${candidates.length} for ${userName}", "summary": "Brief synthesis"}
 }`;
 }
 

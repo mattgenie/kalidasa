@@ -61,6 +61,8 @@ export function buildStage1aPrompt(
 Domain: ${request.query.domain}${excludesText}
 Location: ${request.logistics.searchLocation?.city || 'any'}
 
+IMPORTANT: Diversify across facets - vary by style, price, vibe, era, subgenre, etc. Avoid clustering similar options.
+
 Return ONLY JSON array - no explanation:
 [
   {
