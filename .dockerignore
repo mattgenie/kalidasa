@@ -1,0 +1,41 @@
+# Dependencies (will be installed fresh in container)
+node_modules
+**/node_modules
+
+# Build artifacts (will be built fresh)
+dist
+**/dist
+.turbo
+**/.turbo
+
+# Git
+.git
+.gitignore
+
+# Environment files (secrets passed via App Runner config)
+.env
+.env.*
+!.env.example
+
+# Development files
+*.log
+*.md
+!README.md
+.DS_Store
+coverage
+.nyc_output
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+__tests__
+tests
+
+# Scripts (not needed in container)
+scripts/evaluate*.ts

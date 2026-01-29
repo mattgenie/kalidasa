@@ -157,9 +157,12 @@ export interface EventsEnrichment {
 }
 
 export interface VideosEnrichment {
+    title?: string;
+    description?: string;
     thumbnailUrl?: string;
     duration?: string;
     viewCount?: number;
+    likeCount?: number;
     publishedAt?: string;
     channelName?: string;
     channelId?: string;

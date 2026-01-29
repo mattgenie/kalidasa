@@ -16,7 +16,7 @@ function getIdentifierSpec(domain: string): string {
         movies: '{"year": 2024, "director": "director name"}',
         music: '{"artist": "artist name", "album": "album name"}',
         articles: '{"source": "publication", "date": "YYYY-MM-DD"}',
-        videos: '{"channel": "channel name", "platform": "youtube/vimeo"}',
+        videos: '{"youtube_id": "VIDEO_ID", "channel": "channel name"}',
         events: '{"venue": "venue name", "date": "YYYY-MM-DD"}',
         general: '{"category": "category"}',
     };
@@ -54,9 +54,33 @@ export function buildStage1aPrompt(
 
     // Domain-specific search hint guidance
     // For movies: don't include year in search_hint - it's passed separately via identifiers.year
-    const searchHintGuidance = request.query.domain === 'movies'
-        ? '"search_hint": "exact movie title only" (e.g., "Amélie", "The 400 Blows") - no year, no extra words'
-        : '"search_hint": "search query for external API"';
+    // For videos: search_hint not needed since we get youtube_id via grounded search
+    let searchHintGuidance = '"search_hint": "search query for external API"';
+    if (request.query.domain === 'movies') {
+        searchHintGuidance = '"search_hint": "exact movie title only" (e.g., "Amélie", "The 400 Blows") - no year, no extra words';
+    } else if (request.query.domain === 'videos') {
+        searchHintGuidance = '"search_hint": "video title" - the youtube_id in identifiers is required for verification';
+    }
+
+    // Videos domain needs special handling - grounded search for real YouTube video IDs
+    if (request.query.domain === 'videos') {
+        return `Find ${maxCandidates} YouTube videos for: "${request.query.text}"
+
+CRITICAL: You MUST use web search to find REAL YouTube videos. Extract the video ID from the YouTube URL.
+The video ID is the 11-character code after "v=" in youtube.com/watch?v=XXXXXXXXXXX
+
+IMPORTANT: Diversify across facets - vary by creator, style, length, popularity, recency.
+
+Return ONLY JSON array with REAL video IDs from your search results:
+[
+  {
+    "name": "exact video title",
+    "identifiers": {"youtube_id": "11-char video ID from URL", "channel": "channel name"},
+    "search_hint": "video title",
+    "enrichment_hooks": ["youtube"]
+  }
+]`;
+    }
 
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${request.query.domain}${excludesText}
