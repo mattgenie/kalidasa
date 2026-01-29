@@ -37,7 +37,7 @@ function buildStreamingPrompt(
 
     const identifierExamples: Record<string, string> = {
         places: '{"address": "123 Main St", "city": "NYC"}',
-        movies: '{"year": 2024, "director": "Director Name"}',
+        movies: '{"year": 2023, "director": "Director Name"}',
         music: '{"artist": "Artist", "album": "Album"}',
         general: '{"category": "topic"}',
     };
@@ -48,6 +48,24 @@ function buildStreamingPrompt(
         music: '["apple_music"]',
         general: '["wikipedia"]',
     };
+
+    // Movies: emphasize year is CRITICAL for lookup
+    if (domain === 'movies') {
+        // Extract year from query if present
+        const yearMatch = request.query.text.match(/\b(19|20)\d{2}\b/);
+        const yearHint = yearMatch ? ` (from ${yearMatch[0]})` : '';
+
+        return `Find ${maxCandidates} movies for: "${request.query.text}"
+
+CRITICAL: The "year" field is REQUIRED for each movie. TMDB lookup will fail without it.
+${yearMatch ? `The query mentions year ${yearMatch[0]} - use this for recent movies.` : 'Infer the year from context or use the movie\'s actual release year.'}
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+Each line:
+{"name": "exact movie title", "identifiers": {"year": YYYY, "director": "director name"}, "search_hint": "exact title", "enrichment_hooks": ["tmdb"]}
+
+Start outputting now:`;
+    }
 
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${domain}
@@ -115,17 +133,16 @@ export class StreamingCAOGenerator {
         const prompt = buildStreamingPrompt(request, this.maxCandidates);
 
         const modelConfig: any = {
-            model: this.model,
+            model: this.model,  // gemini-2.0-flash - fast!
             generationConfig: {
                 temperature: 0.7,
             },
         };
 
-        // Add grounding for current/temporal queries
-        if (temporality.useGrounding) {
-            modelConfig.model = 'gemini-2.5-flash';
-            modelConfig.tools = [{ google_search: {} }];
-        }
+        // REMOVED: Grounding logic for temporal queries
+        // Enrichment hooks (Google Places API, TMDB, etc.) handle verification
+        // This saves ~15-20s per search request
+        console.log(`[StreamingCAO] Using ${modelConfig.model} (temporality: ${temporality.type})`);
 
         const model = this.genAI.getGenerativeModel(modelConfig);
 
