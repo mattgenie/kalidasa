@@ -132,8 +132,8 @@ fi
 # Build Docker image
 # ----------------------------------------------------------------------------
 log_info "Building Docker image..."
-docker build -t "${ECR_REPO}:${IMAGE_TAG}" .
-log_success "Docker image built: ${ECR_REPO}:${IMAGE_TAG}"
+docker build --platform linux/amd64 -t "${ECR_REPO}:${IMAGE_TAG}" .
+log_success "Docker image built: ${ECR_REPO}:${IMAGE_TAG} (linux/amd64)"
 
 # ----------------------------------------------------------------------------
 # Push to ECR
@@ -185,20 +185,23 @@ ENV_VARS="${ENV_VARS%,}}"
 if [ "$CREATE_MODE" = true ]; then
     log_info "Creating App Runner service..."
     
-    # Create autoscaling configuration
-    AUTOSCALE_ARN=$(aws apprunner create-auto-scaling-configuration \
-        --auto-scaling-configuration-name "kalidasa-autoscale" \
-        --min-size 1 \
-        --max-size 10 \
-        --max-concurrency 80 \
+    # Create or get autoscaling configuration
+    # First try to get existing, otherwise create new
+    AUTOSCALE_ARN=$(aws apprunner list-auto-scaling-configurations \
         --region "${AWS_REGION}" \
-        --query 'AutoScalingConfiguration.AutoScalingConfigurationArn' \
-        --output text 2>/dev/null || \
-        aws apprunner describe-auto-scaling-configuration \
+        --query "AutoScalingConfigurationSummaryList[?AutoScalingConfigurationName=='kalidasa-autoscale' && Status=='active'] | sort_by(@, &AutoScalingConfigurationRevision) | [-1].AutoScalingConfigurationArn" \
+        --output text 2>/dev/null)
+    
+    if [ -z "$AUTOSCALE_ARN" ] || [ "$AUTOSCALE_ARN" = "None" ]; then
+        AUTOSCALE_ARN=$(aws apprunner create-auto-scaling-configuration \
             --auto-scaling-configuration-name "kalidasa-autoscale" \
+            --min-size 1 \
+            --max-size 10 \
+            --max-concurrency 80 \
             --region "${AWS_REGION}" \
             --query 'AutoScalingConfiguration.AutoScalingConfigurationArn' \
             --output text)
+    fi
     
     log_info "Autoscaling config ARN: ${AUTOSCALE_ARN}"
     
@@ -226,10 +229,10 @@ if [ "$CREATE_MODE" = true ]; then
         --health-check-configuration "{
             \"Protocol\": \"HTTP\",
             \"Path\": \"/health\",
-            \"Interval\": 10,
-            \"Timeout\": 5,
+            \"Interval\": 20,
+            \"Timeout\": 10,
             \"HealthyThreshold\": 1,
-            \"UnhealthyThreshold\": 5
+            \"UnhealthyThreshold\": 10
         }" \
         --auto-scaling-configuration-arn "${AUTOSCALE_ARN}" \
         --region "${AWS_REGION}"
