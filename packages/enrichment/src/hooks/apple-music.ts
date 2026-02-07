@@ -18,25 +18,28 @@ export class AppleMusicHook implements EnrichmentHook {
     priority = 100;
 
     private token: string;
+    private storefront: string;
     private baseUrl = 'https://api.music.apple.com/v1';
 
-    constructor(token?: string) {
-        this.token = token || process.env.APPLE_MUSIC_TOKEN || '';
+    constructor(token?: string, storefront?: string) {
+        // CRIT-02: Fail-fast on missing token
+        const resolvedToken = token ?? process.env.APPLE_MUSIC_TOKEN;
+        if (!resolvedToken) {
+            throw new Error('[AppleMusicHook] APPLE_MUSIC_TOKEN is required - check environment variables');
+        }
+        this.token = resolvedToken;
+        // HIGH-01: Configurable storefront (default to us if not specified)
+        this.storefront = storefront ?? process.env.APPLE_MUSIC_STOREFRONT ?? 'us';
     }
 
     async enrich(
         candidate: RawCAOCandidate,
         context: EnrichmentContext
     ): Promise<EnrichmentData | null> {
-        if (!this.token) {
-            console.warn('[AppleMusicHook] No token configured');
-            return null;
-        }
-
         const query = candidate.search_hint || candidate.name;
 
         try {
-            const url = `${this.baseUrl}/catalog/us/search?term=${encodeURIComponent(query)}&types=songs&limit=5`;
+            const url = `${this.baseUrl}/catalog/${this.storefront}/search?term=${encodeURIComponent(query)}&types=songs&limit=5`;
             const response = await fetch(url, {
                 headers: {
                     Host: 'api.music.apple.com',

@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@google/generative-ai": "^0.21.0",
+        "@kalidasa/domain-registry": "workspace:*",
         "@kalidasa/facet-libraries": "workspace:*",
         "@kalidasa/types": "workspace:*"
     },

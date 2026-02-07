@@ -20,6 +20,9 @@ export interface CAOResult {
     /** Display name */
     name: string;
 
+    /** Compact info bar, e.g. "0.3 mi · Open now · 4.5★ · $$" */
+    subheader?: string;
+
     /** 2-3 sentence description */
     summary: string;
 

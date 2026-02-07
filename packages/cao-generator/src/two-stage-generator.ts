@@ -10,7 +10,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { KalidasaSearchRequest, RawCAO, RawCAOCandidate, EnrichedCandidate } from '@kalidasa/types';
 import { buildStage1aPrompt, parseStage1aResponse, type Stage1aCandidate } from './stage-1a-prompt.js';
-import { buildStage1cPrompt, parseStage1cResponse, type Stage1cResponse } from './stage-1c-prompt.js';
+import {
+    buildSummaryPrompt, parseSummaryResponse, type SummaryResponse,
+    buildForUserPrompt, parseForUserResponse, type ForUserResponse,
+} from './stage-1c-prompt.js';
 import { classifyTemporality, type TemporalityResult } from './temporality.js';
 
 /**
@@ -95,34 +98,33 @@ export class TwoStageGenerator {
             search_hint: c.search_hint,
         }));
 
-        // Stage 1b + 1c: Run enrichment and personalization in parallel
+        // Stage 1b + 1c: Run enrichment, summary, and forUser ALL in parallel
         const parallelStart = Date.now();
-        const [enrichResult, personalization] = await Promise.all([
+        const [enrichResult, summaryResult, forUserResult] = await Promise.all([
             enrichFn(rawCandidates, {
                 timeout: 5000,  // 5s timeout for external APIs
                 requestId: `two-stage-${Date.now()}`,
                 searchLocation: request.logistics.searchLocation,
             }),
-            this.runStage1c(stage1aCandidates, request),
+            this.runSummaryPass(stage1aCandidates, request),
+            this.runForUserPass(stage1aCandidates, request),
         ]);
         const parallelMs = Date.now() - parallelStart;
 
         const enriched = enrichResult.enriched;
         console.log(`[TwoStage] Stage 1b+1c parallel: ${enriched.length} enriched (${parallelMs}ms)`);
 
-        // Merge personalization into enriched candidates
-        const finalCandidates = this.mergePersonalization(enriched, personalization);
+        // Merge both summary and forUser into enriched candidates
+        const finalCandidates = this.mergePersonalization(enriched, summaryResult, forUserResult);
 
         // Build final CAO
         const cao: RawCAO = {
             candidates: finalCandidates,
-            answerBundle: personalization.answerBundle
-                ? { ...personalization.answerBundle, facetsApplied: [] }
-                : {
-                    headline: `${finalCandidates.length} results found`,
-                    summary: `Found ${finalCandidates.length} verified results.`,
-                    facetsApplied: [],
-                },
+            answerBundle: {
+                headline: `${finalCandidates.length} results found`,
+                summary: `Found ${finalCandidates.length} verified results.`,
+                facetsApplied: [],
+            },
         };
 
         return {
@@ -316,16 +318,16 @@ Example format:
     }
 
     /**
-     * Stage 1c: Personalization
+     * Summary pass: informative, third-person descriptions
      */
-    private async runStage1c(
+    private async runSummaryPass(
         candidates: Stage1aCandidate[],
         request: KalidasaSearchRequest
-    ): Promise<Stage1cResponse> {
-        const prompt = buildStage1cPrompt(
+    ): Promise<SummaryResponse> {
+        const prompt = buildSummaryPrompt(
             candidates,
-            request.capsule,
-            request.query.text
+            request.query.text,
+            request.query.domain
         );
 
         const model = this.genAI.getGenerativeModel({
@@ -339,27 +341,65 @@ Example format:
         try {
             const result = await model.generateContent(prompt);
             const text = result.response.text();
-            return parseStage1cResponse(text);
+            const parsed = parseSummaryResponse(text);
+            console.log(`[TwoStage] Summary pass: ${Object.keys(parsed.summaries).length} summaries`);
+            return parsed;
         } catch (error) {
-            console.error('[TwoStage] Stage 1c error:', error);
+            console.error('[TwoStage] Summary pass error:', error);
+            return { summaries: {} };
+        }
+    }
+
+    /**
+     * ForUser pass: conversational, second-person personalization
+     */
+    private async runForUserPass(
+        candidates: Stage1aCandidate[],
+        request: KalidasaSearchRequest
+    ): Promise<ForUserResponse> {
+        const prompt = buildForUserPrompt(
+            candidates,
+            request.capsule,
+            request.query.text,
+            request.query.domain
+        );
+
+        const model = this.genAI.getGenerativeModel({
+            model: this.model,
+            generationConfig: {
+                responseMimeType: 'application/json',
+                temperature: 0.7,
+            },
+        });
+
+        try {
+            const result = await model.generateContent(prompt);
+            const text = result.response.text();
+            const parsed = parseForUserResponse(text);
+            console.log(`[TwoStage] ForUser pass: ${Object.keys(parsed.personalizations).length} notes`);
+            return parsed;
+        } catch (error) {
+            console.error('[TwoStage] ForUser pass error:', error);
             return { personalizations: {} };
         }
     }
 
     /**
-     * Merge personalization into enriched candidates
+     * Merge summary + forUser into enriched candidates
      */
     private mergePersonalization(
         enriched: EnrichedCandidate[],
-        personalization: Stage1cResponse
+        summaries: SummaryResponse,
+        forUser: ForUserResponse
     ): RawCAOCandidate[] {
         return enriched.map(candidate => {
-            const p = personalization.personalizations[candidate.name];
+            const summary = summaries.summaries[candidate.name];
+            const personalization = forUser.personalizations[candidate.name];
             return {
                 ...candidate,
-                summary: p?.summary || candidate.summary || '',
-                personalization: p ? {
-                    forUser: p.forUser,
+                summary: summary || candidate.summary || '',
+                personalization: personalization ? {
+                    forUser: personalization,
                 } : undefined,
             };
         });

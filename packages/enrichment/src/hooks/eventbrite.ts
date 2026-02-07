@@ -21,18 +21,18 @@ export class EventbriteHook implements EnrichmentHook {
     private baseUrl = 'https://www.eventbriteapi.com/v3';
 
     constructor(token?: string) {
-        this.token = token || process.env.EVENTBRITE_API_KEY || '';
+        // CRIT-02: Fail-fast on missing token
+        const resolvedToken = token ?? process.env.EVENTBRITE_API_KEY;
+        if (!resolvedToken) {
+            throw new Error('[EventbriteHook] EVENTBRITE_API_KEY is required - check environment variables');
+        }
+        this.token = resolvedToken;
     }
 
     async enrich(
         candidate: RawCAOCandidate,
         context: EnrichmentContext
     ): Promise<EnrichmentData | null> {
-        if (!this.token) {
-            console.warn('[EventbriteHook] No token configured');
-            return null;
-        }
-
         const query = candidate.search_hint || candidate.name;
 
         try {

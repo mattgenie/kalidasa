@@ -1,0 +1,680 @@
+[
+  {
+    "query": "cheap eats East Village",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 16271,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 3,
+      "overall": 4
+    },
+    "issues": [
+      "Personalization notes are somewhat repetitive, all acknowledging the lack of direct cuisine match but suggesting exploration.",
+      "Could benefit from explicitly stating price range information if available to confirm 'cheap eats' aspect."
+    ]
+  },
+  {
+    "query": "romantic Italian restaurant Greenwich Village prix fixe",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 23016,
+    "llmScore": {
+      "relevance": 4,
+      "diversity": 3,
+      "personalization": 2,
+      "overall": 3
+    },
+    "issues": [
+      "All results are Italian restaurants, which is good for relevance but limits diversity.",
+      "Personalization is weak as none of the results align with the user's preferred cuisines or other interests.",
+      "The 'prix fixe' aspect of the query is not consistently addressed in the result descriptions.",
+      "The location (Greenwich Village) is not always explicitly confirmed for each result."
+    ]
+  },
+  {
+    "query": "best rooftop bars Midtown for happy hour",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9804,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 2,
+      "overall": 3
+    },
+    "issues": [
+      "All results are rooftop bars in Midtown, so relevance is high.",
+      "Diversity is limited as all results seem similar in style and price (likely upper end).",
+      "Personalization only focuses on cuisine and music, ignoring the 'happy hour' aspect and vibe preferences (intimate, lively, authentic). The price range is also not considered.",
+      "The personalization notes are repetitive and don't add much value beyond stating the obvious mismatch in cuisine and music."
+    ]
+  },
+  {
+    "query": "live jazz venue Brooklyn with cocktails",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 15163,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "vegan brunch Lower East Side outdoor seating",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 30221,
+    "llmScore": {
+      "relevance": 4,
+      "diversity": 3,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "Essex and Manousheh Grand are not clearly vegan, decreasing relevance.",
+      "Diversity is limited as most results are similar in cuisine type (though vegan).",
+      "Personalization notes are good at highlighting the tension between the vegan requirement and the user's preferred cuisines."
+    ]
+  },
+  {
+    "query": "family-friendly restaurants Upper West Side",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 18034,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 3,
+      "overall": 4
+    },
+    "issues": [
+      "The results are all family-friendly restaurants on the Upper West Side, so relevance is high.",
+      "Diversity is moderate, as the restaurants offer different types of American cuisine, but could be more varied.",
+      "Personalization notes correctly identify the mismatch between the restaurants' cuisines and the user's preferences.",
+      "The results could be improved by including restaurants that align with the user's preferred cuisines while still being family-friendly and located on the Upper West Side."
+    ]
+  },
+  {
+    "query": "speakeasy near Times Square",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 35138,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 2,
+      "overall": 3
+    },
+    "issues": [
+      "All results seem to be speakeasies near Times Square, so relevance is high.",
+      "Diversity is low because the results are all of the same type of establishment.",
+      "Personalization is weak; the notes acknowledge the user's preferences but the names don't give much to work with. The notes are mostly negative, saying the names don't align with the user's preferences."
+    ]
+  },
+  {
+    "query": "best steakhouse financial district client dinner",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9672,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 3,
+      "overall": 4
+    },
+    "issues": [
+      "All results are steakhouses which limits diversity, but matches the query.",
+      "Personalization notes are accurate but repetitive.",
+      "Could include some restaurants that are not steakhouses but are still good for client dinners in the financial district."
+    ]
+  },
+  {
+    "query": "casual cafes Chelsea open late",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 54759,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "The results are all relevant to the query 'casual cafes Chelsea open late'.",
+      "Diversity could be improved by including cafes with different price points or vibes, if available.",
+      "Personalization is generally good, acknowledging the query fit and user preference alignment/tension, but could be more specific about the menu offerings of each cafe to better assess cuisine fit."
+    ]
+  },
+  {
+    "query": "French bistro Upper East Side wine list",
+    "domain": "places",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 19062,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "All results are French bistros, which limits diversity given the query constraints. Personalization notes are accurate in acknowledging the mismatch with preferred cuisines but could explore vibe preferences more if information was available."
+    ]
+  },
+  {
+    "query": "Intense thriller movies like 'Prisoners'",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 8350,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 4,
+      "overall": 3
+    },
+    "issues": [
+      "All results are intense thrillers, so relevance is high, but diversity is low. All the movies are very similar.",
+      "Personalization notes are good, acknowledging the query intent (intense thriller) and the user's preferences (dislike of action, preference for documentaries, indie, and foreign films).",
+      "Diversity could be improved by including thrillers with different subgenres or styles (e.g., psychological thriller, suspense thriller, foreign thriller).",
+      "The user dislikes action movies, it might be useful to filter out action thrillers, if any are present."
+    ]
+  },
+  {
+    "query": "Critically acclaimed indie films 2010-2020",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9592,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Funny romantic comedies set in Paris",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 11679,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "The results are all relevant to the query. The personalization notes are generally good, acknowledging the tension between the query and the user's stated preferences. Diversity is good as the movies are different, but could be improved by explicitly stating the differences in the personalization notes."
+    ]
+  },
+  {
+    "query": "Documentaries about space exploration narrated by Neil deGrasse Tyson",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 10339,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Japanese animated films with Studio Ghibli vibes but not actually Ghibli",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 10811,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 4,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Mind-bending Christopher Nolan movies",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9274,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "The results are all Christopher Nolan movies, which is highly relevant to the query. However, there is no diversity as they are all similar types of movies.",
+      "The personalization notes are generally good, acknowledging the tension between the user's preference for documentary, indie, and foreign films and the mainstream nature of Nolan's work. They attempt to find connections to experimental themes and complex narratives, which is appropriate.",
+      "The personalization could be improved by suggesting *why* these movies are considered mind-bending."
+    ]
+  },
+  {
+    "query": "Feel-good movies from the 1980s",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 10626,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 2,
+      "overall": 3
+    },
+    "issues": [
+      "All results are feel-good movies from the 1980s, so relevance is high.",
+      "There is no diversity; all movies are mainstream.",
+      "Personalization notes only mention that the movies don't align with the user's preferred genres, but they should also acknowledge that the query is for feel-good movies from the 1980s, which these movies are.",
+      "The personalization notes should also acknowledge that the user's disliked genres are action and superhero, and these movies are not those genres."
+    ]
+  },
+  {
+    "query": "Dark and atmospheric Scandinavian crime dramas",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9379,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Movies with stunning cinematography and a thought-provoking plot",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 11032,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 3,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Quentin Tarantino movies ranked",
+    "domain": "movies",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 12519,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "The results are all Quentin Tarantino movies, which is highly relevant to the query. However, there is no diversity as they are all from the same director and generally similar in style. The personalization notes are good, acknowledging the tension between the user's stated preferences and the films' genres. The personalization could be improved by suggesting *why* the user might still enjoy these films despite the genre mismatch, e.g., highlighting Tarantino's unique style or the films' cultural impact."
+    ]
+  },
+  {
+    "query": "Chill acoustic albums for studying",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9558,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "All results are from the same source (Apple Music), which limits diversity.",
+      "Personalization notes are good, but could be stronger in suggesting specific tracks or artists that might bridge the gap between the query and user preferences (e.g., acoustic covers of jazz standards)."
+    ]
+  },
+  {
+    "query": "90s hip hop playlists - explicit",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9525,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 3,
+      "overall": 4
+    },
+    "issues": [
+      "All results are from the same source (Apple Music), limiting diversity.",
+      "Personalization notes are somewhat weak; they could be more insightful about how the 'explicit' aspect of the query interacts with user preferences (or lack thereof).",
+      "While the results are relevant to the query, the personalization could be stronger in explaining why a user who likes experimental music might still enjoy classic 90s hip hop, or why they might not."
+    ]
+  },
+  {
+    "query": "Best workout playlists - high energy pop",
+    "domain": "music",
+    "resultCount": 3,
+    "verifiedCount": 3,
+    "latencyMs": 8334,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 4,
+      "overall": 4
+    },
+    "issues": [
+      "All results are very similar, lacking diversity.",
+      "Personalization notes are repetitive, but accurate in identifying the mismatch between the query and user preferences."
+    ]
+  },
+  {
+    "query": "Indie folk artists similar to Bon Iver",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 10776,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Upbeat jazz albums for a dinner party",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 12203,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 5,
+      "overall": 5
+    },
+    "issues": []
+  },
+  {
+    "query": "Classical music playlists for relaxation",
+    "domain": "music",
+    "resultCount": 6,
+    "verifiedCount": 6,
+    "latencyMs": 9464,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 3,
+      "overall": 3
+    },
+    "issues": [
+      "All results are classical music playlists, so relevance is high, but diversity is low.",
+      "Personalization notes are reasonable, noting the tension between the query (classical music) and the user's preferred genres (jazz, world, experimental).",
+      "The results are all very similar in style (relaxation-focused classical), so there is no diversity."
+    ]
+  },
+  {
+    "query": "New country albums 2024",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 16696,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 3,
+      "overall": 3
+    },
+    "issues": [
+      "All results are country albums, so they are relevant to the query. However, there's no diversity in terms of subgenres or artists.",
+      "Personalization notes correctly identify the mismatch between the query (country music) and the user's preferred genres (jazz, world, experimental).",
+      "The personalization could be improved by suggesting alternative searches that align with the user's preferences while still acknowledging the original query. For example, 'While these are new country albums, you might also enjoy exploring new jazz albums.'",
+      "No diversity in the results."
+    ]
+  },
+  {
+    "query": "80s rock anthems playlist",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9097,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 2
+    },
+    "issues": [
+      "The results are highly relevant to the query \"80s rock anthems playlist\" as they all list popular 80s rock songs.",
+      "There is no diversity as all the songs are similar in genre and style.",
+      "The personalization is poor because it only focuses on the user's preferred genres and doesn't acknowledge the query intent. While the songs don't align with the user's preferred genres, they perfectly match the query.",
+      "The overall score is low because while the results are relevant, they completely ignore the user's preferences without any attempt to balance the query with the user's tastes. A better approach would be to include some songs that are more aligned with the user's preferences while still fulfilling the query."
+    ]
+  },
+  {
+    "query": "Sad indie songs about heartbreak",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 8649,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 1,
+      "personalization": 3,
+      "overall": 3
+    },
+    "issues": [
+      "All results are sad songs about heartbreak, so they are relevant to the query.",
+      "There is no diversity in the results; they are all very similar mainstream songs.",
+      "The personalization notes correctly identify that the songs do not align with the user's preferred genres, but do align with the 'indie' vibe to some extent (though some notes say the songs lack the 'indie' edge).",
+      "The results are relevant but not diverse and only weakly personalized."
+    ]
+  },
+  {
+    "query": "Reggaeton artists from Miami",
+    "domain": "music",
+    "resultCount": 10,
+    "verifiedCount": 10,
+    "latencyMs": 9192,
+    "llmScore": {
+      "relevance": 5,
+      "diversity": 4,
+      "personalization": 4,
+      "overall": 5
+    },
+    "issues": [
+      "The results are all relevant to the query. The personalization notes accurately reflect the tension between the query (reggaeton artists) and the user's stated preferences (jazz, world, experimental).",
+      "Diversity is good, as the artists listed have slightly different styles within the reggaeton genre."
+    ]
+  },
+  {
+    "query": "Beginner guitar lesson for acoustic folk songs",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 10282,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so it's impossible to evaluate relevance, diversity, or personalization.",
+      "The query is very specific (beginner guitar lesson for acoustic folk songs), and the lack of results indicates a significant problem."
+    ]
+  },
+  {
+    "query": "Gordon Ramsay quick and easy weeknight dinners",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 9435,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific, so the lack of results is a significant issue."
+    ]
+  },
+  {
+    "query": "Documentary about the history of skateboarding",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 10404,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific (documentary about skateboarding history), and the empty result set indicates a failure to find anything matching that query."
+    ]
+  },
+  {
+    "query": "funny cat videos 2024 try not to laugh",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 24917,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific (funny cat videos 2024 try not to laugh), so the lack of results is a significant problem."
+    ]
+  },
+  {
+    "query": "DIY home renovation small bathroom on a budget",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 11012,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific, so the lack of results is a significant issue."
+    ]
+  },
+  {
+    "query": "Sci-fi short film best visual effects",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 11121,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is specific, so the lack of results is a significant issue."
+    ]
+  },
+  {
+    "query": "Latest news coverage of climate change summit",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 25998,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is about news coverage of a climate change summit, which aligns with the user's interest in 'science' videos, but without any results, this alignment cannot be assessed.",
+      "Lack of results prevents any assessment of diversity."
+    ]
+  },
+  {
+    "query": "ASMR relaxing sleep sounds ocean waves",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 11327,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific (ASMR, relaxing, sleep sounds, ocean waves), so the absence of results is a significant issue."
+    ]
+  },
+  {
+    "query": "Minecraft building tutorial medieval castle step by step",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 12061,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned, so relevance, diversity, and personalization are all minimal.",
+      "The query is very specific (Minecraft building tutorial medieval castle step by step), so the lack of results indicates a significant problem."
+    ]
+  },
+  {
+    "query": "Stand up comedy full special John Mulaney",
+    "domain": "videos",
+    "resultCount": 0,
+    "verifiedCount": 0,
+    "latencyMs": 11200,
+    "llmScore": {
+      "relevance": 1,
+      "diversity": 1,
+      "personalization": 1,
+      "overall": 1
+    },
+    "issues": [
+      "No results were returned.",
+      "The query is very specific (John Mulaney stand up special), so the lack of results indicates a major failure in relevance.",
+      "Because there are no results, diversity and personalization cannot be assessed."
+    ]
+  }
+]

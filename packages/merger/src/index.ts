@@ -6,3 +6,4 @@
 
 export { Merger } from './merger.js';
 export { generateRenderHints } from './render-hints.js';
+export { generateSubheader } from './subheader.js';

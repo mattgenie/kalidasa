@@ -13,6 +13,7 @@ import type {
     Domain,
 } from '@kalidasa/types';
 import { generateRenderHints } from './render-hints.js';
+import { generateSubheader } from './subheader.js';
 
 export interface MergeOptions {
     domain: Domain;
@@ -41,7 +42,7 @@ export class Merger {
 
         // Convert to CAO results
         const results: CAOResult[] = verified.map((candidate, index) =>
-            this.toCAOResult(candidate, index)
+            this.toCAOResult(candidate, index, options.domain)
         );
 
         // Generate answer bundle
@@ -60,13 +61,26 @@ export class Merger {
     /**
      * Convert an enriched candidate to a CAO result
      */
-    private toCAOResult(candidate: EnrichedCandidate, index: number): CAOResult {
+    private toCAOResult(candidate: EnrichedCandidate, index: number, domain: Domain): CAOResult {
         const id = candidate.enrichment?.canonical?.value || `result-${index}-${Date.now()}`;
+
+        const enrichment = {
+            verified: true,
+            source: candidate.enrichment?.source,
+            places: candidate.enrichment?.places,
+            movies: candidate.enrichment?.movies,
+            music: candidate.enrichment?.music,
+            events: candidate.enrichment?.events,
+            videos: candidate.enrichment?.videos,
+            articles: candidate.enrichment?.articles,
+            general: candidate.enrichment?.general,
+        };
 
         return {
             id,
             type: candidate.type,
             name: candidate.name,
+            subheader: generateSubheader(domain, enrichment),
             summary: candidate.summary,
             canonical: candidate.enrichment?.canonical
                 ? {
@@ -84,17 +98,7 @@ export class Merger {
                 forGroup: candidate.personalization?.forGroup as any,
                 groupNotes: candidate.personalization?.groupNotes,
             },
-            enrichment: {
-                verified: true,
-                source: candidate.enrichment?.source,
-                places: candidate.enrichment?.places,
-                movies: candidate.enrichment?.movies,
-                music: candidate.enrichment?.music,
-                events: candidate.enrichment?.events,
-                videos: candidate.enrichment?.videos,
-                articles: candidate.enrichment?.articles,
-                general: candidate.enrichment?.general,
-            },
+            enrichment,
             facetScores: candidate.facetScores,
         };
     }

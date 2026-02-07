@@ -11,5 +11,11 @@ export { buildPrompt } from './prompt-builder.js';
 export { parseCAO } from './parser.js';
 export { classifyTemporality, needsGrounding, type TemporalityResult, type TemporalityType } from './temporality.js';
 
+// Stage 1a exports
+export { type Stage1aCandidate } from './stage-1a-prompt.js';
 
-
+// Stage 1c exports (shared prompts for both batch and streaming paths)
+export {
+    buildSummaryPrompt, parseSummaryResponse, type SummaryResponse,
+    buildForUserPrompt, parseForUserResponse, type ForUserResponse,
+} from './stage-1c-prompt.js';
