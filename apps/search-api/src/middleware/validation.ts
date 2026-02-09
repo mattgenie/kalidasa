@@ -8,7 +8,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 
 // Domain enum
-const DomainSchema = z.enum(['places', 'movies', 'music', 'events', 'videos', 'articles', 'general']);
+const DomainSchema = z.enum(['places', 'movies', 'music', 'events', 'articles', 'general']);
 
 // Query schema
 const QuerySchema = z.object({

@@ -36,9 +36,11 @@ function buildStreamingPrompt(
     const location = request.logistics.searchLocation?.city || 'any';
 
     const identifierExamples: Record<string, string> = {
-        places: '{"address": "123 Main St", "city": "NYC"}',
+        places: '{"address": "street address if known", "neighborhood": "district or area name", "city": "city name"}',
         movies: '{"year": 2023, "director": "Director Name"}',
         music: '{"artist": "Artist", "album": "Album"}',
+        events: '{"venue": "venue name", "city": "city", "date": "YYYY-MM-DD if known"}',
+        articles: '{"source": "publication or site", "topic": "subject area"}',
         general: '{"category": "topic"}',
     };
 
@@ -46,6 +48,8 @@ function buildStreamingPrompt(
         places: '["google_places"]',
         movies: '["tmdb"]',
         music: '["apple_music"]',
+        events: '["events_composite"]',
+        articles: '["wikipedia"]',
         general: '["wikipedia"]',
     };
 
@@ -63,6 +67,60 @@ ${yearMatch ? `The query mentions year ${yearMatch[0]} - use this for recent mov
 Output EXACTLY one JSON object per line (NDJSON format). No extra text.
 Each line:
 {"name": "exact movie title", "identifiers": {"year": YYYY, "director": "director name"}, "search_hint": "exact title", "enrichment_hooks": ["tmdb"]}
+
+Start outputting now:`;
+    }
+
+    // Places: emphasize address for Google Places disambiguation
+    if (domain === 'places') {
+        return `Find ${maxCandidates} recommendations for: "${request.query.text}"
+Domain: ${domain}
+Location: ${location}
+
+IMPORTANT: Only recommend places you are confident actually exist. Each will be verified via Google Places API. Prefer well-known, established venues over obscure or recently-opened ones that may be harder to verify. If uncertain about a place's exact name or location, skip it.
+
+CRITICAL: The "neighborhood" in identifiers MUST be the district/area name (e.g., "Monastiraki", "Le Marais", "Shibuya"). Include "address" if you know the street. Google Places lookup needs at minimum name + neighborhood + city.
+The "search_hint" should be the venue name + neighborhood or street for disambiguation (e.g., "Zillers Roof Garden Mitropoleos Syntagma Athens").
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+Each line must be valid JSON:
+{"name": "exact venue name", "identifiers": {"address": "street if known", "neighborhood": "district/area", "city": "${location}"}, "search_hint": "venue name + area", "enrichment_hooks": ["google_places"]}
+
+Start outputting now:`;
+    }
+
+    // Events: constrained prompt for high Ticketmaster/Eventbrite/Wikipedia hit rate
+    if (domain === 'events') {
+        return `Find ${maxCandidates} events for: "${request.query.text}"
+Location: ${location}
+
+CRITICAL RULES:
+1. STRONGLY PREFER ticketed events — concerts, theater shows, sports games,
+   comedy shows, and events listed on Ticketmaster or Eventbrite.
+2. For large public events (parades, festivals, free cultural events),
+   use the OFFICIAL event name as it would appear on Wikipedia.
+3. "search_hint" MUST be the headliner artist/performer name + city,
+   NOT the tour name (e.g., "Billie Eilish New York" not "Hit Me Hard Tour").
+4. Only recommend REAL, UPCOMING events. No past events, no made-up names.
+5. Events MUST be in or near: ${location}.
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+Each line must be valid JSON:
+{"name": "event or artist name", "identifiers": {"venue": "venue if known", "city": "${location}"}, "search_hint": "artist or event name + city", "enrichment_hooks": ["events_composite"]}
+
+Start outputting now:`;
+    }
+
+    // Articles: emphasize topic specificity for Wikipedia/NewsAPI lookup
+    if (domain === 'articles') {
+        return `Find ${maxCandidates} articles or topics for: "${request.query.text}"
+
+CRITICAL: Recommend well-known, established topics or concepts that have Wikipedia articles. For each, use the EXACT Wikipedia article title as the "search_hint".
+Prefer specific, notable topics over broad categories.
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+Each line must be valid JSON:
+{"name": "topic or article name", "identifiers": {"source": "Wikipedia", "topic": "subject area"}, "search_hint": "exact Wikipedia article title", "enrichment_hooks": ["wikipedia"]}
 
 Start outputting now:`;
     }

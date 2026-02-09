@@ -62,7 +62,7 @@ export function buildSummaryPrompt(
 
     return `Query: "${queryText}"
 
-For each item, write a brief summary that makes someone genuinely curious about it. Include one specific, non-obvious detail that someone wouldn't know just from the name. Be honest — if it's a great fit, say why; if it's a stretch, say that too.
+For each item, write a brief summary that makes someone genuinely curious about it. Be honest — if it's a great fit, say why; if it's a stretch, say that too.
 
 ${domainGuidance}
 
@@ -72,18 +72,18 @@ STYLE:
 - 1-2 sentences max
 - Write with genuine enthusiasm and personality — have an OPINION, take a STANCE
 - Lead with the most interesting or distinctive thing about it
-- Include at least one SPECIFIC detail (a standout dish, a particular scene, a unique feature)
 - COMMIT to your take — say "this is incredible" or "this falls short" — not "this might be good"
 
-BAD: "This restaurant offers Italian cuisine in a comfortable atmosphere, suitable for group dining."
-BAD: "A well-regarded spot that could be a good fit for groups looking for Italian food."
-GOOD: "The mafaldine with pink peppercorn is worth the trip alone — Lilia's buzzing energy on weekend nights makes it a blast for groups, though you'll want to book early."
+ACCURACY (critical):
+- Only name a specific dish, song, scene, or feature if you are GENUINELY CONFIDENT it exists
+- If unsure whether a specific item is real, describe the CATEGORY instead: "the handmade pasta" not "the truffle pappardelle"
+- Describe what the EXPERIENCE is like rather than naming items you're unsure about
+- Do NOT invent menu items, comedy bits, songs, or features — say what you know
 
-BAD: "A cerebral sci-fi film that might appeal to thoughtful viewers."
-GOOD: "A slow-burn sci-fi that gets under your skin — the final act is genuinely unsettling, and Natalie Portman's performance carries real weight."
-
-BAD (advisor voice): "Taiwanese-American comfort food done incredibly well. The communal tables make it great for groups."
-GOOD (enthusiast voice): "Win Son's mochi donuts are dangerously addictive, and the NT Chicken sandwich has a cult following — expect a wait on weekends but the energy is infectious."
+GOOD: "The handmade pasta here is outstanding — the open kitchen and buzzing energy make it worth braving the wait."
+GOOD: "A slow-burn sci-fi that gets under your skin — the final act is genuinely unsettling."
+BAD: "The truffle-infused rigatoni al forno is a must-try" (unless you're CERTAIN this dish exists)
+BAD: "His bit about airline food is killer" (unless you're CERTAIN this bit exists)
 
 Anti-patterns (NEVER do these):
 - No hedging: no "might be", "could be", "it depends on", "suitable for", "may appeal to"
@@ -97,7 +97,9 @@ Items: ${candidateNames}
 Return ONLY JSON:
 {
   "summaries": {"ItemName": "1-2 sentence summary"}
-}`;
+}
+
+If you don't recognize an item or can't write a genuine summary, set its value to null — do NOT write an explanation or apology.`;
 }
 
 // ============================================================================
@@ -105,8 +107,34 @@ Return ONLY JSON:
 // ============================================================================
 
 /**
+ * Check if preferences have meaningful content.
+ * Returns true if there's at least one non-empty preference value.
+ */
+function hasRealPreferences(capsule: PersonalizationCapsule): boolean {
+    const prefs = capsule.members?.[0]?.preferences;
+    if (!prefs) return false;
+
+    // Check all preference domains for non-empty arrays or actual values
+    for (const domainPrefs of Object.values(prefs)) {
+        if (typeof domainPrefs !== 'object' || domainPrefs === null) continue;
+        for (const val of Object.values(domainPrefs)) {
+            if (Array.isArray(val) && val.length > 0) return true;
+            if (typeof val === 'string' && val.length > 0) return true;
+            if (typeof val === 'number') return true;
+            if (typeof val === 'boolean') return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Build prompt for generating personalization notes.
- * These explain WHY each result matches the user's preferences.
+ * 
+ * TWO MODES:
+ * - With real user preferences → personalized match ("connects to your love of...")
+ * - Without preferences → review-grounded insider take ("regulars love...", "the hidden gem is...")
+ * 
+ * This dual-mode prevents hallucinated preferences when the user has no profile data.
  */
 export function buildForUserPrompt(
     candidates: Stage1aCandidate[],
@@ -116,8 +144,26 @@ export function buildForUserPrompt(
 ): string {
     const candidateNames = candidates.map(c => c.name).join(', ');
     const userName = capsule.members?.[0]?.name || 'you';
+
+    if (hasRealPreferences(capsule)) {
+        return buildPersonalizedPrompt(candidateNames, capsule, queryText, domain || 'places', userName);
+    } else {
+        return buildInsiderTakePrompt(candidateNames, queryText, domain || 'places', userName);
+    }
+}
+
+/**
+ * When user HAS real preferences: reference them specifically.
+ */
+function buildPersonalizedPrompt(
+    candidateNames: string,
+    capsule: PersonalizationCapsule,
+    queryText: string,
+    domain: string,
+    userName: string
+): string {
     const prefs = JSON.stringify(capsule.members?.[0]?.preferences || {});
-    const domainGuidance = getForUserGuidance(domain || 'places');
+    const domainGuidance = getForUserGuidance(domain);
 
     return `Query: "${queryText}"
 User: ${userName}
@@ -125,39 +171,25 @@ Preferences: ${prefs}
 
 For each item, tell ${userName} why they'd personally love it (or honestly, why it won't click for them). Ground every note in something SPECIFIC — a dish, a scene, a sound, a moment — not abstract preference-matching.
 
-CRITICAL: Reference at least one SPECIFIC item from ${userName}'s preferences BY NAME. Not "your favorite genres" but the actual genre/artist/cuisine/director name. If they love Radiohead, say "Radiohead"; if they love Thai food, say "Thai"; if they hate horror, say "horror."
+Reference at least one SPECIFIC item from ${userName}'s preferences BY NAME. Not "your favorite genres" but the actual genre/artist/cuisine/director name. If they love Radiohead, say "Radiohead"; if they love Thai food, say "Thai"; if they hate horror, say "horror."
 
 PRIORITY: Their most niche, specific interests trump broad categories. "Your love of bossa nova" beats "your music taste." "The noir influence" beats "your favorite genres."
 
 ${domainGuidance}
 
 VOICE:
-- You're a friend who's been there and is genuinely excited to share — not an advisor being helpful
+- You're a friend who's been there and is genuinely excited to share
 - Warm and direct: "The cacio e pepe here is RIDICULOUS" not "This pasta dish is of high quality"
 - COMMIT: say "you'll love this" or "skip this one" — never "might be" or "could work"
 - 1-2 sentences, punchy but substantive
 - Vary how you open each note — don't start the same way twice
 
-BAD: "This aligns with your stated preference for Italian cuisine and fits your price range."
-BAD: "This could be a good fit since you enjoy sci-fi movies."
-GOOD: "The handmade pasta here is outstanding, and the lively Saturday night vibe is exactly your speed — just book ahead, it fills up fast."
-GOOD: "If you loved Ex Machina, this is its weirder, more unsettling cousin — zero gore, so it dodges the horror you hate."
-
-NICHE vs GENERIC:
-BAD: "Great for your interest in Japanese food" (too broad)
-BAD: "Fits your preference for upscale dining" (too generic)
-GOOD: "Pure Edomae-style omakase — the kind of precise, ingredient-focused sushi that drew you in" (names the specific style)
-GOOD: "Think Caetano Veloso meets ambient electronic — right in your wheelhouse" (names the artist)
-
 Anti-patterns (NEVER do these):
 - No hedging: "might be", "could be", "it depends on", "may appeal to"
 - No "aligns with your preference" / "matches your profile" / "fits your criteria"
-- No broad-category connections without specifics: not "your taste in music" but name the artist or genre
 - No bro-speak: no "Dude", "Bro", "fam", or similar slang
 - No UUIDs, member IDs, or scoring mechanics
-- No "User 1", "User 2", or "the user"
 - No "based on your" more than once across all items
-- No "you mentioned" — just demonstrate you know, don't narrate it
 
 Items: ${candidateNames}
 
@@ -165,6 +197,73 @@ Return ONLY JSON:
 {
   "personalizations": {"ItemName": "1-2 sentence personal note for ${userName}"}
 }`;
+}
+
+/**
+ * When user has NO preferences: give review-grounded insider takes.
+ * This replaces forced personalization with genuinely useful guidance
+ * drawn from reviews, local knowledge, and popular opinion.
+ */
+function buildInsiderTakePrompt(
+    candidateNames: string,
+    queryText: string,
+    domain: string,
+    userName: string
+): string {
+    const domainHighlights = getInsiderGuidance(domain);
+
+    return `Query: "${queryText}"
+
+For each item, give ${userName} the kind of insider tip a well-connected local friend would share. Focus on what makes each one stand out and what to actually DO there — the stuff you only learn from going.
+
+${domainHighlights}
+
+WHAT TO INCLUDE (pick 1-2 per item):
+- What regulars, critics, or reviewers consistently praise — the standout (a signature dish, the best seat, the moment everyone talks about)
+- The hidden gem angle — what most people miss or don't know about
+- Practical insider knowledge — when to go, what to avoid, what to order
+- How popular/crowded it gets — is it a scene or a hidden spot?
+- Honest caveats — what disappoints, what's overrated, what to skip
+
+ACCURACY (critical):
+- Only name specific items (dishes, songs, drinks) if you are CONFIDENT they are real
+- When in doubt, describe the TYPE of thing instead: "the signature cocktail" not "the lavender gin fizz"
+- It's better to say "the desserts here are incredible" than to invent a dessert name
+
+VOICE:
+- You're a local who's been there many times, sharing what you genuinely think
+- Enthusiastic but honest — call out what's overrated as readily as what's great
+- Specific and concrete — "the window seats have the best view" not "nice atmosphere"
+- 1-2 sentences, punchy but substantive
+
+BAD: "A popular spot that many people enjoy visiting." (generic, says nothing)
+BAD: "This aligns with your interest in live music." (inventing preferences — you have NO user preference data!)
+GOOD: "Go on a weeknight — the crowds thin out and you'll actually hear the performers. The house margarita is the move."
+GOOD: "Fair warning: the line wraps around the block on weekends, but the brisket is legitimately the best in the city."
+
+CRITICAL: You do NOT have preference data for this user. Do NOT invent or assume preferences. Do NOT say things like "right up your alley" or "perfect for your taste" — you don't know their taste. Instead, tell them what ANYONE would want to know.
+
+Items: ${candidateNames}
+
+Return ONLY JSON:
+{
+  "personalizations": {"ItemName": "1-2 sentence insider take for ${userName}"}
+}`;
+}
+
+/**
+ * Domain-specific guidance for insider-take mode (no user preferences).
+ */
+function getInsiderGuidance(domain: string): string {
+    const guidance: Record<string, string> = {
+        places: `Think like a food critic or local regular. What dish is the star? What's the vibe on a Friday night vs Tuesday? Is it worth the wait or is it overhyped?`,
+        movies: `Think like a film buff friend. What's the standout performance? Is it a crowd-pleaser or a divisive one? What kind of mood should you be in to watch it?`,
+        music: `Think like a music journalist. What's the signature sound? Where does this fit in their discography? Is this an entry point or deep cut territory?`,
+        events: `Think like a local who's been to this event before. What's the energy like? What should you not miss? Is it worth the ticket price? Any pro tips (parking, where to stand, what to eat)?`,
+        videos: `Think like someone who watches a lot of this creator's content. What makes this one special? Is it accessible for newcomers or for fans?`,
+        articles: `Think like a well-read friend. What's the key insight? Is it accessible or niche? How long should you set aside?`,
+    };
+    return guidance[domain] || guidance.places;
 }
 
 // ============================================================================

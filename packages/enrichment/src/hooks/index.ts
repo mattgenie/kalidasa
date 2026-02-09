@@ -10,12 +10,12 @@ import { HookRegistry } from '../registry.js';
 import { GooglePlacesHook } from './google-places.js';
 import { TMDBHook } from './tmdb.js';
 import { OMDbHook } from './omdb.js';
-import { YouTubeHook } from './youtube.js';
-import { VimeoHook } from './vimeo.js';
+// Videos disabled pending non-technical issue resolution
+// import { YouTubeHook } from './youtube.js';
+// import { VimeoHook } from './vimeo.js';
 import { AppleMusicHook } from './apple-music.js';
 import { MusicBrainzHook } from './musicbrainz.js';
-import { EventbriteHook } from './eventbrite.js';
-import { TicketmasterHook } from './ticketmaster.js';
+import { CompositeEventsHook } from './composite-events.js';
 import { NewsAPIHook } from './newsapi.js';
 import { DiffbotHook } from './diffbot.js';
 import { NewsMeshHook } from './newsmesh.js';
@@ -39,13 +39,12 @@ export function createHookRegistry(): HookRegistry {
     registry.register(new AppleMusicHook());
     registry.register(new MusicBrainzHook());
 
-    // Events
-    registry.register(new EventbriteHook());
-    registry.register(new TicketmasterHook());
+    // Events (composite: parallel TM + EB + Wikipedia with validation)
+    registry.register(new CompositeEventsHook());
 
-    // Videos
-    registry.register(new YouTubeHook());
-    registry.register(new VimeoHook());
+    // Videos — disabled pending non-technical issue resolution
+    // registry.register(new YouTubeHook());
+    // registry.register(new VimeoHook());
 
     // News & Articles
     registry.register(new NewsAPIHook());
@@ -68,6 +67,8 @@ export { AppleMusicHook } from './apple-music.js';
 export { MusicBrainzHook } from './musicbrainz.js';
 export { EventbriteHook } from './eventbrite.js';
 export { TicketmasterHook } from './ticketmaster.js';
+export { CompositeEventsHook } from './composite-events.js';
+export { SerpApiEventsHook } from './serpapi-events.js';
 export { NewsAPIHook } from './newsapi.js';
 export { DiffbotHook } from './diffbot.js';
 export { NewsMeshHook } from './newsmesh.js';

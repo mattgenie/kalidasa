@@ -43,7 +43,25 @@ async function generateSummary(
         });
         const result = await model.generateContent(prompt);
         const parsed = parseSummaryResponse(result.response.text());
-        return parsed.summaries[candidateName] || '';
+
+        // Try exact match first, then fuzzy
+        const exactMatch = parsed.summaries[candidateName];
+        if (exactMatch) return exactMatch;
+
+        const nameLower = candidateName.toLowerCase();
+        for (const [key, value] of Object.entries(parsed.summaries)) {
+            const keyLower = key.toLowerCase();
+            if (keyLower.includes(nameLower) || nameLower.includes(keyLower)) {
+                return value;
+            }
+        }
+
+        const entries = Object.entries(parsed.summaries);
+        if (entries.length === 1 && entries[0][1]) {
+            return entries[0][1];
+        }
+
+        return '';
     } catch {
         return '';
     }
@@ -72,7 +90,27 @@ async function generateForUser(
         });
         const result = await model.generateContent(prompt);
         const parsed = parseForUserResponse(result.response.text());
-        return parsed.personalizations[candidateName] || `Recommended for ${capsule.members?.[0]?.name || 'you'}`;
+
+        // Try exact match first, then fuzzy match (LLM sometimes alters item names)
+        const exactMatch = parsed.personalizations[candidateName];
+        if (exactMatch) return exactMatch;
+
+        // Fuzzy: case-insensitive substring match on keys
+        const nameLower = candidateName.toLowerCase();
+        for (const [key, value] of Object.entries(parsed.personalizations)) {
+            const keyLower = key.toLowerCase();
+            if (keyLower.includes(nameLower) || nameLower.includes(keyLower)) {
+                return value;
+            }
+        }
+
+        // Last resort: if there's exactly one entry, it's probably for this candidate
+        const entries = Object.entries(parsed.personalizations);
+        if (entries.length === 1 && entries[0][1]) {
+            return entries[0][1];
+        }
+
+        return `Recommended for ${capsule.members?.[0]?.name || 'you'}`;
     } catch {
         return `Recommended for ${capsule.members?.[0]?.name || 'you'}`;
     }
@@ -176,12 +214,20 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
 
     const { streamingGenerator, streamingEnricher, genAI } = getStreamingServices();
 
+    // Oversample: generate 50% more candidates than requested, emit only verified
+    const maxResults = searchRequest.options?.maxResults || 4;
+    const oversampleTarget = Math.ceil(maxResults * 1.5);
+
     let candidateCount = 0;
     let verifiedCount = 0;
+    let skippedCount = 0;
 
     try {
-        // Start streaming generation
-        const candidateStream = streamingGenerator!.generateStream(searchRequest);
+        // Start streaming generation with oversample target
+        const candidateStream = streamingGenerator!.generateStream({
+            ...searchRequest,
+            options: { ...searchRequest.options, maxResults: oversampleTarget },
+        });
 
         for await (const candidate of candidateStream) {
             candidateCount++;
@@ -200,7 +246,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             // Parallel: enrichment + summary + forUser
             const [enriched, summary, forUser] = await Promise.all([
                 streamingEnricher!.enrichOne(rawCandidate, {
-                    timeout: 2000,
+                    timeout: 5000,
                     requestId,
                     searchLocation: searchRequest.logistics.searchLocation,
                 }),
@@ -219,9 +265,15 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
                 ),
             ]);
 
-            if (enriched.verified) {
-                verifiedCount++;
+            // Skip unverified enrichment or failed summary (null = Gemini doesn't know this place)
+            if (!enriched.verified || !summary) {
+                skippedCount++;
+                const reason = !enriched.verified ? 'unverified' : 'no summary';
+                console.log(`[${requestId}] ⊘ Skipping: ${candidate.name} (${reason}, ${Date.now() - candidateStart}ms)`);
+                continue;
             }
+
+            verifiedCount++;
 
             // Send candidate event
             const domain = searchRequest.query.domain || 'general';
@@ -240,6 +292,9 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             });
 
             console.log(`[${requestId}] → Streamed ${candidate.name} (${Date.now() - candidateStart}ms)`);
+
+            // Stop once we have enough verified results
+            if (verifiedCount >= maxResults) break;
         }
 
         // Send bundle
@@ -259,7 +314,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             data: { totalMs, count: candidateCount },
         });
 
-        console.log(`[${requestId}] ✅ Stream complete: ${verifiedCount}/${candidateCount} verified (${totalMs}ms)`);
+        console.log(`[${requestId}] ✅ Stream complete: ${verifiedCount}/${candidateCount} verified, ${skippedCount} skipped (${totalMs}ms)`);
 
     } catch (error) {
         console.error(`[${requestId}] ❌ Stream error:`, error);

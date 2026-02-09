@@ -157,6 +157,8 @@ export interface EventsEnrichment {
     priceRange?: string;
     imageUrl?: string;
     status?: string;
+    description?: string;    // Wikipedia description for non-ticketed events
+    wikipediaUrl?: string;   // link to Wikipedia article
 }
 
 export interface VideosEnrichment {
@@ -183,6 +185,7 @@ export interface ArticlesEnrichment {
 
 export interface GeneralEnrichment {
     summary?: string;
+    description?: string;  // short Wikipedia description field (e.g. "annual music festival")
     thumbnail?: string;
     wikipediaUrl?: string;
 }

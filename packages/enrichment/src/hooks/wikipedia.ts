@@ -82,6 +82,7 @@ export class WikipediaHook implements EnrichmentHook {
                 },
                 general: {
                     summary: data.extract,
+                    description: data.description,  // e.g. "annual music festival" — used for event detection
                     thumbnail: data.thumbnail?.source,
                     wikipediaUrl: data.content_urls?.desktop?.page,
                 },

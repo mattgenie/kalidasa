@@ -119,6 +119,18 @@ function buildEventsSubheader(e: EnrichmentResult): string | undefined {
         chips.push(ev.priceRange);
     }
 
+    // Fallback for Wikipedia-only events (no venue/date)
+    if (chips.length === 0 && ev.description) {
+        const firstSentence = ev.description.split('.')[0];
+        if (firstSentence && firstSentence.length > 0) {
+            // Truncate at 120 chars with ellipsis if needed
+            const truncated = firstSentence.length > 120
+                ? firstSentence.substring(0, 117) + '...'
+                : firstSentence;
+            chips.push(truncated);
+        }
+    }
+
     return chips.length > 0 ? chips.join(SEP) : undefined;
 }
 

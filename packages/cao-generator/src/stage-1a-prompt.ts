@@ -12,7 +12,7 @@ import type { KalidasaSearchRequest } from '@kalidasa/types';
  */
 function getIdentifierSpec(domain: string): string {
     const specs: Record<string, string> = {
-        places: '{"address": "street address", "city": "city name"}',
+        places: '{"address": "street address if known", "neighborhood": "district or area", "city": "city name"}',
         movies: '{"year": 2024, "director": "director name"}',
         music: '{"artist": "artist name", "album": "album name"}',
         articles: '{"source": "publication", "date": "YYYY-MM-DD"}',
@@ -33,7 +33,7 @@ function getDefaultHooks(domain: string): string[] {
         music: ['apple_music', 'musicbrainz'],
         articles: ['newsapi', 'wikipedia'],
         videos: ['youtube'],
-        events: ['ticketmaster', 'eventbrite'],
+        events: ['events_composite'],
         general: ['wikipedia'],
     };
     return hooks[domain] || hooks.general;
@@ -56,7 +56,9 @@ export function buildStage1aPrompt(
     // For movies: don't include year in search_hint - it's passed separately via identifiers.year
     // For videos: search_hint not needed since we get youtube_id via grounded search
     let searchHintGuidance = '"search_hint": "search query for external API"';
-    if (request.query.domain === 'movies') {
+    if (request.query.domain === 'places') {
+        searchHintGuidance = '"search_hint": "venue name + neighborhood or street" (e.g., "Zillers Roof Garden Mitropoleos Syntagma") - MUST disambiguate from other nearby places. Only recommend places you are confident exist — each is verified via Google Places API.';
+    } else if (request.query.domain === 'movies') {
         searchHintGuidance = '"search_hint": "exact movie title only" (e.g., "Amélie", "The 400 Blows") - no year, no extra words';
     } else if (request.query.domain === 'videos') {
         searchHintGuidance = '"search_hint": "video title" - the youtube_id in identifiers is required for verification';
