@@ -3,11 +3,13 @@
  * 
  * POST /api/search - Main search endpoint (batch)
  * POST /api/search/stream - Streaming SSE endpoint
+ * GET  /api/registry - Domain registry (for consumer sync)
  */
 
 import { Router } from 'express';
 import { searchHandler } from '../handlers/search-handler.js';
 import { streamingSearchHandler } from '../handlers/streaming-handler.js';
+import { registryHandler } from '../handlers/registry-handler.js';
 import { validateSearchRequest } from '../middleware/validation.js';
 
 import type { Router as RouterType } from 'express';
@@ -22,4 +24,7 @@ searchRouter.post('/search/stream', validateSearchRequest, streamingSearchHandle
 
 // GET /api/search/stream - Streaming mode (for EventSource)
 searchRouter.get('/search/stream', streamingSearchHandler);
+
+// GET /api/registry - Domain registry for consumer sync (Chat Agent, etc.)
+searchRouter.get('/registry', registryHandler);
 

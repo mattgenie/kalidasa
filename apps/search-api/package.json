@@ -13,6 +13,7 @@
     "dependencies": {
         "@google/generative-ai": "^0.21.0",
         "@kalidasa/cao-generator": "workspace:*",
+        "@kalidasa/domain-registry": "workspace:*",
         "@kalidasa/enrichment": "workspace:*",
         "@kalidasa/facet-libraries": "workspace:*",
         "@kalidasa/merger": "workspace:*",

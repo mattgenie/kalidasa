@@ -26,6 +26,9 @@ importers:
       '@kalidasa/cao-generator':
         specifier: workspace:*
         version: link:../../packages/cao-generator
+      '@kalidasa/domain-registry':
+        specifier: workspace:*
+        version: link:../../packages/domain-registry
       '@kalidasa/enrichment':
         specifier: workspace:*
         version: link:../../packages/enrichment
