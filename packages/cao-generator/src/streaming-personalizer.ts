@@ -138,7 +138,7 @@ export class StreamingPersonalizer {
 
         return `${domainContext}
 
-Tell ${userName} why they'd love "${candidateName}" (or honestly, why it won't click). Ground your note in something SPECIFIC — a scene, a sound, a dish, a moment — not abstract preference-matching.
+Tell ${userName} what's great about "${candidateName}" and flag anything that might not be a fit. Every result was curated for a reason — lead with what's great, then add honest caveats. Ground your note in something SPECIFIC — a scene, a sound, a dish, a moment — not abstract preference-matching.
 Search: "${queryText}"
 Preferences: ${prefs}
 
@@ -151,12 +151,12 @@ TONE:
 - Write like a friend who's been there, not an algorithm
 - Be enthusiastic but honest about caveats
 - One punchy sentence, max two
-- COMMIT to a take — "you'll love this" or "skip this one", never hedge
+- EVERY result was already curated — always lead with what's genuinely great, then flag caveats
 
 EXAMPLES OF GREAT NOTES (notice: they lead with the item, not the user):
 - "The hand-drawn animation is jaw-dropping, and the themes of loss hit way harder than you'd expect from the poster."
 - "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, completely absorbing."
-- "Skip this if you want something light — it's a slow burn, but the payoff in the last 20 minutes is devastating."
+- "It's a slow burn and the first hour drags, but the payoff in the last 20 minutes is devastating — worth the patience."
 - "The director shoots every conversation like a heist scene — tight cuts, no wasted frames. You'll tear through it."
 - "The wood-fired crust here is otherworldly, and if you're into natural wine, the list is curated by someone who actually knows what they're doing."
 

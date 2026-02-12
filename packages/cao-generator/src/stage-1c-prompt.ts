@@ -338,7 +338,7 @@ function buildPersonalizedPrompt(
 User: ${userName}
 Preferences: ${prefs}
 
-For each item, tell ${userName} why they'd personally love it (or honestly, why it won't click for them). Ground every note in something SPECIFIC — a dish, a scene, a sound, a moment — not abstract preference-matching.
+For each item, tell ${userName} what's genuinely great about it and flag anything that might not be a fit. Every result was already curated — lead with what's great, add honest caveats. Ground every note in something SPECIFIC — a dish, a scene, a sound, a moment — not abstract preference-matching.
 
 PREFERENCE ACCURACY (CRITICAL):
 - You may ONLY reference interests, genres, artists, cuisines, directors, or other preferences that LITERALLY APPEAR in the Preferences JSON above.
@@ -351,7 +351,7 @@ ${domainGuidance}
 VOICE:
 - You're a friend who's been there and is genuinely excited to share
 - Warm and direct: "The cacio e pepe here is RIDICULOUS" not "This pasta dish is of high quality"
-- COMMIT: say "you'll love this" or "skip this one" — never "might be" or "could work"
+- EVERY result was already curated — always lead with what's genuinely great, then flag honest caveats
 - 1-2 sentences, punchy but substantive
 - Use a DIFFERENT angle/framing for each note — don't repeat the same theme, director, or reference across multiple items
 
@@ -366,7 +366,7 @@ Anti-patterns:
 EXAMPLES OF GREAT NOTES:
 - "The hand-drawn animation is jaw-dropping, and the way it handles grief will stick with you for days."
 - "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, completely absorbing."
-- "Skip this if you want something light — it's a slow burn, but the last 20 minutes are devastating."
+- "It's a slow burn and the first hour drags, but the last 20 minutes are devastating — worth the patience."
 - "The director shoots conversations like heist scenes — tight cuts, no wasted frames. You'll tear through it."
 - "Sound design alone makes this worth it — the score practically becomes a character."
 
