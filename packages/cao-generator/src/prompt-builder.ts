@@ -56,7 +56,7 @@ ${logisticsJson}${conversationContext}
 ## Task
 Generate ${maxCandidates} high-quality recommendations. Use web grounding for real, verifiable results.
 
-For personalization: Think about why each result matches the user's preferences. Include personalization notes in output.
+For personalization: Every result was already curated — lead with what's genuinely great about it, then flag honest caveats. Never tell the user to skip a result you're recommending. Ground notes in specifics (a dish, a scene, a sound), not abstract preference-matching.
 
 ## Enrichment Hooks (specify which API verifies each result)
 - google_places (restaurants/venues) | tmdb/omdb (movies) | apple_music (songs)
@@ -70,7 +70,7 @@ Return ONLY valid JSON (no markdown, no explanation):
       "name": "Exact name",
       ${identifierSpec},
       "summary": "Brief description",
-      "personalization": {"forUser": "Why this is good for the user based on their preferences"},
+      "personalization": {"forUser": "What's great about this + any honest caveats"},
       "enrichment_hooks": ["hook_name"],
       "search_hint": "search query for enrichment API"
     }
