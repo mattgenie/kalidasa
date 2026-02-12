@@ -70,7 +70,7 @@ Return ONLY valid JSON (no markdown, no explanation):
       "name": "Exact name",
       ${identifierSpec},
       "summary": "Brief description",
-      "personalization": {"forUser": "What's great about this + any honest caveats"},
+      "personalization": {"forUser": "What's great about this + any honest caveats (NEVER say 'skip this')"},
       "enrichment_hooks": ["hook_name"],
       "search_hint": "search query for enrichment API"
     }
