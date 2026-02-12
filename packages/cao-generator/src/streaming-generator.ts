@@ -40,7 +40,9 @@ function buildStreamingPrompt(
         movies: '{"year": 2023, "director": "Director Name"}',
         music: '{"artist": "Artist", "album": "Album"}',
         events: '{"venue": "venue name", "city": "city", "date": "YYYY-MM-DD if known"}',
-        articles: '{"source": "publication or site", "topic": "subject area"}',
+        books: '{"author": "Author Name", "publisher": "Publisher", "year": 2024}',
+        articles: '{"author": "Author Name", "source": "publication or site", "topic": "subject area"}',
+        news: '{"source": "outlet name", "date": "YYYY-MM-DD", "author": "author name"}',
         general: '{"category": "topic"}',
     };
 
@@ -49,7 +51,9 @@ function buildStreamingPrompt(
         movies: '["tmdb"]',
         music: '["apple_music"]',
         events: '["events_composite"]',
-        articles: '["wikipedia"]',
+        books: '["books_composite"]',
+        articles: '["exa", "serpapi_articles", "articles_composite"]',
+        news: '["newsapi"]',
         general: '["wikipedia"]',
     };
 
@@ -111,29 +115,108 @@ Each line must be valid JSON:
 Start outputting now:`;
     }
 
-    // Articles: emphasize topic specificity for Wikipedia/NewsAPI lookup
-    if (domain === 'articles') {
-        return `Find ${maxCandidates} articles or topics for: "${request.query.text}"
+    // Books: demand specific published books
+    if (domain === 'books') {
+        return `Find ${maxCandidates} specific, real books for: "${request.query.text}"
 
-CRITICAL: Recommend well-known, established topics or concepts that have Wikipedia articles. For each, use the EXACT Wikipedia article title as the "search_hint".
-Prefer specific, notable topics over broad categories.
+CRITICAL RULES:
+1. Each must be a PUBLISHED book with a real author. NOT a topic or Wikipedia page.
+2. Include author, publisher, and year in identifiers.
+3. Mix classic/foundational books AND recent high-quality titles.
+4. Do NOT include articles, essays, or blog posts — ONLY books.
+5. Only include books you are CONFIDENT actually exist.
+
+GOOD:
+{"name": "Thinking, Fast and Slow", "identifiers": {"author": "Daniel Kahneman", "publisher": "Farrar, Straus and Giroux", "year": 2011}, "search_hint": "Thinking Fast and Slow Daniel Kahneman", "enrichment_hooks": ["books_composite"]}
+
+BAD: {"name": "Behavioral Economics", ...}  ← TOPIC, not a book!
 
 Output EXACTLY one JSON object per line (NDJSON format). No extra text.
-Each line must be valid JSON:
-{"name": "topic or article name", "identifiers": {"source": "Wikipedia", "topic": "subject area"}, "search_hint": "exact Wikipedia article title", "enrichment_hooks": ["wikipedia"]}
+{"name": "exact book title", "identifiers": {"author": "author name", "publisher": "publisher", "year": 2024}, "search_hint": "title author", "enrichment_hooks": ["books_composite"]}
 
 Start outputting now:`;
     }
 
+    // Articles: demand specific published essays, blog posts, papers — NOT books
+    if (domain === 'articles') {
+        return `Find ${maxCandidates} specific, real articles, essays, or papers for: "${request.query.text}"
+
+CRITICAL RULES:
+1. Each must be a SPECIFIC, PUBLISHED article, essay, or paper — NOT a book and NOT a topic.
+2. You must be CONFIDENT each article actually exists with that exact title.
+3. Include the author and publication/source in identifiers.
+4. "search_hint" should be: article title + author for disambiguation.
+5. Mix classic/foundational pieces AND recent high-quality coverage.
+6. Do NOT invent or guess article titles — only include pieces you are certain exist.
+7. Do NOT include books — only articles, essays, blog posts, or papers.
+
+GOOD:
+{"name": "Meditations on Moloch", "identifiers": {"author": "Scott Alexander", "source": "Slate Star Codex", "topic": "coordination problems"}, "search_hint": "Meditations on Moloch Scott Alexander", "enrichment_hooks": ["exa", "serpapi_articles", "articles_composite"]}
+{"name": "Concrete Problems in AI Safety", "identifiers": {"author": "Dario Amodei et al.", "source": "arXiv", "topic": "AI safety"}, "search_hint": "Concrete Problems in AI Safety Amodei arXiv", "enrichment_hooks": ["exa", "serpapi_articles", "articles_composite"]}
+
+BAD: {"name": "AI safety", ...}  ← TOPIC, not an article!
+BAD: {"name": "Superintelligence: Paths, Dangers, Strategies", ...}  ← That's a BOOK, not an article!
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+{"name": "exact article title", "identifiers": {"author": "author name", "source": "publication", "topic": "subject area"}, "search_hint": "title author publication", "enrichment_hooks": ["exa", "serpapi_articles", "articles_composite"]}
+
+Start outputting now:`;
+    }
+
+    // News: recent news articles
+    if (domain === 'news') {
+        return `Find ${maxCandidates} recent news articles about: "${request.query.text}"
+
+CRITICAL RULES:
+1. Each must be a REAL, RECENT news article from the last 30 days.
+2. Include author and publication in identifiers.
+3. Use exact headlines as published.
+4. Do NOT include opinion pieces, essays, or books — ONLY news articles.
+
+Output EXACTLY one JSON object per line (NDJSON format). No extra text.
+{"name": "exact headline", "identifiers": {"author": "author name", "source": "outlet", "date": "YYYY-MM-DD"}, "search_hint": "headline source", "enrichment_hooks": ["newsapi"]}
+
+Start outputting now:`;
+    }
+
+    // Build conversation context for all domains
+    const conversationContext = buildConversationContext(request);
+
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${domain}
 Location: ${location}
+${conversationContext}
+${conversationContext ? `\nIMPORTANT: If this query is a refinement of a previous search, every recommendation MUST clearly satisfy the refinement criteria. Do not include results that don't match the refinement.\n` : ''}
+SEARCH_HINT RULE: The "search_hint" is used to look up each result in an external API.
+Include enough context to disambiguate: if the query implies a specific format (anime, TV series, podcast, etc.),
+include that format in the search_hint. Example: "My Happy Marriage anime series" NOT just "My Happy Marriage".
 
 Output EXACTLY one JSON object per line (NDJSON format). No extra text.
 Each line must be valid JSON:
 {"name": "...", "identifiers": ${identifierExamples[domain] || identifierExamples.general}, "search_hint": "...", "enrichment_hooks": ${hookDefaults[domain] || hookDefaults.general}}
 
 Start outputting now:`;
+}
+
+/**
+ * Build conversation context string from the search request
+ */
+function buildConversationContext(request: KalidasaSearchRequest): string {
+    const parts: string[] = [];
+
+    if (request.conversation?.previousSearches?.length) {
+        parts.push(`Previous searches: ${request.conversation.previousSearches.slice(-3).join(', ')}`);
+    }
+
+    if (request.conversation?.recentMessages?.length) {
+        const msgs = request.conversation.recentMessages
+            .slice(-3)
+            .map(m => `${m.speaker}: ${m.content}`)
+            .join(' | ');
+        parts.push(`Recent conversation: ${msgs}`);
+    }
+
+    return parts.length > 0 ? parts.join('\n') : '';
 }
 
 /**
@@ -172,7 +255,7 @@ export class StreamingCAOGenerator {
 
         this.genAI = new GoogleGenerativeAI(apiKey);
         this.model = options.model || 'gemini-2.0-flash';
-        this.maxCandidates = options.maxCandidates || 10;
+        this.maxCandidates = options.maxCandidates || 12;
     }
 
     /**

@@ -40,7 +40,7 @@ export class CAOGenerator {
         this.model = options.model || 'gemini-2.5-flash';
         this.modelUngrounded = options.modelUngrounded || 'gemini-2.0-flash';
         this.temperature = options.temperature || 0.7;
-        this.maxCandidates = options.maxCandidates || 10;
+        this.maxCandidates = options.maxCandidates || 12;
     }
 
     /**

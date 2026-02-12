@@ -15,6 +15,7 @@ import {
     buildForUserPrompt, parseForUserResponse, type ForUserResponse,
 } from './stage-1c-prompt.js';
 import { classifyTemporality, type TemporalityResult } from './temporality.js';
+import { NewsSearchEngine, type NewsMode, type ArticleCluster } from './news-search.js';
 
 /**
  * Enrichment function interface (to avoid circular dependency)
@@ -56,7 +57,7 @@ export class TwoStageGenerator {
 
         this.genAI = new GoogleGenerativeAI(apiKey);
         this.model = options.model || 'gemini-2.0-flash';
-        this.maxCandidates = options.maxCandidates || 10;
+        this.maxCandidates = options.maxCandidates || 12;
     }
 
     /**
@@ -76,6 +77,11 @@ export class TwoStageGenerator {
 
         console.log(`[TwoStage] Starting parallel generation...`);
         console.log(`[TwoStage] Temporality: ${temporality.type} (${temporality.confidence})`);
+
+        // ==== NEWS DOMAIN: Search-first pipeline ====
+        if (request.query.domain === 'news') {
+            return this.runNewsPipeline(request, startTime, temporality);
+        }
 
         // Stage 1a: Generate candidate names
         const stage1aStart = Date.now();
@@ -318,16 +324,107 @@ Example format:
     }
 
     /**
+     * Specialized news search pipeline.
+     * Bypasses LLM candidate generation entirely — searches real articles,
+     * pre-attaches enrichment, runs mode-adaptive summaries.
+     */
+    private async runNewsPipeline(
+        request: KalidasaSearchRequest,
+        startTime: number,
+        temporality: TemporalityResult
+    ): Promise<TwoStageResult> {
+        const newsEngine = new NewsSearchEngine(this.genAI, this.model);
+        const maxResults = this.maxCandidates;
+
+        // Stage 1a: Real search (Exa + NewsAPI with mode classification)
+        const stage1aStart = Date.now();
+        const { mode, candidates: newsCandidates, clusters } = await newsEngine.search(
+            request.query.text,
+            maxResults
+        );
+        const stage1aMs = Date.now() - stage1aStart;
+        console.log(`[TwoStage:News] Stage 1a complete: ${newsCandidates.length} candidates, mode=${mode} (${stage1aMs}ms)`);
+
+        if (newsCandidates.length === 0) {
+            return this.emptyResult(startTime, stage1aMs, temporality);
+        }
+
+        // Pre-build enriched candidates (no executor needed — data comes from search APIs)
+        const enrichedCandidates: EnrichedCandidate[] = newsCandidates.map(c => {
+            const newsData = (c as any)._newsEnrichment;
+            return {
+                ...c,
+                type: 'article' as const,
+                summary: '',
+                verified: true,
+                enrichment: {
+                    verified: true,
+                    source: 'news_composite',
+                    news: newsData,
+                },
+            };
+        });
+
+        // Stage 1c: Summary + forUser in parallel (with news mode + cluster info)
+        const stage1cStart = Date.now();
+        const [summaryResult, forUserResult] = await Promise.all([
+            this.runSummaryPass(newsCandidates, request, mode, clusters),
+            this.runForUserPass(newsCandidates, request, mode),
+        ]);
+        const stage1cMs = Date.now() - stage1cStart;
+
+        // Merge personalization — news uses index-based keys ("1", "2", ...)
+        const finalCandidates = enrichedCandidates.map((candidate, i) => {
+            const indexKey = String(i + 1);
+            // Try index key first (news indexed format), then name (fallback)
+            const summary = summaryResult.summaries[indexKey]
+                || summaryResult.summaries[candidate.name];
+            const personalization = forUserResult.personalizations[indexKey]
+                || forUserResult.personalizations[candidate.name];
+            return {
+                ...candidate,
+                summary: summary || candidate.summary || '',
+                personalization: personalization ? {
+                    forUser: personalization,
+                } : undefined,
+            };
+        });
+
+        const cao: RawCAO = {
+            candidates: finalCandidates,
+            answerBundle: {
+                headline: `${finalCandidates.length} news articles found`,
+                summary: `Found ${finalCandidates.length} articles from verified sources.`,
+                facetsApplied: [],
+            },
+        };
+
+        return {
+            cao,
+            enriched: finalCandidates as EnrichedCandidate[],
+            latencyMs: Date.now() - startTime,
+            stage1aMs,
+            enrichmentMs: 0,  // No enrichment executor needed
+            stage1cMs,
+            temporality,
+        };
+    }
+
+    /**
      * Summary pass: informative, third-person descriptions
      */
     private async runSummaryPass(
         candidates: Stage1aCandidate[],
-        request: KalidasaSearchRequest
+        request: KalidasaSearchRequest,
+        newsMode?: NewsMode,
+        newsClusters?: ArticleCluster[]
     ): Promise<SummaryResponse> {
         const prompt = buildSummaryPrompt(
             candidates,
             request.query.text,
-            request.query.domain
+            request.query.domain,
+            newsMode,
+            newsClusters
         );
 
         const model = this.genAI.getGenerativeModel({
@@ -355,13 +452,15 @@ Example format:
      */
     private async runForUserPass(
         candidates: Stage1aCandidate[],
-        request: KalidasaSearchRequest
+        request: KalidasaSearchRequest,
+        newsMode?: NewsMode
     ): Promise<ForUserResponse> {
         const prompt = buildForUserPrompt(
             candidates,
             request.capsule,
             request.query.text,
-            request.query.domain
+            request.query.domain,
+            newsMode
         );
 
         const model = this.genAI.getGenerativeModel({
