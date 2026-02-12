@@ -56,7 +56,7 @@ ${logisticsJson}${conversationContext}
 ## Task
 Generate ${maxCandidates} high-quality recommendations. Use web grounding for real, verifiable results.
 
-For personalization: Every result was already curated — lead with what's genuinely great about it, then flag honest caveats. Never tell the user to skip a result you're recommending. Ground notes in specifics (a dish, a scene, a sound), not abstract preference-matching.
+For personalization: Every result was already curated — lead with what's genuinely great about it, then flag honest caveats. NEVER tell the user to skip a result you're recommending — reframe drawbacks as context. Ground notes in specifics (a dish, a scene, a sound), not abstract preference-matching.
 
 ## Enrichment Hooks (specify which API verifies each result)
 - google_places (restaurants/venues) | tmdb/omdb (movies) | apple_music (songs)

@@ -35,6 +35,12 @@ function buildStreamingPrompt(
     const domain = request.query.domain;
     const location = request.logistics.searchLocation?.city || 'any';
 
+    // Build conversation context UPFRONT so all domain-specific prompts can use it
+    const conversationContext = buildConversationContext(request);
+    const refinementBlock = conversationContext
+        ? `\n${conversationContext}\n\nREFINEMENT FILTER (CRITICAL): This query is a refinement of a previous search. Every recommendation MUST clearly satisfy the refinement criteria. Do NOT include results that conflict with what the user asked for.\n`
+        : '';
+
     const identifierExamples: Record<string, string> = {
         places: '{"address": "street address if known", "neighborhood": "district or area name", "city": "city name"}',
         movies: '{"year": 2023, "director": "Director Name"}',
@@ -64,7 +70,7 @@ function buildStreamingPrompt(
         const yearHint = yearMatch ? ` (from ${yearMatch[0]})` : '';
 
         return `Find ${maxCandidates} movies for: "${request.query.text}"
-
+${refinementBlock}
 CRITICAL: The "year" field is REQUIRED for each movie. TMDB lookup will fail without it.
 ${yearMatch ? `The query mentions year ${yearMatch[0]} - use this for recent movies.` : 'Infer the year from context or use the movie\'s actual release year.'}
 
@@ -80,7 +86,7 @@ Start outputting now:`;
         return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${domain}
 Location: ${location}
-
+${refinementBlock}
 IMPORTANT: Only recommend places you are confident actually exist. Each will be verified via Google Places API. Prefer well-known, established venues over obscure or recently-opened ones that may be harder to verify. If uncertain about a place's exact name or location, skip it.
 
 CRITICAL: The "neighborhood" in identifiers MUST be the district/area name (e.g., "Monastiraki", "Le Marais", "Shibuya"). Include "address" if you know the street. Google Places lookup needs at minimum name + neighborhood + city.
@@ -97,7 +103,7 @@ Start outputting now:`;
     if (domain === 'events') {
         return `Find ${maxCandidates} events for: "${request.query.text}"
 Location: ${location}
-
+${refinementBlock}
 CRITICAL RULES:
 1. STRONGLY PREFER ticketed events — concerts, theater shows, sports games,
    comedy shows, and events listed on Ticketmaster or Eventbrite.
@@ -118,7 +124,7 @@ Start outputting now:`;
     // Books: demand specific published books
     if (domain === 'books') {
         return `Find ${maxCandidates} specific, real books for: "${request.query.text}"
-
+${refinementBlock}
 CRITICAL RULES:
 1. Each must be a PUBLISHED book with a real author. NOT a topic or Wikipedia page.
 2. Include author, publisher, and year in identifiers.
@@ -140,7 +146,7 @@ Start outputting now:`;
     // Articles: demand specific published essays, blog posts, papers — NOT books
     if (domain === 'articles') {
         return `Find ${maxCandidates} specific, real articles, essays, or papers for: "${request.query.text}"
-
+${refinementBlock}
 CRITICAL RULES:
 1. Each must be a SPECIFIC, PUBLISHED article, essay, or paper — NOT a book and NOT a topic.
 2. You must be CONFIDENT each article actually exists with that exact title.
@@ -166,7 +172,7 @@ Start outputting now:`;
     // News: recent news articles
     if (domain === 'news') {
         return `Find ${maxCandidates} recent news articles about: "${request.query.text}"
-
+${refinementBlock}
 CRITICAL RULES:
 1. Each must be a REAL, RECENT news article from the last 30 days.
 2. Include author and publication in identifiers.
@@ -179,14 +185,10 @@ Output EXACTLY one JSON object per line (NDJSON format). No extra text.
 Start outputting now:`;
     }
 
-    // Build conversation context for all domains
-    const conversationContext = buildConversationContext(request);
-
     return `Find ${maxCandidates} recommendations for: "${request.query.text}"
 Domain: ${domain}
 Location: ${location}
-${conversationContext}
-${conversationContext ? `\nIMPORTANT: If this query is a refinement of a previous search, every recommendation MUST clearly satisfy the refinement criteria. Do not include results that don't match the refinement.\n` : ''}
+${refinementBlock}
 SEARCH_HINT RULE: The "search_hint" is used to look up each result in an external API.
 Include enough context to disambiguate: if the query implies a specific format (anime, TV series, podcast, etc.),
 include that format in the search_hint. Example: "My Happy Marriage anime series" NOT just "My Happy Marriage".
