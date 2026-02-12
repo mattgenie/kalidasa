@@ -358,6 +358,7 @@ VOICE:
 Anti-patterns (NEVER do these):
 - No hedging: "might be", "could be", "it depends on", "may appeal to"
 - No "aligns with your preference" / "matches your profile" / "fits your criteria"
+- No "your favorite" / "right up your alley" / "perfect for your taste" / "your appreciation for"
 - No bro-speak: no "Dude", "Bro", "fam", or similar slang
 - No UUIDs, member IDs, or scoring mechanics
 - No "based on your" more than once across all items

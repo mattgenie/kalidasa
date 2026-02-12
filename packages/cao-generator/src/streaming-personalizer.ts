@@ -118,7 +118,7 @@ export class StreamingPersonalizer {
         } catch (error) {
             console.error(`[StreamPersonalizer] Error for ${candidateName}:`, error);
             return {
-                forUser: `Recommended for ${userName}`,
+                forUser: `Worth checking out — see the summary for details`,
             };
         }
     }
@@ -142,15 +142,25 @@ Why would "${candidateName}" be great for ${userName}?
 Search: "${queryText}"
 Preferences: ${prefs}
 
-TONE (critical):
+PREFERENCE ACCURACY (CRITICAL):
+- You may ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON above.
+- NEVER infer, guess, or hallucinate additional preferences beyond what is in the JSON.
+- If the Preferences JSON is sparse, focus on the item's specific qualities rather than inventing connections.
+
+TONE:
 - Write like a friend recommending something
 - Use "you" and "your", NEVER "${userName}'s preference" or "aligns with"
-- Reference SPECIFIC items from their preferences by name
 - Be enthusiastic but honest about caveats
 - One punchy sentence, max two
 
+BANNED PHRASES (never use these):
+- "your favorite" / "right up your alley" / "perfect for your taste"
+- "aligns with" / "matches your" / "based on your profile"
+- "your appreciation for" / "your interest in"
+
 BAD: "This aligns with ${userName}'s preference for comedy"
-GOOD: "Dry wit meets sharp writing - right up your alley"
+BAD: "Right up your alley given your love of indie films"
+GOOD: "Dry wit meets sharp writing — and the director's long takes give each scene breathing room"
 
 Your recommendation:`;
     }
