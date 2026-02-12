@@ -138,29 +138,27 @@ export class StreamingPersonalizer {
 
         return `${domainContext}
 
-Why would "${candidateName}" be great for ${userName}?
+Tell ${userName} why they'd love "${candidateName}" (or honestly, why it won't click). Ground your note in something SPECIFIC — a scene, a sound, a dish, a moment — not abstract preference-matching.
 Search: "${queryText}"
 Preferences: ${prefs}
 
 PREFERENCE ACCURACY (CRITICAL):
-- You may ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON above.
+- ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON above.
 - NEVER infer, guess, or hallucinate additional preferences beyond what is in the JSON.
 - If the Preferences JSON is sparse, focus on the item's specific qualities rather than inventing connections.
 
 TONE:
-- Write like a friend recommending something
-- Use "you" and "your", NEVER "${userName}'s preference" or "aligns with"
+- Write like a friend who's been there, not an algorithm
 - Be enthusiastic but honest about caveats
 - One punchy sentence, max two
+- COMMIT to a take — "you'll love this" or "skip this one", never hedge
 
-Avoid lazy recommendation clichés ("right up your alley", "perfect for your taste", "aligns with", "matches your profile"). Instead, show WHY it connects:
-
-EXAMPLES OF GREAT NOTES:
-- "The hand-drawn animation here is jaw-dropping, and the themes of loss hit way harder than you'd expect from the poster."
-- "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, and completely absorbing."
+EXAMPLES OF GREAT NOTES (notice: they lead with the item, not the user):
+- "The hand-drawn animation is jaw-dropping, and the themes of loss hit way harder than you'd expect from the poster."
+- "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, completely absorbing."
 - "Skip this if you want something light — it's a slow burn, but the payoff in the last 20 minutes is devastating."
 - "The director shoots every conversation like a heist scene — tight cuts, no wasted frames. You'll tear through it."
-- "Fair warning: the first hour drags, but once the ensemble clicks, it's the best thing you'll watch this year."
+- "The wood-fired crust here is otherworldly, and if you're into natural wine, the list is curated by someone who actually knows what they're doing."
 
 Your recommendation:`;
     }
@@ -183,18 +181,19 @@ Search: "${queryText}"
 
 Give an insider tip — the kind of thing a well-connected local friend would share.
 Focus on what makes it special, what to actually do there, or what most people miss.
+You have NO preference data for this user — tell them what ANYONE would want to know.
 
 RULES:
 - One punchy sentence, max two
-- Be specific and concrete — "the window seats have the best view" not "nice atmosphere"
+- Be specific and concrete — lead with the THING, not the person
 - Only name specific items (dishes, songs, etc.) if you're CONFIDENT they're real
-- Do NOT invent or assume user preferences — you have NO preference data
-- Do NOT say "right up your alley" or "perfect for your taste" — you don't know their taste
 
-BAD: "This aligns with your interest in live music." (inventing preferences)
-BAD: "A popular spot that many enjoy." (generic, useless)
-GOOD: "Go on a weeknight — crowds thin out and you'll actually hear the performers."
-GOOD: "Fair warning: the line wraps around the block, but the brisket is the best in the city."
+EXAMPLES OF GREAT INSIDER TIPS:
+- "Go on a weeknight — crowds thin out and you'll actually hear the performers."
+- "Fair warning: the line wraps around the block, but the brisket is the best in the city."
+- "The tasting menu is a splurge, but the wine pairings are where they really flex."
+- "Skip the main room — the back garden is where locals hide, and the cocktails are better there too."
+- "Sound design alone makes this worth it — headphones, lights off, full attention."
 
 Your insider tip:`;
     }
