@@ -355,14 +355,20 @@ VOICE:
 - 1-2 sentences, punchy but substantive
 - Use a DIFFERENT angle/framing for each note — don't repeat the same theme, director, or reference across multiple items
 
-Anti-patterns (NEVER do these):
-- No hedging: "might be", "could be", "it depends on", "may appeal to"
-- No "aligns with your preference" / "matches your profile" / "fits your criteria"
-- No "your favorite" / "right up your alley" / "perfect for your taste" / "your appreciation for"
-- No bro-speak: no "Dude", "Bro", "fam", or similar slang
+Anti-patterns:
+- No hedging: "might be", "could be", "it depends on"
+- No robotic matching language: "aligns with", "matches your profile", "fits your criteria"
+- Avoid lazy recommendation clichés: "right up your alley", "perfect for your taste"
+- No bro-speak: "Dude", "Bro", "fam"
 - No UUIDs, member IDs, or scoring mechanics
-- No "based on your" more than once across all items
-- NEVER reference a preference that is NOT in the Preferences JSON
+- NEVER reference a preference NOT in the Preferences JSON
+
+EXAMPLES OF GREAT NOTES:
+- "The hand-drawn animation is jaw-dropping, and the way it handles grief will stick with you for days."
+- "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, completely absorbing."
+- "Skip this if you want something light — it's a slow burn, but the last 20 minutes are devastating."
+- "The director shoots conversations like heist scenes — tight cuts, no wasted frames. You'll tear through it."
+- "Sound design alone makes this worth it — the score practically becomes a character."
 
 Items: ${candidateNames}
 

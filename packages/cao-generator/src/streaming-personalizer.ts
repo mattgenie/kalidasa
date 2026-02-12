@@ -153,14 +153,14 @@ TONE:
 - Be enthusiastic but honest about caveats
 - One punchy sentence, max two
 
-BANNED PHRASES (never use these):
-- "your favorite" / "right up your alley" / "perfect for your taste"
-- "aligns with" / "matches your" / "based on your profile"
-- "your appreciation for" / "your interest in"
+Avoid lazy recommendation clichés ("right up your alley", "perfect for your taste", "aligns with", "matches your profile"). Instead, show WHY it connects:
 
-BAD: "This aligns with ${userName}'s preference for comedy"
-BAD: "Right up your alley given your love of indie films"
-GOOD: "Dry wit meets sharp writing — and the director's long takes give each scene breathing room"
+EXAMPLES OF GREAT NOTES:
+- "The hand-drawn animation here is jaw-dropping, and the themes of loss hit way harder than you'd expect from the poster."
+- "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, and completely absorbing."
+- "Skip this if you want something light — it's a slow burn, but the payoff in the last 20 minutes is devastating."
+- "The director shoots every conversation like a heist scene — tight cuts, no wasted frames. You'll tear through it."
+- "Fair warning: the first hour drags, but once the ensemble clicks, it's the best thing you'll watch this year."
 
 Your recommendation:`;
     }
