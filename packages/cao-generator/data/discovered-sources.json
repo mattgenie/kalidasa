@@ -1,0 +1,129 @@
+{
+  "7news.com.au": {
+    "displayName": "7News Australia",
+    "tier": 2,
+    "region": "Asia",
+    "paywall": "free"
+  },
+  "foxnews.com": {
+    "displayName": "Fox News",
+    "tier": 3,
+    "region": "US",
+    "paywall": "free"
+  },
+  "freepressjournal.in": {
+    "displayName": "Free Press Journal",
+    "tier": 3,
+    "region": "Asia",
+    "paywall": "free"
+  },
+  "thestar.com": {
+    "displayName": "The Toronto Star",
+    "tier": 2,
+    "region": "Canada",
+    "paywall": "metered"
+  },
+  "hindustantimes.com": {
+    "displayName": "Hindustan Times",
+    "tier": 2,
+    "region": "Asia",
+    "paywall": "metered"
+  },
+  "mylondon.news": {
+    "displayName": "MyLondon",
+    "tier": 3,
+    "region": "UK",
+    "paywall": "free"
+  },
+  "standard.co.uk": {
+    "displayName": "Evening Standard",
+    "tier": 2,
+    "region": "UK",
+    "paywall": "metered"
+  },
+  "businessinsider.com": {
+    "displayName": "Business Insider",
+    "tier": 2,
+    "region": "Global",
+    "paywall": "metered",
+    "specialty": "finance"
+  },
+  "heavy.com": {
+    "displayName": "Heavy.com",
+    "tier": 3,
+    "region": "US",
+    "paywall": "free",
+    "specialty": "sports"
+  },
+  "fastcompany.com": {
+    "displayName": "Fast Company",
+    "tier": 2,
+    "region": "Global",
+    "paywall": "metered",
+    "specialty": "tech"
+  },
+  "ekathimerini.com": {
+    "displayName": "Kathimerini",
+    "tier": 2,
+    "region": "EU",
+    "paywall": "metered"
+  },
+  "atlantafed.org": {
+    "displayName": "Federal Reserve Bank of Atlanta",
+    "tier": 1,
+    "region": "US",
+    "paywall": "free",
+    "specialty": "finance"
+  },
+  "bankofcanada.ca": {
+    "displayName": "Bank of Canada",
+    "tier": 1,
+    "region": "Canada",
+    "paywall": "free",
+    "specialty": "finance"
+  },
+  "newsweek.com": {
+    "displayName": "Newsweek",
+    "tier": 2,
+    "region": "Global",
+    "paywall": "metered"
+  },
+  "ksat.com": {
+    "displayName": "KSAT",
+    "tier": 3,
+    "region": "US",
+    "paywall": "free"
+  },
+  "sandiegouniontribune.com": {
+    "displayName": "San Diego Union-Tribune",
+    "tier": 2,
+    "region": "US",
+    "paywall": "metered"
+  },
+  "winnipegfreepress.com": {
+    "displayName": "Winnipeg Free Press",
+    "tier": 2,
+    "region": "Canada",
+    "paywall": "metered"
+  },
+  "bankofengland.co.uk": {
+    "displayName": "Bank of England",
+    "tier": 2,
+    "region": "UK",
+    "paywall": "free",
+    "specialty": "finance"
+  },
+  "globenewswire.com": {
+    "displayName": "GlobeNewswire",
+    "tier": 2,
+    "region": "Global",
+    "paywall": "free"
+  },
+  "w3.org": {
+    "displayName": "W3C",
+    "tier": 2,
+    "region": "Global",
+    "paywall": "free",
+    "specialty": "tech"
+  }
+}

@@ -7,7 +7,9 @@
  * Music:    "Bon Iver · Bon Iver, Bon Iver · 2011"
  * Events:   "Feb 7 · The McKittrick Hotel · $100–$150"
  * Videos:   "Vox · 12:34 · 2.1M views"
- * Articles: "Stratechery · Ben Thompson · Jan 15"
+ * Articles: "Stratechery · Ben Thompson · 12 min read"
+ * Books:    "W.W. Norton, 2020 · Brian Christian · 352 pages"
+ * News:     "New York Times · 2 hours ago · David Gelles"
  */
 
 import type { EnrichmentResult, Domain } from '@kalidasa/types';
@@ -35,6 +37,10 @@ export function generateSubheader(
             return buildVideosSubheader(enrichment);
         case 'articles':
             return buildArticlesSubheader(enrichment);
+        case 'books':
+            return buildBooksSubheader(enrichment);
+        case 'news':
+            return buildNewsSubheader(enrichment);
         case 'general':
             return buildGeneralSubheader(enrichment);
         default:
@@ -155,18 +161,93 @@ function buildVideosSubheader(e: EnrichmentResult): string | undefined {
 
 function buildArticlesSubheader(e: EnrichmentResult): string | undefined {
     const a = e.articles;
-    if (!a) return undefined;
+    if (!a) {
+        // Fallback: if we have general enrichment (Wikipedia), use its description
+        const g = e.general;
+        if (g?.description) return g.description;
+        return undefined;
+    }
 
     const chips: string[] = [];
 
-    if (a.source) {
+    // NEVER show 'Wikipedia' as the publication source
+    if (a.source && !a.source.toLowerCase().includes('wikipedia')) {
         chips.push(a.source);
     }
     if (a.author) {
         chips.push(a.author);
     }
-    if (a.publishedAt) {
+    if (a.readingTimeMinutes) {
+        chips.push(`${a.readingTimeMinutes} min read`);
+    } else if (a.publishedAt) {
         chips.push(formatShortDate(a.publishedAt));
+    }
+
+    return chips.length > 0 ? chips.join(SEP) : undefined;
+}
+
+function buildBooksSubheader(e: EnrichmentResult): string | undefined {
+    const b = e.books;
+    if (!b) return undefined;
+
+    const chips: string[] = [];
+
+    // Publisher and year: "W.W. Norton, 2020"
+    if (b.publisher && b.year) {
+        chips.push(`${b.publisher}, ${b.year}`);
+    } else if (b.publisher) {
+        chips.push(b.publisher);
+    } else if (b.year) {
+        chips.push(String(b.year));
+    }
+
+    if (b.author) {
+        chips.push(b.author);
+    }
+
+    if (b.pageCount) {
+        chips.push(`${b.pageCount} pages`);
+    }
+
+    if (b.rating) {
+        chips.push(`${b.rating}★`);
+    }
+
+    return chips.length > 0 ? chips.join(SEP) : undefined;
+}
+
+function buildNewsSubheader(e: EnrichmentResult): string | undefined {
+    const n = e.news;
+    if (!n) return undefined;
+
+    const chips: string[] = [];
+
+    // Source with tier badge (★ = Tier 1)
+    if (n.source && !n.source.toLowerCase().includes('wikipedia')) {
+        const tierBadge = n.sourceTier === 1 ? '★ ' : '';
+        chips.push(`${tierBadge}${n.source}`);
+    }
+
+    // Relative time
+    if (n.publishedAt) {
+        chips.push(formatRelativeTime(n.publishedAt));
+    }
+
+    // Author
+    if (n.author) {
+        chips.push(n.author);
+    }
+
+    // Article type (only show non-default types)
+    if (n.articleType && n.articleType !== 'reporting') {
+        chips.push(n.articleType);
+    }
+
+    // Paywall indicator
+    if (n.paywall === 'hard') {
+        chips.push('🔒');
+    } else if (n.paywall === 'metered') {
+        chips.push('🔓');
     }
 
     return chips.length > 0 ? chips.join(SEP) : undefined;
@@ -222,4 +303,27 @@ function formatViewCount(count: number): string {
         return `${k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)}K views`;
     }
     return `${count} views`;
+}
+
+/** Format a date as relative time: "2 hours ago", "3 days ago" */
+function formatRelativeTime(dateStr: string): string {
+    try {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr;
+
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        if (diffHours < 1) return 'Just now';
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffHours < 48) return 'Yesterday';
+        const diffDays = Math.floor(diffHours / 24);
+        if (diffDays < 7) return `${diffDays}d ago`;
+        if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+
+        return formatShortDate(dateStr);
+    } catch {
+        return dateStr;
+    }
 }

@@ -21,17 +21,27 @@ export * from './types.js';
 export { DOMAIN_REGISTRY, REGISTRY_VERSION };
 
 // ============================================================================
-// Domain Access
+// Derived Types (compile-time literal unions from registry)
 // ============================================================================
 
-/** Get all domain names */
-export function getDomainNames(): string[] {
-    return Object.keys(DOMAIN_REGISTRY.domains);
-}
+/** Compile-time literal union of all domain names: 'places' | 'movies' | 'music' | ... */
+export type DomainName = keyof typeof DOMAIN_REGISTRY.domains;
+
+/** Compile-time literal union of all singular result types: 'place' | 'movie' | 'music' | ... */
+export type SingularType = typeof DOMAIN_REGISTRY.domains[DomainName]['singularType'];
+
+/** Compile-time literal union of all item renderers: 'place_card' | 'movie_card' | ... */
+export type ItemRendererType = typeof DOMAIN_REGISTRY.domains[DomainName]['itemRenderer'];
+
+/** Typed domain names array for runtime iteration */
+export const DOMAIN_NAMES = Object.keys(DOMAIN_REGISTRY.domains) as DomainName[];
 
 /** Get domain definition by name */
 export function getDomain(name: string): DomainDefinition | undefined {
-    return DOMAIN_REGISTRY.domains[name];
+    if (name in DOMAIN_REGISTRY.domains) {
+        return DOMAIN_REGISTRY.domains[name as DomainName];
+    }
+    return undefined;
 }
 
 /** Check if domain is known */
@@ -41,7 +51,10 @@ export function isKnownDomain(name: string): boolean {
 
 /** Get domain or fallback to general */
 export function getDomainOrDefault(name: string): DomainDefinition {
-    return DOMAIN_REGISTRY.domains[name] || DOMAIN_REGISTRY.domains.general;
+    if (name in DOMAIN_REGISTRY.domains) {
+        return DOMAIN_REGISTRY.domains[name as DomainName];
+    }
+    return DOMAIN_REGISTRY.domains.general;
 }
 
 // ============================================================================

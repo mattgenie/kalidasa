@@ -57,7 +57,9 @@ export interface RawCAOCandidate {
 // Enrichment Hook Interface
 // ============================================================================
 
-export type EnrichmentDomain = 'places' | 'movies' | 'music' | 'events' | 'videos' | 'articles' | 'general';
+import type { DomainName } from '@kalidasa/domain-registry';
+
+export type EnrichmentDomain = DomainName;
 
 export interface EnrichmentHook {
     /** Unique identifier for this hook */
@@ -111,6 +113,8 @@ export interface EnrichmentData {
     events?: import('./cao.js').EventsEnrichment;
     videos?: import('./cao.js').VideosEnrichment;
     articles?: import('./cao.js').ArticlesEnrichment;
+    books?: import('./cao.js').BooksEnrichment;
+    news?: import('./cao.js').NewsEnrichment;
     general?: import('./cao.js').GeneralEnrichment;
 }
 

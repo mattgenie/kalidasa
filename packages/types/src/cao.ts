@@ -99,6 +99,10 @@ export interface EnrichmentResult {
     videos?: VideosEnrichment;
     /** Articles enrichment data */
     articles?: ArticlesEnrichment;
+    /** Books enrichment data */
+    books?: BooksEnrichment;
+    /** News enrichment data */
+    news?: NewsEnrichment;
     /** General enrichment data */
     general?: GeneralEnrichment;
 }
@@ -181,6 +185,57 @@ export interface ArticlesEnrichment {
     imageUrl?: string;
     url?: string;
     summary?: string;
+    readingTimeMinutes?: number;
+    wordCount?: number;
+    qualityScore?: number;
+    topics?: string[];
+}
+
+export interface BooksEnrichment {
+    title?: string;
+    author?: string;
+    publisher?: string;
+    year?: number;
+    pageCount?: number;
+    coverUrl?: string;
+    isbn?: string;
+    openLibraryUrl?: string;
+    googleBooksUrl?: string;
+    rating?: number;
+    ratingsCount?: number;
+    subjects?: string[];
+    summary?: string;
+}
+
+export interface NewsEnrichment {
+    /** Article headline (real, from search API) */
+    title?: string;
+    /** Author name */
+    author?: string;
+    /** Publication date ISO 8601 */
+    publishedAt?: string;
+    /** Source outlet display name */
+    source?: string;
+    /** Source domain for dedup/tiering */
+    sourceDomain?: string;
+    /** Quality tier: 1=paper of record, 2=respected specialist, 3=good niche, 0=unknown */
+    sourceTier?: number;
+    /** Geographic region of the outlet */
+    sourceRegion?: string;
+    /** Paywall status */
+    paywall?: 'free' | 'metered' | 'hard';
+    /** Article type */
+    articleType?: 'reporting' | 'analysis' | 'opinion' | 'investigation' | 'explainer';
+    /** Article hero image URL */
+    imageUrl?: string;
+    /** Article URL */
+    url?: string;
+    /** Article snippet/summary from search API */
+    summary?: string;
+    /** Estimated word count */
+    wordCount?: number;
+    /** Estimated reading time in minutes */
+    readingTimeMinutes?: number;
 }
 
 export interface GeneralEnrichment {
@@ -203,13 +258,15 @@ export interface AnswerBundle {
     facetsApplied: string[];
 }
 
+import type { ItemRendererType } from '@kalidasa/domain-registry';
+
 export interface RenderHints {
     /** Component type for the frontend */
     componentType: 'search_grid' | 'carousel' | 'detailed_list' | 'comparison_matrix';
     /** Domain for styling */
     domain: string;
-    /** Item renderer component */
-    itemRenderer: 'place_card' | 'movie_card' | 'music_card' | 'event_card' | 'video_card' | 'article_card' | 'generic_card';
+    /** Item renderer component — derived from domain registry */
+    itemRenderer: ItemRendererType;
     /** Layout options */
     layout?: {
         columns?: number;

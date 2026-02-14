@@ -5,12 +5,13 @@
 import type { PersonalizationCapsule } from './capsule.js';
 import type { LogisticsContext } from './logistics.js';
 import type { CAOResult, AnswerBundle, RenderHints, ComparisonMatrix, SourceItem } from './cao.js';
+import type { DomainName } from '@kalidasa/domain-registry';
 
 // ============================================================================
 // Search Request
 // ============================================================================
 
-export type Domain = 'places' | 'movies' | 'music' | 'events' | 'videos' | 'articles' | 'general';
+export type Domain = DomainName;
 
 export interface KalidasaSearchRequest {
     /**

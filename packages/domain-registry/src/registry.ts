@@ -3,17 +3,23 @@
  * 
  * Central registry of all supported search domains.
  * Add new domains here to enable them across Kalidasa and Chat Agent.
+ * 
+ * IMPORTANT: This is the SINGLE SOURCE OF TRUTH for domain definitions.
+ * Types like DomainName, SingularType, and ItemRendererType are derived
+ * from this object at compile time. When you add a domain here, the
+ * TypeScript compiler will guide you to every place that needs updating.
  */
 
-import type { DomainDefinition, DomainRegistry } from './types.js';
+import type { DomainDefinition } from './types.js';
 
-export const REGISTRY_VERSION = '1.0.0';
+export const REGISTRY_VERSION = '1.1.0';
 
-export const DOMAIN_REGISTRY: DomainRegistry = {
+export const DOMAIN_REGISTRY = {
     version: REGISTRY_VERSION,
     domains: {
         places: {
             name: 'places',
+            singularType: 'place',
             displayName: 'Restaurants & Venues',
             enrichmentHooks: ['google_places', 'yelp'],
             identifierSpec: { address: '...', city: '...' },
@@ -29,6 +35,7 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
         },
         movies: {
             name: 'movies',
+            singularType: 'movie',
             displayName: 'Movies & TV',
             enrichmentHooks: ['tmdb', 'omdb'],
             identifierSpec: { year: '2024', director: '...' },
@@ -44,6 +51,7 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
         },
         music: {
             name: 'music',
+            singularType: 'music',
             displayName: 'Music & Songs',
             enrichmentHooks: ['apple_music', 'spotify'],
             identifierSpec: { artist: '...', album: '...' },
@@ -59,6 +67,7 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
         },
         events: {
             name: 'events',
+            singularType: 'event',
             displayName: 'Events & Experiences',
             enrichmentHooks: ['ticketmaster', 'eventbrite'],
             identifierSpec: { venue: '...', date: 'YYYY-MM-DD', city: '...' },
@@ -74,6 +83,7 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
         },
         videos: {
             name: 'videos',
+            singularType: 'video',
             displayName: 'Videos',
             enrichmentHooks: ['youtube', 'vimeo'],
             identifierSpec: { channel: '...', url: '...' },
@@ -85,22 +95,53 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
                 'how to', 'watch video', 'channel', 'subscribe', 'shorts'
             ],
         },
+        books: {
+            name: 'books',
+            singularType: 'book',
+            displayName: 'Books',
+            enrichmentHooks: ['books_composite'],
+            identifierSpec: { author: '...', publisher: '...', year: '2024' },
+            temporalityDefault: 'evergreen',
+            itemRenderer: 'book_card',
+            exclusionCategories: ['genres', 'topics'],
+            detectionKeywords: [
+                'book', 'books', 'read', 'reading', 'novel', 'nonfiction',
+                'non-fiction', 'author', 'memoir', 'biography', 'autobiography',
+                'textbook', 'bestseller', 'paperback', 'hardcover',
+            ],
+        },
         articles: {
             name: 'articles',
-            displayName: 'Articles & News',
-            enrichmentHooks: ['newsapi', 'newsmesh'],
-            identifierSpec: { source: '...', date: 'YYYY-MM-DD', url: '...' },
-            temporalityDefault: 'current',
+            singularType: 'article',
+            displayName: 'Articles & Essays',
+            enrichmentHooks: ['articles_composite'],
+            identifierSpec: { author: '...', source: '...', url: '...' },
+            temporalityDefault: 'evergreen',
             itemRenderer: 'article_card',
             exclusionCategories: ['sources', 'topics'],
             detectionKeywords: [
-                'article', 'news', 'read', 'story', 'report', 'breaking',
-                'headline', 'blog', 'post', 'editorial', 'opinion',
-                'latest news', 'current events'
+                'article', 'essay', 'blog', 'longform', 'post', 'editorial',
+                'opinion', 'paper', 'thesis', 'report', 'journal',
+                'magazine', 'column', 'piece',
+            ],
+        },
+        news: {
+            name: 'news',
+            singularType: 'news',
+            displayName: 'News',
+            enrichmentHooks: ['newsapi'],
+            identifierSpec: { source: '...', date: 'YYYY-MM-DD', url: '...' },
+            temporalityDefault: 'current',
+            itemRenderer: 'news_card',
+            exclusionCategories: ['sources', 'topics'],
+            detectionKeywords: [
+                'news', 'breaking', 'headline', 'latest', 'current events',
+                'today', 'yesterday', 'this week', 'recent',
             ],
         },
         general: {
             name: 'general',
+            singularType: 'general',
             displayName: 'General Knowledge',
             enrichmentHooks: ['wikipedia'],
             identifierSpec: { wikipedia_title: '...' },
@@ -110,4 +151,4 @@ export const DOMAIN_REGISTRY: DomainRegistry = {
             detectionKeywords: [],  // Fallback domain - no keywords
         },
     },
-};
+} as const satisfies { version: string; domains: Record<string, DomainDefinition> };

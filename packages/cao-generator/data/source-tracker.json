@@ -1,0 +1,4016 @@
+{
+  "version": 1,
+  "lastMaintenance": "2026-02-11T01:43:36.230Z",
+  "domains": {
+    "nytimes.com": {
+      "domain": "nytimes.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "timeout",
+        "success",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 16,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:33:42.720Z",
+      "lastSuccess": "2026-02-11T12:30:02.053Z",
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "ft.com": {
+      "domain": "ft.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 9,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "wsj.com": {
+      "domain": "wsj.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "junk",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 11,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "economist.com": {
+      "domain": "economist.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "bloomberg.com": {
+      "domain": "bloomberg.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 10,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:24:45.511Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "theatlantic.com": {
+      "domain": "theatlantic.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "junk"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "newyorker.com": {
+      "domain": "newyorker.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "washingtonpost.com": {
+      "domain": "washingtonpost.com",
+      "outcomes": [
+        "junk",
+        "success",
+        "success",
+        "timeout",
+        "junk",
+        "success",
+        "junk",
+        "timeout",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 30,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T14:38:07.767Z",
+      "lastSuccess": "2026-02-11T14:33:58.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theinformation.com": {
+      "domain": "theinformation.com",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "thetimes.co.uk": {
+      "domain": "thetimes.co.uk",
+      "outcomes": [
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall",
+        "paywall"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "foxnews.com": {
+      "domain": "foxnews.com",
+      "outcomes": [
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "si.com": {
+      "domain": "si.com",
+      "outcomes": [
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "arstechnica.com": {
+      "domain": "arstechnica.com",
+      "outcomes": [
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "politico.com": {
+      "domain": "politico.com",
+      "outcomes": [
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T01:43:36.231Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T01:43:36.231Z",
+      "trialRemaining": null
+    },
+    "api.kyivindependent.com": {
+      "domain": "api.kyivindependent.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": "2026-02-11T13:29:12.173Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "kyivindependent.com": {
+      "domain": "kyivindependent.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:32:34.408Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:09:40.256Z",
+      "trialRemaining": null
+    },
+    "thenewhumanitarian.org": {
+      "domain": "thenewhumanitarian.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:32:34.408Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:09:40.256Z",
+      "trialRemaining": null
+    },
+    "voanews.com": {
+      "domain": "voanews.com",
+      "outcomes": [
+        "junk",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T08:32:34.408Z",
+      "lastSuccess": "2026-02-11T08:32:34.408Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nbcnews.com": {
+      "domain": "nbcnews.com",
+      "outcomes": [
+        "success",
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "timeout",
+        "junk",
+        "junk",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 11,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:33.076Z",
+      "lastSuccess": "2026-02-11T01:43:59.970Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "usatoday.com": {
+      "domain": "usatoday.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 37,
+      "totalSuccesses": 33,
+      "lastAttempt": "2026-02-11T14:33:10.125Z",
+      "lastSuccess": "2026-02-11T14:33:10.125Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cnn.com": {
+      "domain": "cnn.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 28,
+      "totalSuccesses": 21,
+      "lastAttempt": "2026-02-11T14:34:09.351Z",
+      "lastSuccess": "2026-02-11T08:32:35.355Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "aljazeera.com": {
+      "domain": "aljazeera.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success"
+      ],
+      "totalAttempts": 17,
+      "totalSuccesses": 8,
+      "lastAttempt": "2026-02-11T14:33:40.010Z",
+      "lastSuccess": "2026-02-11T14:33:40.010Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "latimes.com": {
+      "domain": "latimes.com",
+      "outcomes": [
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 14,
+      "totalSuccesses": 9,
+      "lastAttempt": "2026-02-11T14:33:06.175Z",
+      "lastSuccess": "2026-02-11T14:33:06.175Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "reuters.com": {
+      "domain": "reuters.com",
+      "outcomes": [
+        "no-text",
+        "success",
+        "timeout",
+        "no-text",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 16,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T13:29:27.698Z",
+      "lastSuccess": "2026-02-11T07:39:02.842Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "axios.com": {
+      "domain": "axios.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "success",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 15,
+      "totalSuccesses": 8,
+      "lastAttempt": "2026-02-11T14:34:06.567Z",
+      "lastSuccess": "2026-02-11T14:34:06.567Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "scmp.com": {
+      "domain": "scmp.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 15,
+      "totalSuccesses": 10,
+      "lastAttempt": "2026-02-11T13:29:23.692Z",
+      "lastSuccess": "2026-02-11T08:32:36.190Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "smh.com.au": {
+      "domain": "smh.com.au",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "no-text",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 9,
+      "totalSuccesses": 7,
+      "lastAttempt": "2026-02-11T14:34:12.630Z",
+      "lastSuccess": "2026-02-11T14:34:12.630Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "independent.co.uk": {
+      "domain": "independent.co.uk",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:24:45.511Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T07:21:51.258Z",
+      "trialRemaining": null
+    },
+    "apnews.com": {
+      "domain": "apnews.com",
+      "outcomes": [
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 16,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T14:38:12.643Z",
+      "lastSuccess": "2026-02-11T14:38:12.643Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "understandingwar.org": {
+      "domain": "understandingwar.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 24,
+      "totalSuccesses": 24,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": "2026-02-11T13:29:12.173Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theage.com.au": {
+      "domain": "theage.com.au",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "timeout"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:42.822Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T13:29:42.822Z",
+      "trialRemaining": null
+    },
+    "bbc.com": {
+      "domain": "bbc.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 20,
+      "totalSuccesses": 15,
+      "lastAttempt": "2026-02-11T14:33:46.388Z",
+      "lastSuccess": "2026-02-11T14:33:46.388Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "the-independent.com": {
+      "domain": "the-independent.com",
+      "outcomes": [
+        "timeout",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T13:29:15.681Z",
+      "lastSuccess": "2026-02-11T08:09:41.229Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ox.ac.uk": {
+      "domain": "ox.ac.uk",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T07:39:17.844Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mediawell.ssrc.org": {
+      "domain": "mediawell.ssrc.org",
+      "outcomes": [
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 25,
+      "totalSuccesses": 13,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T13:31:28.438Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "itif.org": {
+      "domain": "itif.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "blogs.lse.ac.uk": {
+      "domain": "blogs.lse.ac.uk",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T07:39:17.844Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "promarket.org": {
+      "domain": "promarket.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:28.438Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T12:29:48.248Z",
+      "trialRemaining": null
+    },
+    "publicknowledge.org": {
+      "domain": "publicknowledge.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "defenseone.com": {
+      "domain": "defenseone.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T07:39:18.525Z",
+      "lastSuccess": "2026-02-11T07:39:18.525Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "keo.co.za": {
+      "domain": "keo.co.za",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T08:09:08.120Z",
+      "lastSuccess": "2026-02-11T08:09:08.120Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "heavy.com": {
+      "domain": "heavy.com",
+      "outcomes": [
+        "timeout",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T08:09:08.166Z",
+      "lastSuccess": "2026-02-11T08:09:08.166Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "forwardlawreview.com": {
+      "domain": "forwardlawreview.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:28:46.607Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:15:09.902Z",
+      "trialRemaining": null
+    },
+    "washingtontimes.com": {
+      "domain": "washingtontimes.com",
+      "outcomes": [
+        "success",
+        "success",
+        "no-text",
+        "no-text",
+        "timeout",
+        "success",
+        "success",
+        "timeout",
+        "no-text",
+        "timeout"
+      ],
+      "totalAttempts": 19,
+      "totalSuccesses": 13,
+      "lastAttempt": "2026-02-11T14:38:27.335Z",
+      "lastSuccess": "2026-02-11T14:34:04.663Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "abc.net.au": {
+      "domain": "abc.net.au",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 15,
+      "totalSuccesses": 14,
+      "lastAttempt": "2026-02-11T14:34:29.070Z",
+      "lastSuccess": "2026-02-11T14:34:26.436Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thestar.com": {
+      "domain": "thestar.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 27,
+      "totalSuccesses": 25,
+      "lastAttempt": "2026-02-11T14:33:31.218Z",
+      "lastSuccess": "2026-02-11T14:33:31.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ksat.com": {
+      "domain": "ksat.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 14,
+      "totalSuccesses": 9,
+      "lastAttempt": "2026-02-11T14:34:25.067Z",
+      "lastSuccess": "2026-02-11T08:28:52.574Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "winnipegfreepress.com": {
+      "domain": "winnipegfreepress.com",
+      "outcomes": [
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text",
+        "no-text"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:06:50.412Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:06:50.412Z",
+      "trialRemaining": null
+    },
+    "sandiegouniontribune.com": {
+      "domain": "sandiegouniontribune.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 13,
+      "totalSuccesses": 9,
+      "lastAttempt": "2026-02-11T14:33:23.606Z",
+      "lastSuccess": "2026-02-11T08:28:52.499Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bostonherald.com": {
+      "domain": "bostonherald.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "no-text",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 14,
+      "totalSuccesses": 11,
+      "lastAttempt": "2026-02-11T14:33:40.164Z",
+      "lastSuccess": "2026-02-11T14:33:40.164Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "environment.govt.nz": {
+      "domain": "environment.govt.nz",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:28:50.733Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:15:16.990Z",
+      "trialRemaining": null
+    },
+    "tonko.house.gov": {
+      "domain": "tonko.house.gov",
+      "outcomes": [
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 10,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T08:28:50.733Z",
+      "lastSuccess": "2026-02-11T08:27:13.517Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cleanenergywire.org": {
+      "domain": "cleanenergywire.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:28:50.733Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:28:50.733Z",
+      "trialRemaining": null
+    },
+    "whitehouse.gov": {
+      "domain": "whitehouse.gov",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T14:34:02.417Z",
+      "lastSuccess": "2026-02-11T14:34:02.417Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "eenews.net": {
+      "domain": "eenews.net",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 9,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:35.562Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T08:06:53.657Z",
+      "trialRemaining": null
+    },
+    "blogs.law.columbia.edu": {
+      "domain": "blogs.law.columbia.edu",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T07:39:31.785Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mondaq.com": {
+      "domain": "mondaq.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 12,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "dw.com": {
+      "domain": "dw.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T14:34:09.350Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "newsweek.com": {
+      "domain": "newsweek.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 7,
+      "lastAttempt": "2026-02-11T14:33:47.571Z",
+      "lastSuccess": "2026-02-11T14:33:47.571Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "rawstory.com": {
+      "domain": "rawstory.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T13:31:24.228Z",
+      "lastSuccess": "2026-02-11T08:28:51.042Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nationalinterest.org": {
+      "domain": "nationalinterest.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 7,
+      "lastAttempt": "2026-02-11T08:28:51.669Z",
+      "lastSuccess": "2026-02-11T08:28:51.669Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news-herald.net": {
+      "domain": "news-herald.net",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:32:34.408Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "carbonbrief.org": {
+      "domain": "carbonbrief.org",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:28:46.607Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nature.com": {
+      "domain": "nature.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "junk",
+        "success"
+      ],
+      "totalAttempts": 12,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:35.562Z",
+      "lastSuccess": "2026-02-11T13:29:35.562Z",
+      "blockedSince": "2026-02-11T08:28:50.733Z",
+      "trialRemaining": null
+    },
+    "theguardian.com": {
+      "domain": "theguardian.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:34:02.191Z",
+      "lastSuccess": "2026-02-11T14:34:02.191Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "foreignaffairs.com": {
+      "domain": "foreignaffairs.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T12:27:58.628Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "climatechangenews.com": {
+      "domain": "climatechangenews.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:35.562Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nationalobserver.com": {
+      "domain": "nationalobserver.com",
+      "outcomes": [
+        "timeout",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T08:28:52.644Z",
+      "lastSuccess": "2026-02-11T08:28:52.644Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "premiumtimesng.com": {
+      "domain": "premiumtimesng.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:32:34.408Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "businessinsider.com": {
+      "domain": "businessinsider.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 11,
+      "totalSuccesses": 9,
+      "lastAttempt": "2026-02-11T14:33:47.568Z",
+      "lastSuccess": "2026-02-11T14:33:47.568Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "lemonde.fr": {
+      "domain": "lemonde.fr",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cepa.org": {
+      "domain": "cepa.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:09:07.190Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "aei.org": {
+      "domain": "aei.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:31:28.438Z",
+      "lastSuccess": "2026-02-11T13:31:28.438Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "arxiv.org": {
+      "domain": "arxiv.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:28:21.250Z",
+      "lastSuccess": "2026-02-11T12:28:21.250Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bisi.org.uk": {
+      "domain": "bisi.org.uk",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T12:29:48.248Z",
+      "lastSuccess": "2026-02-11T12:29:48.248Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bnnbloomberg.ca": {
+      "domain": "bnnbloomberg.ca",
+      "outcomes": [
+        "success",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:31:55.008Z",
+      "lastSuccess": "2026-02-11T12:28:36.435Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "fastcompany.com": {
+      "domain": "fastcompany.com",
+      "outcomes": [
+        "timeout",
+        "timeout",
+        "timeout",
+        "success",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:27.612Z",
+      "lastSuccess": "2026-02-11T13:29:41.193Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "profootballnetwork.com": {
+      "domain": "profootballnetwork.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:09:10.695Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thehill.com": {
+      "domain": "thehill.com",
+      "outcomes": [
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:46.726Z",
+      "lastSuccess": "2026-02-11T08:09:12.281Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "france24.com": {
+      "domain": "france24.com",
+      "outcomes": [
+        "success",
+        "timeout",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:31:58.851Z",
+      "lastSuccess": "2026-02-11T13:31:58.851Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "chicago.suntimes.com": {
+      "domain": "chicago.suntimes.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T08:09:12.342Z",
+      "lastSuccess": "2026-02-11T08:09:12.342Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mirror.co.uk": {
+      "domain": "mirror.co.uk",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:09:14.707Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "wealthprofessional.ca": {
+      "domain": "wealthprofessional.ca",
+      "outcomes": [
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T08:27:11.923Z",
+      "lastSuccess": "2026-02-11T08:27:11.923Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "eos.org": {
+      "domain": "eos.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T12:29:45.555Z",
+      "lastSuccess": "2026-02-11T12:29:45.555Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "frontiersin.org": {
+      "domain": "frontiersin.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T08:27:13.517Z",
+      "lastSuccess": "2026-02-11T08:27:13.517Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nzherald.co.nz": {
+      "domain": "nzherald.co.nz",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T08:09:40.256Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "naturalcarboncapture.yale.edu": {
+      "domain": "naturalcarboncapture.yale.edu",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T08:28:46.607Z",
+      "lastSuccess": "2026-02-11T08:28:46.607Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "kyivpost.com": {
+      "domain": "kyivpost.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T13:29:12.173Z",
+      "trialRemaining": null
+    },
+    "digg.com": {
+      "domain": "digg.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:24:43.470Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "espn.com": {
+      "domain": "espn.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:20.754Z",
+      "lastSuccess": "2026-02-11T13:29:20.754Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "haaretz.com": {
+      "domain": "haaretz.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:24:45.511Z",
+      "lastSuccess": "2026-02-11T12:24:45.511Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "npr.org": {
+      "domain": "npr.org",
+      "outcomes": [
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:33.077Z",
+      "lastSuccess": "2026-02-11T12:24:45.511Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "project-syndicate.org": {
+      "domain": "project-syndicate.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T12:29:39.289Z",
+      "lastSuccess": "2026-02-11T12:29:39.289Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "globalsecurityreview.com": {
+      "domain": "globalsecurityreview.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:27:58.628Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "semafor.com": {
+      "domain": "semafor.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:29.939Z",
+      "lastSuccess": "2026-02-11T14:34:29.939Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thenationalnews.com": {
+      "domain": "thenationalnews.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": "2026-02-11T12:29:32.211Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "indianexpress.com": {
+      "domain": "indianexpress.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:27:58.628Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "usnews.com": {
+      "domain": "usnews.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:27:58.628Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "neamgroup.com": {
+      "domain": "neamgroup.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "forrester.com": {
+      "domain": "forrester.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:06.449Z",
+      "lastSuccess": "2026-02-11T13:29:12.173Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "fisherinvestments.com": {
+      "domain": "fisherinvestments.com",
+      "outcomes": [
+        "success",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:05.206Z",
+      "lastSuccess": "2026-02-11T12:27:58.629Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "argentfinancial.com": {
+      "domain": "argentfinancial.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:27:58.629Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "think.ing.com": {
+      "domain": "think.ing.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": "2026-02-11T12:29:57.703Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "7news.com.au": {
+      "domain": "7news.com.au",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:28:07.152Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "dailymail.co.uk": {
+      "domain": "dailymail.co.uk",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:28:07.152Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mckinsey.com": {
+      "domain": "mckinsey.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:28:11.958Z",
+      "lastSuccess": "2026-02-11T12:28:11.958Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "csmapnyu.org": {
+      "domain": "csmapnyu.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:48.248Z",
+      "lastSuccess": "2026-02-11T12:29:48.248Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mdpi.com": {
+      "domain": "mdpi.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "yougov.co.uk": {
+      "domain": "yougov.co.uk",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T12:29:48.248Z",
+      "lastSuccess": "2026-02-11T12:29:48.248Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "oajournals.fupress.net": {
+      "domain": "oajournals.fupress.net",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:48.248Z",
+      "lastSuccess": "2026-02-11T12:29:48.248Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "unesco.org": {
+      "domain": "unesco.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success"
+      ],
+      "totalAttempts": 20,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": "2026-02-11T13:31:47.502Z",
+      "trialRemaining": null
+    },
+    "digital-strategy.ec.europa.eu": {
+      "domain": "digital-strategy.ec.europa.eu",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:48.248Z",
+      "lastSuccess": "2026-02-11T12:29:48.248Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "europarl.europa.eu": {
+      "domain": "europarl.europa.eu",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "harvardlawreview.org": {
+      "domain": "harvardlawreview.org",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:17.511Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T14:38:17.511Z",
+      "trialRemaining": null
+    },
+    "edaa.eu": {
+      "domain": "edaa.eu",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "stratechery.com": {
+      "domain": "stratechery.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:28:14.825Z",
+      "lastSuccess": "2026-02-11T12:28:14.825Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "competitionandmarkets.blog.gov.uk": {
+      "domain": "competitionandmarkets.blog.gov.uk",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:28:14.825Z",
+      "lastSuccess": "2026-02-11T12:28:14.825Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "lexology.com": {
+      "domain": "lexology.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T13:31:28.439Z",
+      "lastSuccess": "2026-02-11T13:31:28.439Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "dogdogfish.com": {
+      "domain": "dogdogfish.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:28:14.825Z",
+      "lastSuccess": "2026-02-11T12:28:14.825Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "carnegieendowment.org": {
+      "domain": "carnegieendowment.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": "2026-02-11T13:29:50.427Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "fda.gov": {
+      "domain": "fda.gov",
+      "outcomes": [
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:29:51.679Z",
+      "lastSuccess": "2026-02-11T12:28:21.250Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "brookings.edu": {
+      "domain": "brookings.edu",
+      "outcomes": [
+        "success",
+        "success",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:21.563Z",
+      "lastSuccess": "2026-02-11T12:29:51.679Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "republicworld.com": {
+      "domain": "republicworld.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:28:24.755Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ekathimerini.com": {
+      "domain": "ekathimerini.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 28,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:32.550Z",
+      "lastSuccess": "2026-02-11T12:29:54.529Z",
+      "blockedSince": "2026-02-11T13:32:06.449Z",
+      "trialRemaining": null
+    },
+    "en.parapolitika.gr": {
+      "domain": "en.parapolitika.gr",
+      "outcomes": [
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success",
+        "junk",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 28,
+      "totalSuccesses": 20,
+      "lastAttempt": "2026-02-11T14:38:32.550Z",
+      "lastSuccess": "2026-02-11T14:38:32.550Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "pressreader.com": {
+      "domain": "pressreader.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:32.550Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T14:38:32.550Z",
+      "trialRemaining": null
+    },
+    "miragenews.com": {
+      "domain": "miragenews.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:54.529Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "dnews.gr": {
+      "domain": "dnews.gr",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:54.529Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "en.protothema.gr": {
+      "domain": "en.protothema.gr",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:32.550Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "tovima.com": {
+      "domain": "tovima.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "greekreporter.com": {
+      "domain": "greekreporter.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "politpro.eu": {
+      "domain": "politpro.eu",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": "2026-02-11T12:29:57.703Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "marketscreener.com": {
+      "domain": "marketscreener.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "openknowledge.worldbank.org": {
+      "domain": "openknowledge.worldbank.org",
+      "outcomes": [
+        "success",
+        "junk",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cypruseconomicsociety.org": {
+      "domain": "cypruseconomicsociety.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": "2026-02-11T12:29:57.703Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ceicdata.com": {
+      "domain": "ceicdata.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:57.703Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "wellsfargo.bluematrix.com": {
+      "domain": "wellsfargo.bluematrix.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:30:02.053Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cnbc.com": {
+      "domain": "cnbc.com",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "success",
+        "junk",
+        "success",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 22,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:34:21.563Z",
+      "blockedSince": "2026-02-11T12:28:35.386Z",
+      "trialRemaining": null
+    },
+    "conference-board.org": {
+      "domain": "conference-board.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 7,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bankofcanada.ca": {
+      "domain": "bankofcanada.ca",
+      "outcomes": [
+        "junk",
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 19,
+      "totalSuccesses": 14,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "newyorkfed.org": {
+      "domain": "newyorkfed.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": "2026-02-11T13:29:12.173Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "atlantafed.org": {
+      "domain": "atlantafed.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 6,
+      "totalSuccesses": 6,
+      "lastAttempt": "2026-02-11T12:30:02.053Z",
+      "lastSuccess": "2026-02-11T12:30:02.053Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nyfed.org": {
+      "domain": "nyfed.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bankrate.com": {
+      "domain": "bankrate.com",
+      "outcomes": [
+        "success",
+        "success",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T12:30:02.053Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "themortgagereports.com": {
+      "domain": "themortgagereports.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T12:30:02.053Z",
+      "lastSuccess": "2026-02-11T12:30:02.053Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mortgagenewsdaily.com": {
+      "domain": "mortgagenewsdaily.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:28:36.339Z",
+      "lastSuccess": "2026-02-11T12:28:36.339Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "investmentexecutive.com": {
+      "domain": "investmentexecutive.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:28:38.887Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "en.highnorthnews.com": {
+      "domain": "en.highnorthnews.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": "2026-02-11T12:29:32.211Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news.cgtn.com": {
+      "domain": "news.cgtn.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": "2026-02-11T12:29:32.211Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "english.cctv.com": {
+      "domain": "english.cctv.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:32.211Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "pantheonmacro.com": {
+      "domain": "pantheonmacro.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:32:06.449Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "omfif.org": {
+      "domain": "omfif.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:32.212Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "beta.bankofengland.co.uk": {
+      "domain": "beta.bankofengland.co.uk",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "foreignpolicy.com": {
+      "domain": "foreignpolicy.com",
+      "outcomes": [
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T13:31:08.897Z",
+      "lastSuccess": "2026-02-11T13:31:08.897Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "justsecurity.org": {
+      "domain": "justsecurity.org",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:45.555Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "en.wikipedia.org": {
+      "domain": "en.wikipedia.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:39.289Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "worldbank.org": {
+      "domain": "worldbank.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:34:21.563Z",
+      "lastSuccess": "2026-02-11T14:34:21.563Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "pbs.org": {
+      "domain": "pbs.org",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:45.555Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "sdgs.un.org": {
+      "domain": "sdgs.un.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:45.555Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "diplomacyandlaw.com": {
+      "domain": "diplomacyandlaw.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T12:29:45.555Z",
+      "lastSuccess": "2026-02-11T12:29:45.555Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news.bloomberglaw.com": {
+      "domain": "news.bloomberglaw.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "aclu.org": {
+      "domain": "aclu.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": "2026-02-11T13:29:50.427Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "gov.uk": {
+      "domain": "gov.uk",
+      "outcomes": [
+        "junk",
+        "junk",
+        "junk",
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:26.102Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T13:31:26.102Z",
+      "trialRemaining": null
+    },
+    "cltc.berkeley.edu": {
+      "domain": "cltc.berkeley.edu",
+      "outcomes": [
+        "junk",
+        "junk",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": "2026-02-11T13:29:50.427Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "averi.org": {
+      "domain": "averi.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:51.679Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "coalitionforsecureai.org": {
+      "domain": "coalitionforsecureai.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": "2026-02-11T13:29:50.427Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "kpmg.com": {
+      "domain": "kpmg.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T12:29:51.679Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "eaworldview.com": {
+      "domain": "eaworldview.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "westpaciq.com.au": {
+      "domain": "westpaciq.com.au",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:12.173Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "us.cnn.com": {
+      "domain": "us.cnn.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:12.174Z",
+      "lastSuccess": "2026-02-11T13:29:12.174Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "time.com": {
+      "domain": "time.com",
+      "outcomes": [
+        "success",
+        "success",
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:33:28.692Z",
+      "lastSuccess": "2026-02-11T14:33:28.692Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thebulletin.org": {
+      "domain": "thebulletin.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:35.562Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "policyedge.in": {
+      "domain": "policyedge.in",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:35.563Z",
+      "lastSuccess": "2026-02-11T13:29:35.563Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "businessgreen.com": {
+      "domain": "businessgreen.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:35.563Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "politico.eu": {
+      "domain": "politico.eu",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "techpolicy.press": {
+      "domain": "techpolicy.press",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "publications.lawschool.cornell.edu": {
+      "domain": "publications.lawschool.cornell.edu",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "rnz.co.nz": {
+      "domain": "rnz.co.nz",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "malwarebytes.com": {
+      "domain": "malwarebytes.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": "2026-02-11T13:29:39.315Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "newrepublic.com": {
+      "domain": "newrepublic.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "iab.com": {
+      "domain": "iab.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "lewissilkin.com": {
+      "domain": "lewissilkin.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:39.315Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theshillongtimes.com": {
+      "domain": "theshillongtimes.com",
+      "outcomes": [
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:35.965Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "standard.co.uk": {
+      "domain": "standard.co.uk",
+      "outcomes": [
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:53.929Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "civilrights.org": {
+      "domain": "civilrights.org",
+      "outcomes": [
+        "junk",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "globenewswire.com": {
+      "domain": "globenewswire.com",
+      "outcomes": [
+        "junk",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "newswire.ca": {
+      "domain": "newswire.ca",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "microsoft.com": {
+      "domain": "microsoft.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:50.427Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news247.gr": {
+      "domain": "news247.gr",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:29:57.579Z",
+      "lastSuccess": "2026-02-11T13:29:57.579Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "travelandtourworld.com": {
+      "domain": "travelandtourworld.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "junk"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:34:16.530Z",
+      "lastSuccess": "2026-02-11T13:29:57.579Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news.gtp.gr": {
+      "domain": "news.gtp.gr",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:29:57.579Z",
+      "lastSuccess": "2026-02-11T13:29:57.579Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "tornosnews.gr": {
+      "domain": "tornosnews.gr",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:29:57.579Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "abcnews.com": {
+      "domain": "abcnews.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:08.897Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "fool.com": {
+      "domain": "fool.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "timeout",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 7,
+      "lastAttempt": "2026-02-11T13:31:58.354Z",
+      "lastSuccess": "2026-02-11T13:31:58.354Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "foxbusiness.com": {
+      "domain": "foxbusiness.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:08.897Z",
+      "lastSuccess": "2026-02-11T13:31:08.897Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "justthenews.com": {
+      "domain": "justthenews.com",
+      "outcomes": [
+        "timeout",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:34.920Z",
+      "lastSuccess": "2026-02-11T14:33:34.920Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "eff.org": {
+      "domain": "eff.org",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theverge.com": {
+      "domain": "theverge.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "traverselegal.com": {
+      "domain": "traverselegal.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "oversightboard.com": {
+      "domain": "oversightboard.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:28.438Z",
+      "lastSuccess": "2026-02-11T13:31:28.438Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theregreview.org": {
+      "domain": "theregreview.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "waterfront.law": {
+      "domain": "waterfront.law",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:28.439Z",
+      "lastSuccess": "2026-02-11T13:31:28.439Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cassels.com": {
+      "domain": "cassels.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "theglobeandmail.com": {
+      "domain": "theglobeandmail.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:31.945Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "breitbart.com": {
+      "domain": "breitbart.com",
+      "outcomes": [
+        "success",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:35.965Z",
+      "lastSuccess": "2026-02-11T13:31:33.182Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "engadget.com": {
+      "domain": "engadget.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:35.094Z",
+      "lastSuccess": "2026-02-11T13:31:35.094Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "macrumors.com": {
+      "domain": "macrumors.com",
+      "outcomes": [
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:35.965Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "mashable.com": {
+      "domain": "mashable.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:31:37.369Z",
+      "lastSuccess": "2026-02-11T13:31:37.369Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "coincentral.com": {
+      "domain": "coincentral.com",
+      "outcomes": [
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 8,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:32:03.013Z",
+      "lastSuccess": null,
+      "blockedSince": "2026-02-11T13:31:55.008Z",
+      "trialRemaining": null
+    },
+    "chicagotribune.com": {
+      "domain": "chicagotribune.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:39.973Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bclplaw.com": {
+      "domain": "bclplaw.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:31:47.502Z",
+      "lastSuccess": "2026-02-11T13:31:47.502Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ncsl.org": {
+      "domain": "ncsl.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:31:47.502Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "gov.ie": {
+      "domain": "gov.ie",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:31:47.502Z",
+      "lastSuccess": "2026-02-11T13:31:47.502Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thesun.co.uk": {
+      "domain": "thesun.co.uk",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:26.335Z",
+      "lastSuccess": "2026-02-11T14:34:26.335Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "barrons.com": {
+      "domain": "barrons.com",
+      "outcomes": [
+        "no-text"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:32:02.055Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "federalreserve.gov": {
+      "domain": "federalreserve.gov",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "stlouisfed.org": {
+      "domain": "stlouisfed.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "econofact.org": {
+      "domain": "econofact.org",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "tellerwindow.newyorkfed.org": {
+      "domain": "tellerwindow.newyorkfed.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "andolfatto.blogspot.com": {
+      "domain": "andolfatto.blogspot.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "read.sei.io": {
+      "domain": "read.sei.io",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "circle.com": {
+      "domain": "circle.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "blog.sei.io": {
+      "domain": "blog.sei.io",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T13:32:11.843Z",
+      "lastSuccess": "2026-02-11T13:32:11.843Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "streamlinefeed.co.ke": {
+      "domain": "streamlinefeed.co.ke",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:07.767Z",
+      "lastSuccess": "2026-02-11T14:38:07.767Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "roberthalf.com": {
+      "domain": "roberthalf.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:07.767Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "traditiondata.com": {
+      "domain": "traditiondata.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:07.767Z",
+      "lastSuccess": "2026-02-11T14:38:07.767Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "fortune.com": {
+      "domain": "fortune.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:16.687Z",
+      "lastSuccess": "2026-02-11T14:33:16.687Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "hoodline.com": {
+      "domain": "hoodline.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 5,
+      "totalSuccesses": 5,
+      "lastAttempt": "2026-02-11T14:34:09.285Z",
+      "lastSuccess": "2026-02-11T14:34:09.285Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "washingtonexaminer.com": {
+      "domain": "washingtonexaminer.com",
+      "outcomes": [
+        "timeout",
+        "timeout"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:34:37.078Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thespec.com": {
+      "domain": "thespec.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:23.605Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "japantimes.co.jp": {
+      "domain": "japantimes.co.jp",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:23.606Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "wired.com": {
+      "domain": "wired.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:06.942Z",
+      "lastSuccess": "2026-02-11T14:34:06.942Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cbsnews.com": {
+      "domain": "cbsnews.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T14:34:24.492Z",
+      "lastSuccess": "2026-02-11T14:34:24.492Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nationalpost.com": {
+      "domain": "nationalpost.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:26.538Z",
+      "lastSuccess": "2026-02-11T14:33:26.538Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cp24.com": {
+      "domain": "cp24.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:27.609Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "abcnews.go.com": {
+      "domain": "abcnews.go.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:28.936Z",
+      "lastSuccess": "2026-02-11T14:33:28.936Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "esgnews.com": {
+      "domain": "esgnews.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:31.616Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "sports.yahoo.com": {
+      "domain": "sports.yahoo.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:31.617Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "pen.org": {
+      "domain": "pen.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news.un.org": {
+      "domain": "news.un.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "expressvpn.com": {
+      "domain": "expressvpn.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "blog.ericgoldman.org": {
+      "domain": "blog.ericgoldman.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "govfacts.org": {
+      "domain": "govfacts.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:39.218Z",
+      "lastSuccess": "2026-02-11T14:33:39.218Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "irishtimes.com": {
+      "domain": "irishtimes.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:40.164Z",
+      "lastSuccess": "2026-02-11T14:33:40.164Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ctvnews.ca": {
+      "domain": "ctvnews.ca",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:42.721Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "freepressjournal.in": {
+      "domain": "freepressjournal.in",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:08.718Z",
+      "lastSuccess": "2026-02-11T14:34:08.718Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "hindustantimes.com": {
+      "domain": "hindustantimes.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:34:10.225Z",
+      "lastSuccess": "2026-02-11T14:34:10.225Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thedailybeast.com": {
+      "domain": "thedailybeast.com",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:33:46.727Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "betakit.com": {
+      "domain": "betakit.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:47.594Z",
+      "lastSuccess": "2026-02-11T14:33:47.594Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "cheknews.ca": {
+      "domain": "cheknews.ca",
+      "outcomes": [
+        "no-text",
+        "no-text"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:20.122Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ischool.syracuse.edu": {
+      "domain": "ischool.syracuse.edu",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "en.unesco.org": {
+      "domain": "en.unesco.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "hbr.org": {
+      "domain": "hbr.org",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "digitalocean.com": {
+      "domain": "digitalocean.com",
+      "outcomes": [
+        "junk",
+        "junk"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "news.berkeley.edu": {
+      "domain": "news.berkeley.edu",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "insight.kellogg.northwestern.edu": {
+      "domain": "insight.kellogg.northwestern.edu",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:23.832Z",
+      "lastSuccess": "2026-02-11T14:38:23.832Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "deadline.com": {
+      "domain": "deadline.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:33:58.844Z",
+      "lastSuccess": "2026-02-11T14:33:58.844Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "thewalrus.ca": {
+      "domain": "thewalrus.ca",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:34:05.345Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "turkiyetoday.com": {
+      "domain": "turkiyetoday.com",
+      "outcomes": [
+        "success",
+        "success"
+      ],
+      "totalAttempts": 2,
+      "totalSuccesses": 2,
+      "lastAttempt": "2026-02-11T14:38:32.550Z",
+      "lastSuccess": "2026-02-11T14:38:32.550Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "goturkey.com": {
+      "domain": "goturkey.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:16.530Z",
+      "lastSuccess": "2026-02-11T14:34:16.530Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "bankofengland.co.uk": {
+      "domain": "bankofengland.co.uk",
+      "outcomes": [
+        "success",
+        "junk",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "junk",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 11,
+      "totalSuccesses": 9,
+      "lastAttempt": "2026-02-11T14:38:37.624Z",
+      "lastSuccess": "2026-02-11T14:38:37.624Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "taxfoundation.org": {
+      "domain": "taxfoundation.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:21.563Z",
+      "lastSuccess": "2026-02-11T14:34:21.563Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ons.gov.uk": {
+      "domain": "ons.gov.uk",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:21.563Z",
+      "lastSuccess": "2026-02-11T14:34:21.563Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "moneysense.ca": {
+      "domain": "moneysense.ca",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:26.024Z",
+      "lastSuccess": "2026-02-11T14:34:26.024Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "financialpost.com": {
+      "domain": "financialpost.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:26.096Z",
+      "lastSuccess": "2026-02-11T14:34:26.096Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "nypost.com": {
+      "domain": "nypost.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:29.975Z",
+      "lastSuccess": "2026-02-11T14:34:29.975Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "connectcre.ca": {
+      "domain": "connectcre.ca",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:34:30.221Z",
+      "lastSuccess": "2026-02-11T14:34:30.221Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "globalnews.ca": {
+      "domain": "globalnews.ca",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:34:33.077Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "blog.remax.ca": {
+      "domain": "blog.remax.ca",
+      "outcomes": [
+        "timeout"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:34:37.079Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "w3.org": {
+      "domain": "w3.org",
+      "outcomes": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 4,
+      "totalSuccesses": 4,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "vox.com": {
+      "domain": "vox.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "buffer.com": {
+      "domain": "buffer.com",
+      "outcomes": [
+        "success",
+        "success",
+        "success"
+      ],
+      "totalAttempts": 3,
+      "totalSuccesses": 3,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "economyinsights.com": {
+      "domain": "economyinsights.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "ama.org": {
+      "domain": "ama.org",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "aidigital.com": {
+      "domain": "aidigital.com",
+      "outcomes": [
+        "success"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 1,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": "2026-02-11T14:38:17.512Z",
+      "blockedSince": null,
+      "trialRemaining": null
+    },
+    "adclarity.com": {
+      "domain": "adclarity.com",
+      "outcomes": [
+        "junk"
+      ],
+      "totalAttempts": 1,
+      "totalSuccesses": 0,
+      "lastAttempt": "2026-02-11T14:38:17.512Z",
+      "lastSuccess": null,
+      "blockedSince": null,
+      "trialRemaining": null
+    }
+  }
+}

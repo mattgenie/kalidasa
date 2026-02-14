@@ -1,0 +1,379 @@
+[
+  {
+    "scenario": "🎌 Scenario 1: Anime search (sparse profile)",
+    "query": "best anime series to watch",
+    "domain": "movies",
+    "latencyMs": 13266,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Neon Genesis Evangelion: The End of Evangelion",
+        "summary": "Forget giant robots — this is a psychological horror show disguised as mecha anime, culminating in one of the most disturbing and unforgettable endings in animation history. The infamous hospital scene alone cemented its place in anime infamy; you'll never look at orange juice the same way again.",
+        "forUser": "Given your love for 'anime' and the thought-provoking narratives often found within the genre, you'll appreciate the film's exploration of existential themes and complex character dynamics; however, be prepared for a darker and more intense experience compared to the whimsical nature of 'studio ghibli'.",
+        "subheader": "1997",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Spirited Away",
+        "summary": "Hayao Miyazaki's masterpiece isn't just a kids' movie; it's a surreal journey of self-discovery, and the sequence where Chihiro feeds the radish spirit is pure, unadulterated magic. The animation is breathtaking, but it's Joe Hisaishi's score that truly elevates the film to another level.",
+        "forUser": "Matt, if you're in the mood for something that hits that same magical, emotional core as your favorite \"studio ghibli\" films, you'll adore this. The bathhouse setting is so imaginative, and the story has so much heart.",
+        "subheader": "2001",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Your Name.",
+        "summary": "Makoto Shinkai's films are like a visual ASMR, and *Your Name.* is his masterpiece. The body-swapping premise is just a springboard for a story about connection that will absolutely wreck you emotionally, especially when you realize the significance of the braided cord.",
+        "forUser": "Recommended for Matt",
+        "subheader": "2016",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Princess Mononoke",
+        "summary": "This isn't just an anime; it's an eco-epic with a beating heart, and the animation is breathtaking, especially the kodama (tree spirits) that wobble their heads in the most unsettlingly cute way. It's a must-see, even if you think you don't like anime, because its themes of environmentalism and the cost of progress are timeless and deeply moving.",
+        "forUser": "Matt, you'll love this. It's peak \"studio ghibli\"—epic scope, stunning visuals, and a deep dive into nature's power.",
+        "subheader": "1997",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Akira",
+        "summary": "The animation in *Akira* is mind-blowing, especially considering it came out in 1988 – the motorcycle chase scene alone is a masterclass in kinetic energy. But it's the film's haunting score, especially the use of traditional Japanese Noh music blended with synths, that really elevates it from just a visual spectacle to something truly unsettling and unforgettable.",
+        "forUser": "Since you're into 'anime', the animation in Akira is stunning, especially the motorcycle chase scene. But be warned, it's much darker and more violent than 'studio ghibli' films.",
+        "subheader": "1988",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Grave of the Fireflies",
+        "summary": "Brace yourself: this isn't just sad, it's emotionally devastating, a raw depiction of survival during wartime seen through the eyes of children. The sound design, especially the buzzing of flies and the distant echoes of war, burrows deep into your psyche and lingers long after the credits roll.",
+        "forUser": "Since you're into anime and especially studio ghibli, you'll appreciate the animation, but be warned, this one is a serious tearjerker — have tissues handy.",
+        "subheader": "1988",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Cowboy Bebop: The Movie",
+        "summary": "Forget familiar anime movie tie-ins, this is a full-blown Bebop adventure worthy of the series, diving deep into Spike's past with a villain who weaponizes grief. The Halloween parade sequence alone is a visual feast, and the soundtrack, as always, is impeccable.",
+        "forUser": "Matt, you'll love this because it's pure anime with that cinematic feel, like a longer, darker episode of the series, but with a killer soundtrack that totally elevates it. If you're in the mood for something that hits that anime sweet spot, this is it.",
+        "subheader": "2001",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Ghost in the Shell",
+        "summary": "Forget flashy cyberpunk – this is a mood piece, a hazy, rain-slicked neo-noir where the line between human and machine blurs to the point of existential dread. The subtle, almost melancholic soundtrack is key to its power; it lingers long after the credits roll.",
+        "forUser": "Matt, you'll love this. It's cyberpunk with the philosophical depth of your favorite studio ghibli films, but with a harder, more technological edge.",
+        "subheader": "1995",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Perfect Blue",
+        "summary": "Satoshi Kon's directorial debut is a descent into paranoia, blurring the lines between reality and delusion as a pop idol transitions into acting. The stalker's online diary entries, rendered in early-internet Geocities style, add a chillingly prescient layer to this psychological thriller.",
+        "forUser": "Given your love for anime, this psychological thriller will grab you from the start, especially if you appreciate the darker, more unsettling side of the genre, with a mind-bending plot and visuals that'll stick with you.",
+        "subheader": "1998",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Weathering with You",
+        "summary": "Ignore the haters, this is Makoto Shinkai at his most visually stunning — the rain-soaked Tokyo is practically a character itself. The way the film uses music to amplify the emotional beats, especially during the climax, is incredible, even if the plot gets a little…out there.",
+        "forUser": "Since you're a big fan of \"studio ghibli\", you'll appreciate the stunning visuals and emotional depth, but be warned, the romance is dialed up to eleven, which might be a bit much if you're not in the mood for melodrama.",
+        "subheader": "2019",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 2
+  },
+  {
+    "scenario": "🌿 Scenario 2: Miyazaki-esque refinement",
+    "query": "anime series similar to Miyazaki — nature themes, gentle pacing, beautiful animation",
+    "domain": "movies",
+    "latencyMs": 13355,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Wolf Children",
+        "summary": "Mamoru Hosoda's *Wolf Children* is a poignant and beautifully animated story about a mother raising her half-human, half-wolf children in the countryside — the scenes of them frolicking through fields are pure Miyazaki-esque joy. What sets it apart is its unflinching portrayal of the challenges of single motherhood, making it a surprisingly mature and moving experience.",
+        "forUser": "Given your love for **Studio Ghibli**, you'll adore the heartwarming family story and stunning visuals in this one, though the pacing is a bit more dramatic than Miyazaki's films.",
+        "subheader": "2012",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "The Girl Who Leapt Through Time",
+        "summary": "This movie's watercolor backgrounds are gorgeous, but it's the way the protagonist, Makoto, uses her time-leaping powers for trivial things like avoiding awkward situations that makes it so relatable. The ending hits hard because it's not just about romance; it's about growing up and realizing you can't rewind real life.",
+        "forUser": "Since you're into **anime** and love **Studio Ghibli**, this one's a must-watch! It's got that same gentle, thoughtful vibe with a really unique time-travel twist that'll grab you.",
+        "subheader": "2006",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "A Letter to Momo",
+        "summary": "Okay, so *A Letter to Momo* isn't *quite* Miyazaki-level magic, but it gets surprisingly close — the hand-drawn animation is breathtaking, especially the water effects. The yokai are genuinely unsettling at first, but their goofy charm wins you over, making the emotional payoff in the third act really land.",
+        "forUser": "Since you're an anime fan, especially of Studio Ghibli, you'll adore this one — it's got the same gentle spirit and stunning animation, but with a unique story that really tugs at the heartstrings.",
+        "subheader": "2012",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Children Who Chase Lost Voices",
+        "summary": "Makoto Shinkai's visuals are breathtaking, especially the backgrounds that feel both vast and intimate — it nails that Miyazaki sense of wonder, even if the plot leans a little too heavily on familiar tropes. The film's exploration of grief, symbolized by the protagonist's journey, is surprisingly moving.",
+        "forUser": "Since you're into \"studio ghibli\", you'll appreciate the visuals, though the story's a bit more melancholy than Miyazaki's usual fare; still, the nature themes are right up your alley.",
+        "subheader": "2011",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"right up your alley\""
+        ]
+      },
+      {
+        "name": "Patema Inverted",
+        "summary": "The world literally flips upside down in this film, and the way the director plays with perspective is mind-bendingly gorgeous. It's not Miyazaki, but the whimsical feeling of discovering a hidden world, plus the sheer visual inventiveness, makes it a must-see if you're craving that sense of wonder.",
+        "forUser": "Given your love for Studio Ghibli, you'll appreciate the whimsical world-building and heartwarming story, but the slightly more complex plot might not hit the same gentle, relaxing notes you usually seek.",
+        "subheader": "2013",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Penguin Highway",
+        "summary": "Don't let the title fool you; this isn't just a cute kids' movie. The sudden appearance of penguins in a quiet town kicks off a genuinely strange and surprisingly poignant coming-of-age story, with a touch of Studio Ghibli wonder and a healthy dose of weird science that I found surprisingly charming.",
+        "forUser": "Since you're into **Studio Ghibli**, you'll adore this one — it's got that same whimsical vibe and heartwarming story, though the sci-fi elements give it a unique twist.",
+        "subheader": "2018",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Mary and the Witch's Flower",
+        "summary": "While it doesn't reach Miyazaki's heights, Studio Ponoc's debut has a similar whimsical charm — the animation is gorgeous, especially the vibrant, swirling magic sequences, and the story, about a girl finding unexpected power, is genuinely heartwarming. The glowing blue fly-by-night flower is the key to everything, and it's a visual treat every time it appears.",
+        "forUser": "Since you're into anime and Studio Ghibli, this one's right up your alley with its lush animation and magical themes. It's got a similar whimsical feel to *Spirited Away*, though the pacing is a bit quicker, so skip it if you're after something super chill.",
+        "subheader": "2017",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"right up your alley\""
+        ]
+      },
+      {
+        "name": "The Secret World of Arrietty",
+        "summary": "Arrietty captures Miyazaki's gentle magic, especially in its detailed depiction of the miniature world — the way a drop of water looms like a massive bubble is incredible. It's a perfect rainy afternoon movie, even if it lacks the epic scope of his bigger films.",
+        "forUser": "Since you love Studio Ghibli, you'll adore this one — it's got that same gentle magic and breathtaking animation, but with a unique story about connection and the small wonders around us.",
+        "subheader": "2010",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Weathering with You",
+        "summary": "Makoto Shinkai's animation is jaw-dropping, especially the rain effects – it's like Monet with moving water. The story is less profound than Miyazaki at his best, but the sheer visual beauty and soaring soundtrack make it a worthwhile experience, even if the plot leans a little too heavily on teenage melodrama.",
+        "forUser": "Given your love for **Studio Ghibli**, you'll adore the stunning visuals and environmental themes here, but be warned, the pacing is much faster and the stakes are higher than Miyazaki's gentler stories.",
+        "subheader": "2019",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Your Name.",
+        "summary": "Makoto Shinkai's breakout hit is pure visual poetry; the scene with the comet streaking across the sky is breathtaking, and the way it captures the bittersweet ache of adolescence feels incredibly real. While the plot leans into melodrama, the sheer beauty of the animation and the emotional core make it a worthy successor to Miyazaki's legacy.",
+        "forUser": "Given your love for **Studio Ghibli**, you'll definitely appreciate the similar gentle pacing and nature-centric themes in 'Your Name.'; the animation is stunning, but be warned, it leans more into a modern, almost sci-fi narrative than Miyazaki's films.",
+        "subheader": "2016",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 2
+  },
+  {
+    "scenario": "🍿 Scenario 3: Movie search (rich profile)",
+    "query": "best documentaries about music",
+    "domain": "movies",
+    "latencyMs": 12508,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Amy",
+        "summary": "Asif Kapadia's \"Amy\" is a gut-wrenching, intimate portrait of Amy Winehouse's life and tragic downfall; the use of home footage and voicemails creates an almost unbearable sense of closeness, making her struggles feel profoundly personal. The way it juxtaposes her raw talent with the relentless pressures of fame is devastatingly effective.",
+        "forUser": "Since you dig experimental music, you'll love the way Amy Winehouse blended jazz with her own raw, soulful sound — it's like a collision of worlds you're primed for. But be warned, it's a tough watch emotionally, so brace yourself.",
+        "subheader": "2015",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Searching for Sugar Man",
+        "summary": "This documentary feels like uncovering a lost myth, a real-life fairytale about a forgotten musician who unknowingly became a legend in South Africa; the grainy footage of Rodriguez walking through Detroit adds an almost ghostly layer to the story.",
+        "forUser": "Given your love for \"world\" music, you'll be captivated by Rodriguez's story and his impact in South Africa; plus, the mystery surrounding him will keep you hooked like a great indie film.",
+        "subheader": "2012",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Stop Making Sense",
+        "summary": "Jonathan Demme's concert film isn't just a performance; it's a meticulously crafted piece of art. The way David Byrne gradually builds the stage and the band throughout the show, starting with just him and a boombox, is pure genius — it's infectious joy from start to finish.",
+        "forUser": "You'll love this! It's pure energy, a concert film for people who love rhythm and aren't afraid of a little experimental sound, just like your favorite jazz and world music.",
+        "subheader": "1984",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Gimme Shelter",
+        "summary": "The Maysles brothers captured the Rolling Stones' 1969 tour culminating in the disastrous Altamont Free Concert, and what emerges is a chilling portrait of a generation losing its innocence. The stark contrast between the band's performance of \"Gimme Shelter\" and the escalating violence in the crowd is absolutely haunting.",
+        "forUser": "You'll dig this, Jordan. It's a raw, vérité look at the Rolling Stones' 1969 tour that takes a dark turn – think of it as the anti-Woodstock, capturing a chaotic energy that might resonate with your love for experimental music.",
+        "subheader": "1970",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "The Last Waltz",
+        "summary": "Robbie Robertson's guitar work alone makes this concert film essential viewing, but it's Scorsese's intimate direction that elevates it – you feel like you're backstage with The Band as they grapple with ending an era. The sheer weight of musical talent assembled on that stage, from Muddy Waters to Joni Mitchell, is staggering; it's a bittersweet goodbye that somehow manages to feel like a celebration.",
+        "forUser": "Given your love for jazz and experimental music, you'll appreciate the improvisational spirit and genre-bending collaborations in this concert film. Plus, Scorsese's direction brings a cinematic flair that elevates it beyond a typical concert doc.",
+        "subheader": "1978",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Buena Vista Social Club",
+        "summary": "Wim Wenders captured lightning in a bottle, reuniting legendary Cuban musicians from the pre-revolution era. The raw emotion in Ibrahim Ferrer's voice as he rediscovers his talent after years of shining shoes is enough to give you chills.",
+        "forUser": "Given your love for \"world\" music, especially its capacity to tell stories, you'll adore this. The vibrant sounds of Cuban son will sweep you away, especially if you appreciate the improvisational spirit of \"jazz\".",
+        "subheader": "1999",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "20 Feet from Stardom",
+        "summary": "This isn't just a music doc; it's a celebration of the unsung voices that make iconic songs soar. Merry Clayton's isolated vocal track from the Rolling Stones' \"Gimme Shelter\" will give you chills — proof that backup singers deserve way more than 20 feet.",
+        "forUser": "Given your love for jazz and experimental music, you'll appreciate the spotlight on the often-unsung backup singers who've shaped some iconic sounds; the stories of their struggles and triumphs are incredibly moving.",
+        "subheader": "2013",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Metallica: Some Kind of Monster",
+        "summary": "You think you know rock star excess? This documentary throws you into the therapy sessions of Metallica as they implode from within, complete with a $40,000-a-month performance-enhancing coach. It's brutally honest and surprisingly funny, exposing the fragile egos behind the metal gods.",
+        "forUser": "Given your experimental music leanings, this might grab you – it's a raw look at a band imploding during therapy. But honestly, if you're looking for something more like the jazz you love, skip this one; it's a long, sometimes painful ride.",
+        "subheader": "2004",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Hype!",
+        "summary": "If you want to feel the raw, untamed energy of the early Seattle grunge scene before it exploded, *Hype!* is essential viewing. The film's got footage of early Sub Pop meetings that feels like you're right there in the room, witnessing history in the making.",
+        "forUser": "Given your love for experimental music, you'll find the avant-garde soundscapes of the Beastie Boys' later work fascinating – think a deconstructed jazz orchestra colliding with hip-hop.",
+        "subheader": "1996",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "What Happened, Miss Simone?",
+        "summary": "Nina Simone's raw talent is undeniable, but this documentary doesn't shy away from her struggles with mental health and the price of activism. The footage of her performing \"Mississippi Goddam\" after the murder of Medgar Evers is absolutely chilling.",
+        "forUser": "Given your love for jazz, you'll be captivated by Nina Simone's story; her powerful voice and complex life resonate deeply, especially if you appreciate artists who pushed boundaries like in experimental music.",
+        "subheader": "2015",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 1
+  },
+  {
+    "scenario": "🔎 Scenario 4: Restaurant search (empty profile)",
+    "query": "best Italian restaurants in SoHo",
+    "domain": "places",
+    "latencyMs": 1161,
+    "resultCount": 0,
+    "results": [],
+    "hallucinationCount": 0
+  },
+  {
+    "scenario": "📚 Scenario 5: Book search (rich profile)",
+    "query": "best books about jazz history",
+    "domain": "general",
+    "latencyMs": 11610,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "The History of Jazz",
+        "summary": "Ted Gioia's *The History of Jazz* is a must-read for anyone serious about understanding the music's evolution — its deep dive into the social and cultural forces that shaped jazz, like the impact of Prohibition on its early development, makes it far more than just a list of names and dates. Its comprehensive scope and insightful analysis make it an essential resource, even if some find its sheer size a bit daunting.",
+        "forUser": "Given your love for jazz, you'll absolutely devour this — it's like a deep dive into the sounds that resonate with you, tracing the evolution of the genre you're so passionate about. Think of it as the ultimate companion to your favorite jazz albums.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Jazz: A History of America's Music",
+        "summary": "This book is THE definitive jazz history – Ted Gioia manages to be both comprehensive and deeply insightful. You'll come away understanding not just the timeline, but the *why* behind jazz's evolution, including the social forces that shaped it; Gioia doesn't shy away from the music's darker aspects, like the systemic racism that plagued so many artists.",
+        "forUser": "Given your love for jazz, you'll devour this deep dive into its American roots. Think of it as a sprawling, multi-layered Ethiopian stew – complex and deeply satisfying, just like your favorite cuisine.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Early Jazz: Its Roots and Musical Development",
+        "summary": "Gunther Schuller's *Early Jazz* is a deep dive into the musical language of early jazz, not just a historical overview; his technical analysis of Louis Armstrong's Hot Fives recordings is revolutionary. Be warned: this book is dense and requires some musical knowledge, but it's essential for understanding the building blocks of jazz.",
+        "forUser": "Given your love for jazz, you'll devour this deep dive into the origins, especially the sections that explore the genre's connection to world music traditions.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Bebop: The Music and Its Players",
+        "summary": "If you want to *really* understand bebop, this book is essential. Not just a history, it dives deep into the musical theory with transcriptions and analysis — get ready to finally wrap your head around those dizzying chord changes!",
+        "forUser": "Given your love for jazz, this is a must-read! It's a deep dive into the bebop era, which will resonate with you if you appreciate the experimental nature found in your other favorite genres like experimental music.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Jazz Anecdotes",
+        "summary": "This book is a goldmine of insider stories, revealing the personalities behind the legends. I was floored to learn about Charlie Parker's obsession with cartoons – who knew Bird was a Bugs Bunny fanatic?",
+        "forUser": "You'll love this! Given your passion for jazz, imagine getting lost in short, quirky stories about the legends—almost like overhearing juicy backstage gossip at a jazz club. Think of it as the jazz equivalent of a great documentary, one of your favorite movie genres.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Really the Blues",
+        "summary": "This isn't just jazz history, it's a deeply personal journey through Mezz Mezzrow's life, blurring the lines between autobiography and social commentary. Mezzrow, a white clarinetist who famously identified as Black, offers a controversial and captivating perspective on race, music, and identity in the early jazz scene.",
+        "forUser": "You'll dig this! Mezz Mezzrow's autobiography is a wild ride through the early jazz scene, with a focus on New Orleans and Chicago — think of it as the soundtrack to a documentary, which I know you love.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Straight Life",
+        "summary": "Art Pepper's autobiography is a raw, unflinching look at addiction and redemption, told with a brutal honesty that's rare in jazz bios. Pepper details his time in San Quentin with a starkness that's both disturbing and captivating, making it a harrowing yet essential read for anyone serious about jazz history.",
+        "forUser": "Since you're into jazz, this autobiography by Art Pepper is a must-read – it's a raw and honest look at the life of a musician, similar to the unflinching documentaries you enjoy.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Miles: The Autobiography",
+        "summary": "Miles Davis' voice leaps off the page – raw, unapologetic, and utterly captivating. Forget polite history; this is a first-person plunge into the mind of a genius, where he talks as freely about his struggles with addiction as he does about crafting *Kind of Blue*.",
+        "forUser": "Given your love for jazz, you'll devour this raw, unapologetic look into Miles Davis's life – think of it as the sonic equivalent of a spicy Thai curry, hitting you with bold flavors and leaving a lasting impression.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Satchmo: My Life in New Orleans",
+        "summary": "Louis Armstrong's voice leaps off the page in this autobiography, making you feel like you're right there with him during his early days. What makes it truly special is his frankness about the prejudices he faced, which, rather than bitterness, fueled his relentless pursuit of musical excellence.",
+        "forUser": "Since you are a jazz lover, you'll love getting to see the world of early jazz through the eyes of Louis Armstrong himself, and the New Orleans setting will draw you in.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "But Beautiful: A Book About Jazz",
+        "summary": "Geoff Dyer's fictionalized portraits capture the *essence* of jazz greats, not just the facts – his imagining of Mingus's volcanic temper is both hilarious and insightful. It's less a history, more a series of vivid dreams about the music, and I found it utterly captivating.",
+        "forUser": "You'll love diving into the lives of jazz giants—think of it as the soundtrack to a smoky Ethiopian jazz club, but in book form. Given your love for jazz, this will be right up your alley.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 Contains \"right up your alley\""
+        ]
+      }
+    ],
+    "hallucinationCount": 4
+  }
+]

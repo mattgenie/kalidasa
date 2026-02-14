@@ -455,19 +455,34 @@ Example format:
         request: KalidasaSearchRequest,
         newsMode?: NewsMode
     ): Promise<ForUserResponse> {
+        // Build conversation context string for personalization
+        let conversationContext: string | undefined;
+        if (request.conversation?.recentMessages?.length || request.conversation?.previousSearches?.length) {
+            const parts: string[] = [];
+            if (request.conversation.previousSearches?.length) {
+                parts.push(`Previous searches: ${request.conversation.previousSearches.slice(-3).join(', ')}`);
+            }
+            if (request.conversation.recentMessages?.length) {
+                const msgs = request.conversation.recentMessages.slice(-3)
+                    .map(m => `${m.speaker}: ${m.content}`).join('\n');
+                parts.push(`Recent messages:\n${msgs}`);
+            }
+            conversationContext = parts.join('\n');
+        }
         const prompt = buildForUserPrompt(
             candidates,
             request.capsule,
             request.query.text,
             request.query.domain,
-            newsMode
+            newsMode,
+            conversationContext
         );
 
         const model = this.genAI.getGenerativeModel({
             model: this.model,
             generationConfig: {
                 responseMimeType: 'application/json',
-                temperature: 0.7,
+                temperature: 0.4,
             },
         });
 

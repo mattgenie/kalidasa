@@ -141,6 +141,10 @@ importers:
         version: 5.9.3
 
   packages/types:
+    dependencies:
+      '@kalidasa/domain-registry':
+        specifier: workspace:*
+        version: link:../domain-registry
     devDependencies:
       '@types/node':
         specifier: ^20.10.0

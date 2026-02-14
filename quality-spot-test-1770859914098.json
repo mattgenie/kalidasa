@@ -1,0 +1,468 @@
+[
+  {
+    "scenario": "🎌 Scenario 1: Anime search (sparse profile)",
+    "query": "best anime series to watch",
+    "domain": "movies",
+    "latencyMs": 13092,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Neon Genesis Evangelion: The End of Evangelion",
+        "summary": "Forget giant robots — this is a truly disturbing psychological breakdown disguised as an action movie. The infamous hospital scene alone is enough to sear itself into your memory, making it a masterpiece of discomfort.",
+        "forUser": "Since you're into anime, especially the kind of thoughtful narratives you find in Studio Ghibli films, you'll love this. It's like a deconstructed mecha anime—prepare for some seriously mind-bending visuals and existential dread, though.",
+        "subheader": "1997",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Spirited Away",
+        "summary": "Hayao Miyazaki's masterpiece isn't just a kids' film; it's a visually stunning journey into a world of Japanese folklore, where a bathhouse for spirits becomes a portal to self-discovery. The animation is breathtaking, but it's the nuanced character development, like Haku's mysterious past, that elevates it to legendary status.",
+        "forUser": "Given your love for Studio Ghibli, you'll adore this. The bathhouse setting is gorgeous, and the themes of identity and growing up will resonate deeply.",
+        "subheader": "2001",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Your Name.",
+        "summary": "(none)",
+        "forUser": "Recommended for Matt",
+        "subheader": "2016",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Princess Mononoke",
+        "summary": "Forget Disney princesses – San is raised by wolves and fights to protect her forest with a vengeance. The animation is breathtaking, especially the Kodama (tree spirits) that subtly appear in the most pristine parts of the forest; this is Ghibli at its most epic and ecologically conscious.",
+        "forUser": "Matt, since you're a fan of Studio Ghibli, you'll love the environmental themes and stunning animation in this one; the forest spirit's design alone is worth the watch.",
+        "subheader": "1997",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Akira",
+        "summary": "Beyond the iconic motorcycle and cyberpunk aesthetic, Akira's animation remains jaw-droppingly fluid, especially during the psychic battles — the sheer scale and detail of Neo-Tokyo's destruction is unlike anything else. It's a visually overwhelming experience that redefined anime for a generation.",
+        "forUser": "Given your love for anime and Studio Ghibli, you'll appreciate Akira's groundbreaking animation and cyberpunk themes, but be warned, it's much darker and more intense than anything Ghibli has produced. The visual storytelling is mind-blowing, especially the motorcycle chase sequences and Tetsuo's transformations – you'll be hooked.",
+        "subheader": "1988",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Grave of the Fireflies",
+        "summary": "Prepare for an emotional gut punch; this isn't just sad, it's a raw, unflinching look at survival during wartime, where even fireflies become symbols of fleeting hope. The scene where Setsuko buries her candies, mistaking them for her mother's ashes, is guaranteed to break you.",
+        "forUser": "Given your love for 'studio ghibli,' this is a must-watch, but be warned: it's emotionally devastating. Prepare for a tearjerker of epic proportions, but one that will stay with you long after the credits roll.",
+        "subheader": "1988",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Ghost in the Shell",
+        "summary": "The philosophical cyberpunk masterpiece that redefined anime for a generation – the haunting score alone is enough to give you chills. The opening sequence, a mesmerizing blend of practical effects and early CGI, still holds up as a masterclass in visual storytelling.",
+        "forUser": "Given your love for anime, especially the visually stunning works of studio ghibli, you'll find the cyberpunk world and philosophical themes in Ghost in the Shell incredibly captivating. The intricate animation and thought-provoking narrative elevate it beyond typical action anime, offering a mature and visually rich experience.",
+        "subheader": "1995",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Perfect Blue",
+        "summary": "Satoshi Kon's directorial debut is a masterclass in psychological horror, blurring the lines between reality and perception as a pop idol transitions to acting. The infamous bathtub scene is genuinely disturbing, and the film's exploration of parasocial relationships feels eerily prescient even today.",
+        "forUser": "Given your love for anime, especially the work of Studio Ghibli, this is a must-watch, though be warned, it's a psychological thriller, a far cry from the whimsical worlds of Ghibli. Think of it as a dark mirror reflecting the anxieties of fame, a theme that resonates even without fantastical elements.",
+        "subheader": "1998",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Weathering with You",
+        "summary": "Makoto Shinkai's visual style is breathtaking as always, and the rain-drenched Tokyo is practically a character itself. The way the film ties personal struggles to larger environmental anxieties is genuinely compelling, even if the plot occasionally feels a bit rushed.",
+        "forUser": "Since you're a fan of anime, especially studio ghibli, you'll adore the gorgeous visuals and heartwarming story here. It's got that same sense of wonder and environmental themes you love, but with a modern, slightly more fantastical twist.",
+        "subheader": "2019",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Castle in the Sky",
+        "summary": "The sense of wonder in \"Castle in the Sky\" is almost overwhelming; the animation is gorgeous, but it's Joe Hisaishi's score that truly elevates it – the main theme will be stuck in your head for days, in the best way possible.",
+        "forUser": "Matt, given your love for Studio Ghibli, you'll adore this. The whimsical airships and the heartwarming story are classic Miyazaki.",
+        "subheader": "1986",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 0
+  },
+  {
+    "scenario": "🌿 Scenario 2: Miyazaki-esque refinement",
+    "query": "anime series similar to Miyazaki — nature themes, gentle pacing, beautiful animation",
+    "domain": "movies",
+    "latencyMs": 12224,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Wolf Children",
+        "summary": "Mamoru Hosoda's masterpiece is a deeply moving story of motherhood, choice, and acceptance, all wrapped in stunning animation — the scenes of Hana running through the snowy mountains with her wolf children are breathtaking and stick with you long after the credits roll. It's a tearjerker, but in the best possible way, and the soundtrack is just *chef's kiss*.",
+        "forUser": "Given your love for **Studio Ghibli**, you'll adore the heartwarming story and breathtaking visuals here; it beautifully captures the magic of nature and family bonds.",
+        "subheader": "2012",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "The Girl Who Leapt Through Time",
+        "summary": "Forget butterfly effects, this film makes time travel feel surprisingly intimate and character-driven — the scene where Makoto desperately tries to prevent a friend's accident is genuinely heartbreaking and sticks with you long after the credits roll.",
+        "forUser": "Since you're into anime and Studio Ghibli, you'll appreciate the beautiful animation, but be warned, it's a bit more fast-paced and less focused on nature themes compared to Miyazaki's work.",
+        "subheader": "2006",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Summer Wars",
+        "summary": "Don't let the family drama fool you: this is a surprisingly poignant story about connection in the digital age, with some of the most inventive visuals you'll ever see — the design of the OZ world alone is worth the price of admission.",
+        "forUser": "Given your love for Studio Ghibli, you'll appreciate the family-centric themes and vibrant animation here, but the fast-paced, tech-heavy plot is way different from Miyazaki's gentle stories, so skip this one.",
+        "subheader": "2009",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Children Who Chase Lost Voices",
+        "summary": "This film nails that wistful, melancholic tone of early Miyazaki, but with a darker, more overtly fantastical edge — imagine *Spirited Away* by way of Neil Gaiman. The intricate backgrounds are stunning, especially the shimmering, bioluminescent Amaurot, a hidden underworld city.",
+        "forUser": "Since you're into **Studio Ghibli**, you'll appreciate the beautiful animation and nature-focused themes here, though it's a bit more melancholic than Miyazaki's work, so be prepared for a slightly heavier tone.",
+        "subheader": "2011",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Weathering with You",
+        "summary": "Makoto Shinkai's follow-up to *Your Name* dials up the visual spectacle and emotional melodrama to eleven — the rain-soaked Tokyo is stunning, and the soundtrack is pure ear candy. Some find the plot a bit contrived, but if you're looking for a visually breathtaking experience with a side of teenage angst, this delivers; the scene where Hodaka first sees Hina manipulating the weather is genuinely magical.",
+        "forUser": "Since you're a big fan of \"studio ghibli\", you'll definitely appreciate the stunning visuals and themes of nature in this one, but be warned, the pacing is much faster and the plot more intense than Miyazaki's films.",
+        "subheader": "2019",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Your Name.",
+        "summary": "Makoto Shinkai's films are gorgeous, and *Your Name.* is his most accessible. The comet scene alone is worth the price of admission, but the twist involving time and memory elevates it beyond pure spectacle.",
+        "forUser": "Given your love for Studio Ghibli, you'll adore the gentle, nature-filled world and stunning animation here – it's like a Miyazaki dream brought to life. The pacing is deliberately slow, so if you need constant action, maybe skip this one.",
+        "subheader": "2016",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Mary and the Witch's Flower",
+        "summary": "While it's not Miyazaki, Studio Ponoc's debut has that familiar, lush, painterly style, and it's gorgeous to look at—especially the vibrant, bioluminescent forest scenes. The story itself is a bit of a retread of familiar Ghibli themes, but the visuals alone make it worth a watch if you're craving that magic.",
+        "forUser": "Since you're a fan of Studio Ghibli, you'll appreciate the similar art style and whimsical feel, but be warned, the pacing is a bit faster than Miyazaki's films, so it might not have that same gentle, meditative quality.",
+        "subheader": "2017",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Penguin Highway",
+        "summary": "Don't let the title fool you, this is a surprisingly thoughtful coming-of-age story wrapped in a whimsical mystery. The animation during the penguin stampedes is genuinely breathtaking, and the film captures a childlike sense of wonder that Miyazaki perfected.",
+        "forUser": "Since you're into anime, and especially Studio Ghibli, give this a try; the whimsical story and gorgeous visuals will feel right at home, even if the plot gets a little wild.",
+        "subheader": "2018",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Okko's Inn",
+        "summary": "Don't let the cute art style fool you, Okko's Inn is a surprisingly poignant story about grief and healing, told through the eyes of a young girl running a traditional Japanese inn – the onsen scenes are beautifully animated and genuinely relaxing, like a warm bath for your soul.",
+        "forUser": "Matt, given your love for Studio Ghibli, you'll adore this film's gentle spirit and focus on nature. The animation is gorgeous, and the pacing is similar to *My Neighbor Totoro*, so you'll find it comforting.",
+        "subheader": "2018",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Josee, the Tiger and the Fish",
+        "summary": "Forget the saccharine title — this is a surprisingly raw and moving story about disability and dreams, anchored by a powerhouse performance from Kaya Kiyohara as Josee. The animation during the underwater scene where Josee describes her fantasies is breathtaking and unlike anything else.",
+        "forUser": "Given your love for Studio Ghibli, the beautiful animation and heartwarming story here will grab you—though the more grounded, modern setting is a slight departure from Miyazaki's fantastical worlds.",
+        "subheader": "2020",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 0
+  },
+  {
+    "scenario": "🍿 Scenario 3: Movie search (rich profile)",
+    "query": "best documentaries about music",
+    "domain": "movies",
+    "latencyMs": 12931,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Amy",
+        "summary": "Amy Winehouse's raw talent is undeniable, but what hits hardest is the film's unflinching portrayal of her struggles with addiction, pieced together from home videos and unheard tracks — the scene where she nervously giggles before singing 'Back to Black' live is heartbreaking.",
+        "forUser": "Given your experimental music tastes, this might just blow your mind – it's a raw, unfiltered look at a singular talent, but be warned, it's intense and doesn't pull any punches. If you're looking for something smooth like jazz, this will be a shock!",
+        "subheader": "2015",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Searching for Sugar Man",
+        "summary": "This documentary feels like stumbling on a forgotten myth – the story of Rodriguez, a Detroit musician who vanished into obscurity, only to become a massive star in apartheid-era South Africa. The moment when Rodriguez *finally* learns the extent of his fame is unbelievably moving; I dare you not to tear up.",
+        "forUser": "Given your love for 'world' music, you'll be captivated by the story of Rodriguez, a Chicano singer-songwriter who became a massive star in South Africa without even knowing it — the soundtrack alone is worth it.",
+        "subheader": "2012",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "20 Feet from Stardom",
+        "summary": "This isn't just a documentary; it's a love letter to the unsung heroes of rock and pop. Hearing Merry Clayton recount how she nailed the iconic backup vocals on The Rolling Stones' \"Gimme Shelter\" in one take will give you chills.",
+        "forUser": "Given your love for jazz and experimental music, you'll appreciate how this documentary spotlights the unsung heroes behind some iconic sounds. The raw talent and untold stories will resonate deeply.",
+        "subheader": "2013",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Stop Making Sense",
+        "summary": "Jonathan Demme turns a Talking Heads concert into pure cinematic joy — David Byrne's iconic big suit is just the beginning. The way the band gradually assembles onstage, song by song, is a masterclass in building tension and release.",
+        "forUser": "Given your love for experimental music, you'll absolutely adore this Talking Heads concert film. It's a visual and sonic feast, with that infectious, rhythmic energy you dig.",
+        "subheader": "1984",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "The Last Waltz",
+        "summary": "Robbie Robertson's guitar practically weeps in this concert film, a document of The Band's farewell performance. Scorsese somehow makes a concert feel intimate and epic at the same time; the guest appearances alone – Dylan! Muddy Waters! – make it essential viewing.",
+        "forUser": "Given your love for experimental music, you'll appreciate how \"The Last Waltz\" captures the raw energy and improvisational spirit of The Band's farewell concert, much like some of your favorite jazz artists pushing boundaries.",
+        "subheader": "1978",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"your favorite\""
+        ]
+      },
+      {
+        "name": "Gimme Shelter",
+        "summary": "The Maysles' \"Gimme Shelter\" is chilling, capturing the Rolling Stones' 1969 Altamont Free Concert that devolved into violence. What starts as a rock doc transforms into something darker, especially when you realize the Hell's Angels were 'security' – a decision that haunts the film.",
+        "forUser": "Given your love for experimental music, the raw, unfiltered energy of the Rolling Stones in this film will resonate with you, especially the chaotic Altamont Free Concert sequence — skip this if you're not in the mood for something intense.",
+        "subheader": "1970",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Buena Vista Social Club",
+        "summary": "Wim Wenders captures the rediscovery of forgotten Cuban musicians with such warmth and joy that it's impossible not to fall in love with them— Ibrahim Ferrer's voice, after years of shining shoes, is like velvet, and the film perfectly captures the vibrant musical soul of Havana before it changed forever.",
+        "forUser": "Given your love for \"world\" music, you'll absolutely adore this. The infectious energy of Cuban son will have you hooked from the first note – think of it as a sun-drenched, soulful cousin to the jazz you already enjoy.",
+        "subheader": "1999",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Dig!",
+        "summary": "An absolutely bonkers chronicle of the Dandy Warhols and the Brian Jonestown Massacre, this documentary is a masterclass in capturing the volatile dynamic between two bands teetering on the edge of success and self-destruction; the rivalry is epic, the music's great, and the fact that it spans seven years of filming is wild.",
+        "forUser": "Given your soft spot for jazz and experimental music, this deep dive into the Dandy Warhols and Brian Jonestown Massacre's creative processes (and rivalries) might scratch that itch; it's got the raw energy you appreciate, but be warned, it's a long ride.",
+        "subheader": "2004",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "What Happened, Miss Simone?",
+        "summary": "Nina Simone's ferocity burns through this documentary – it's raw, honest, and doesn't shy away from her complexities. Hearing Simone's own voice, through archival footage and recordings, makes it an incredibly intimate, and at times, heartbreaking experience; her performance of \"Mississippi Goddam\" is electrifying.",
+        "forUser": "Given your love for jazz, especially the raw emotion and experimental edges, you'll be captivated by Nina Simone's story. It's a powerful, often heartbreaking look at a true artist, and the soundtrack alone is worth it.",
+        "subheader": "2015",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Hype!",
+        "summary": "This is an incredible deep dive into the Seattle grunge scene from the inside. What makes it special is the director's access: you get to see the bands *before* they were famous, playing to tiny crowds, and the interviews are raw and unfiltered. The scene where Tad Doyle crushes a beer can on his head is legendary.",
+        "forUser": "Given your experimental music tastes, you'll definitely dig this deep dive into the raw energy and cultural impact of early hip-hop – it’s less polished history, more a sonic time capsule. But if you're looking for something as smooth as jazz, this might feel a bit chaotic.",
+        "subheader": "1996",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 1
+  },
+  {
+    "scenario": "🔎 Scenario 4: Restaurant search (empty profile)",
+    "query": "best Italian restaurants in SoHo",
+    "domain": "places",
+    "latencyMs": 10849,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Raoul's",
+        "summary": "Raoul's is pure old-school New York cool, from the chalkboard menu to the perfectly mixed cocktails. Order the steak au poivre — it's legendary for a reason — and soak up the dimly lit, effortlessly chic atmosphere that makes you feel like you've stepped back in time.",
+        "forUser": "Okay, Raoul's is a scene, let's be real. But if you're craving that perfectly-executed steak au poivre and can handle the buzzy, loud atmosphere, you'll love it—just maybe not for a quiet, reflective meal.",
+        "subheader": "Open now · 4.7★ · $$$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Il Buco",
+        "summary": "Il Buco feels like stepping into a rustic Italian farmhouse, right in the middle of SoHo. Their salumi selection is incredible, and I always order the roasted bone marrow—it's pure decadence.",
+        "forUser": "You'll love this place — it's rustic Italian with a serious wine list, perfect for a cozy night out. The handmade pasta is incredible, and the vibe is way more 'Tuscany farmhouse' than 'SoHo scene.'",
+        "subheader": "Open now · 4.9★ · $$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Piccola Cucina Estiatorio",
+        "summary": "Don't let the name fool you, this place is Sicilian through and through. The arancini are perfectly crisp and the pasta alla Norma is a must-try — it's a little slice of Sicily right in SoHo.",
+        "forUser": "You'll love the authentic Sicilian dishes here; it's not just the standard Italian fare. The seafood is super fresh, and the lively atmosphere will be right up your alley.",
+        "subheader": "Open now · 4.6★ · $$",
+        "verified": true,
+        "hallucinationFlags": [
+          "🚩 Contains \"right up your alley\""
+        ]
+      },
+      {
+        "name": "Galleria Giberto",
+        "summary": "Beyond the stunning Murano glass tableware (seriously, each piece is a work of art), Galleria Giberto is a surprisingly intimate and authentic Italian experience. Skip the pasta and go straight for the seafood—the grilled octopus is tender and flavorful, a testament to simple, high-quality ingredients.",
+        "forUser": "Forget it, Alex. This place is more about posing than pasta, and the noise level will drown out even your love for bossa nova.",
+        "subheader": "Open now · 4.9★ · $$$$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Lilia",
+        "summary": "Lilia's cacio e pepe fritters are an absolute revelation, crispy and decadent. The energy is high, the pasta is perfect, and Missy Robbins' touch elevates everything — book well in advance or try your luck at the bar.",
+        "forUser": "You'll love the wood-fired seafood here; it's as fresh and expertly prepared as the best sushi you've had, but with a rustic Italian charm. Be warned, though: getting a reservation is tougher than finding a decent horror film you actually enjoy.",
+        "subheader": "Open now · 4.6★ · $$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Charlie Bird",
+        "summary": "Charlie Bird's scene is pure downtown energy, always buzzing. The roasted half chicken with salsa verde is a must-order, and somehow even the kale salad is craveable.",
+        "forUser": "Okay, Alex, Charlie Bird's wine list alone is worth the trip, seriously! And their roasted chicken? Forget about it – juicy, crispy, perfect. If you're craving something that feels both special and down-to-earth, you'll love this.",
+        "subheader": "Open now · 4.6★ · $$$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "A Pasta Bar",
+        "summary": "Don't let the simple name fool you — this place is a hidden gem. Their cacio e pepe is the real deal, and the cozy, dimly lit atmosphere makes it perfect for a romantic date.",
+        "forUser": "The cacio e pepe here is RIDICULOUS. If you're craving that Roman simplicity done perfectly, you'll love this — plus, it won't break the bank.",
+        "subheader": "Open now · 4.8★ · $$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Bar Pitti",
+        "summary": "Okay, Bar Pitti is a scene. Forget delicate pasta; order the pappardelle with wild boar ragu and soak up the chaotic, cash-only, celebrity-spotting vibe that makes it a downtown institution.",
+        "forUser": "You'll love this place! It's super old-school, and the kind of spot where you can just chill and watch people, even if you're flying solo.",
+        "subheader": "Open now · 4.6★ · $$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Altro Paradiso",
+        "summary": "The Trofie al Pesto is outrageously good – perfectly al dente pasta with a pesto that sings. The vibe is effortlessly chic, like you've stumbled into a Milanese bistro where everyone's impossibly cool and knows each other.",
+        "forUser": "You'll love this spot. The simplicity of their pastas, especially the cacio e pepe, is phenomenal, and the natural wine list will speak to your love for exploring new vineyards.",
+        "subheader": "Open now · 4.8★ · $$",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Pepolino",
+        "summary": "This is not your red-sauce joint; Pepolino feels like a secret Florentine trattoria, right down to the handwritten menu that changes daily. The olive oil gelato is surprisingly addictive, and the wine list is a treasure trove of small Italian producers.",
+        "forUser": "The Tuscan soups and pastas here are legit, and the whole place has that cozy, tucked-away feel you dig. Skip this if you're looking for anything remotely close to horror, though, it's pure comfort.",
+        "subheader": "Open now · 4.7★ · $$$$",
+        "verified": true,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 1
+  },
+  {
+    "scenario": "📚 Scenario 5: Book search (rich profile)",
+    "query": "best books about jazz history",
+    "domain": "books",
+    "latencyMs": 0,
+    "resultCount": 0,
+    "results": [],
+    "hallucinationCount": 0
+  },
+  {
+    "scenario": "🎫 Scenario 6: Events search (rich profile)",
+    "query": "live jazz performances this weekend",
+    "domain": "events",
+    "latencyMs": 11257,
+    "resultCount": 10,
+    "results": [
+      {
+        "name": "Village Vanguard",
+        "summary": "Stepping into the Village Vanguard is like entering a time capsule – the ghosts of jazz legends practically drip from the walls. Don't miss the Monday night Vanguard Jazz Orchestra, a New York institution that still swings harder than anyone else in town.",
+        "forUser": "You'll love this. It's a legendary jazz club with a history as rich as the music itself; think of the improvisational spirit you love in experimental music but with a classic, intimate vibe.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 References \"in experimental music but with a classic\" — NOT in user preferences"
+        ]
+      },
+      {
+        "name": "Blue Note",
+        "summary": "Seeing a legend at the Blue Note is a bucket-list experience for any jazz fan – the Village Vanguard might be older, but the Blue Note has a glossy sheen and draws top-tier talent. Expect to pay a premium and be packed in tight, but where else can you catch someone like Ron Carter in such an intimate setting?",
+        "forUser": "Since you love jazz, the Blue Note is a no-brainer. It can get crowded, but seeing legends in such an intimate space is worth it, especially if they're doing something experimental.",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Dizzy's Club Coca-Cola",
+        "summary": "Dizzy's isn't just a jazz club, it's an experience perched above Columbus Circle with a panoramic view of Central Park. The nightly tribute sets to jazz legends, combined with the upscale, supper-club vibe, makes this a must-visit, even if it's touristy.",
+        "forUser": "Given your love for jazz, you'll absolutely want to check out Dizzy's—it's got that classic, smoky vibe with a modern twist. Plus, the view of Central Park is killer, a perfect backdrop while you soak in the music.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Birdland Jazz Club",
+        "summary": "Catching a show at Birdland is like stepping back into a golden age of jazz, but with a modern energy — the tribute nights to Charlie Parker are especially electric, and you might just catch a living legend dropping in for a set.",
+        "forUser": "You'll love this place, Jordan; it's a legendary venue with a focus on classic jazz, so think less 'experimental' and more straight-ahead—but the history alone makes it worth it.",
+        "verified": true,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Smoke Jazz & Supper Club",
+        "summary": "Smoke is a legit throwback to the golden age of jazz clubs — the dimly lit space and classic cocktails set the mood perfectly. They regularly host some seriously heavy hitters, and the sound quality is incredible, making it a must-visit for any serious jazz fan.",
+        "forUser": "Given your love for jazz, you'll love this place. The intimate setting and top-notch musicians are perfect for a chill weekend night.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Mezzrow",
+        "summary": "This tiny, dimly lit basement club is a true jazz lover's haven. Expect an intimate, almost reverent atmosphere where you're practically sitting on top of the musicians -- and don't be surprised if the owner, a jazz pianist himself, hops on stage for a set.",
+        "forUser": "Jordan, you'll love this place. It's straight-up classic jazz, and the intimate vibe is perfect for soaking in the music, especially if you're in the mood for something like classic jazz. No need to dress up, just show up and listen.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "55 Bar",
+        "summary": "This Village institution is a proper dive with serious jazz chops; guitarist Jonathan Kreisberg holds court regularly, and his solos alone are worth the (cheap) cover.",
+        "forUser": "Okay, this place is legendary for live jazz, and it’s dive-y in the BEST way—think smoky, late-night vibes that might remind you of some of those underground \"experimental\" shows you dig. The crowds can get intense, so maybe not the spot if you're looking for something chill.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "The Django",
+        "summary": "The Django is a loving tribute to guitarist Django Reinhardt, and the musicianship on display is consistently top-notch. Their cocktail menu is surprisingly creative, featuring ingredients like smoked paprika and black truffle oil -- a sophisticated touch that elevates the whole experience.",
+        "forUser": "Since you're into jazz, The Django is right up your alley, plus it's got that intimate, dimly lit vibe you'll dig. Think a chill evening reminiscent of your love for experimental music, but with a strong pulse of swing.",
+        "verified": false,
+        "hallucinationFlags": [
+          "🚩 Contains \"right up your alley\""
+        ]
+      },
+      {
+        "name": "Minton's Playhouse",
+        "summary": "You're walking into a living legend. This isn't just jazz; it's hallowed ground where bebop was born, and you can still catch that electric energy in the room — plus, the kitchen serves up some surprisingly good soul food to fuel your night.",
+        "forUser": "As a jazz lover, you'll be in heaven; Minton's is legendary, the birthplace of bebop! It's a bit touristy, so be prepared for a crowd, but the music history makes it worthwhile.",
+        "verified": false,
+        "hallucinationFlags": []
+      },
+      {
+        "name": "Bill's Place",
+        "summary": "Bill Saxton's tenor sax will blow you away - this legendary Harlem haunt is pure, unadulterated jazz history. It's tiny and intimate, so get there early to snag a spot close to the band.",
+        "forUser": "Since you're into jazz, you'll love this place because it features live improvisational sets. It's got a low-key vibe, perfect for enjoying some music without the big crowds.",
+        "verified": false,
+        "hallucinationFlags": []
+      }
+    ],
+    "hallucinationCount": 2
+  },
+  {
+    "scenario": "📰 Scenario 7: News search (empty profile)",
+    "query": "latest developments in AI and machine learning",
+    "domain": "news",
+    "latencyMs": 0,
+    "resultCount": 0,
+    "results": [],
+    "hallucinationCount": 0
+  }
+]

@@ -75,7 +75,8 @@ async function generateForUser(
     queryText: string,
     domain: string,
     capsule: KalidasaSearchRequest['capsule'],
-    genAI: GoogleGenerativeAI
+    genAI: GoogleGenerativeAI,
+    conversation?: KalidasaSearchRequest['conversation']
 ): Promise<string> {
     try {
         const candidate: Stage1aCandidate = {
@@ -83,10 +84,24 @@ async function generateForUser(
             identifiers: {},
             enrichment_hooks: [],
         };
-        const prompt = buildForUserPrompt([candidate], capsule, queryText, domain);
+        // Build conversation context string for personalization
+        let conversationContext: string | undefined;
+        if (conversation?.recentMessages?.length || conversation?.previousSearches?.length) {
+            const parts: string[] = [];
+            if (conversation.previousSearches?.length) {
+                parts.push(`Previous searches: ${conversation.previousSearches.slice(-3).join(', ')}`);
+            }
+            if (conversation.recentMessages?.length) {
+                const msgs = conversation.recentMessages.slice(-3)
+                    .map(m => `${m.speaker}: ${m.content}`).join('\n');
+                parts.push(`Recent messages:\n${msgs}`);
+            }
+            conversationContext = parts.join('\n');
+        }
+        const prompt = buildForUserPrompt([candidate], capsule, queryText, domain, undefined, conversationContext);
         const model = genAI.getGenerativeModel({
             model: 'gemini-2.0-flash',
-            generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.4 },
         });
         const result = await model.generateContent(prompt);
         const parsed = parseForUserResponse(result.response.text());
@@ -261,7 +276,8 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
                     searchRequest.query.text,
                     searchRequest.query.domain,
                     searchRequest.capsule,
-                    genAI!
+                    genAI!,
+                    searchRequest.conversation
                 ),
             ]);
 

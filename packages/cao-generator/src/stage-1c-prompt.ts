@@ -257,7 +257,8 @@ export function buildForUserPrompt(
     capsule: PersonalizationCapsule,
     queryText: string,
     domain?: string,
-    newsMode?: NewsMode
+    newsMode?: NewsMode,
+    conversationContext?: string
 ): string {
     const userName = capsule.members?.[0]?.name || 'you';
 
@@ -285,9 +286,10 @@ ${domainGuidance}
 
 VOICE:
 - You are a well-informed friend who reads widely and shares what's actually useful
-- Be direct: "Worth reading for the data" or "Skip this if you already follow the topic"
-- Every note MUST make a CONCRETE recommendation: read/skip/skim, and say WHY in specific terms
-- Name what is specifically interesting or skippable — not generalities
+- Be direct: "Worth reading for the data" or "Old news if you already follow this beat"
+- Every note MUST make a CONCRETE recommendation: read/bookmark/skim, and say WHY in specific terms
+- Name what is specifically interesting or redundant — not generalities
+- NEVER say "skip this" — reframe as context: "covers ground you've likely seen" NOT "skip this"
 - If the article is from a live blog or live-updates page, add: "Live page — content may have changed since this summary was written."
 - 1-2 sentences, substantive
 - Vary your openings
@@ -314,9 +316,9 @@ You MUST return a note for EVERY item. An empty value is never acceptable.`;
     const candidateNames = candidates.map(c => c.name).join(', ');
 
     if (hasRealPreferences(capsule)) {
-        return buildPersonalizedPrompt(candidateNames, capsule, queryText, domain || 'places', userName, newsMode);
+        return buildPersonalizedPrompt(candidateNames, capsule, queryText, domain || 'places', userName, newsMode, conversationContext);
     } else {
-        return buildInsiderTakePrompt(candidateNames, queryText, domain || 'places', userName, newsMode);
+        return buildInsiderTakePrompt(candidateNames, queryText, domain || 'places', userName, newsMode, conversationContext);
     }
 }
 
@@ -329,53 +331,62 @@ function buildPersonalizedPrompt(
     queryText: string,
     domain: string,
     userName: string,
-    newsMode?: NewsMode
+    newsMode?: NewsMode,
+    conversationContext?: string
 ): string {
     const prefs = JSON.stringify(capsule.members?.[0]?.preferences || {});
     const domainGuidance = getForUserGuidance(domain, newsMode);
+    const refinementBlock = conversationContext
+        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your notes around how each result satisfies what the user is looking for. Do NOT independently reject results — they were already curated for this refinement.\n`
+        : '';
 
     return `Query: "${queryText}"
 User: ${userName}
-Preferences: ${prefs}
+${refinementBlock}
 
-For each item, tell ${userName} what's genuinely great about it and flag anything that might not be a fit. Every result was already curated — lead with what's great, add honest caveats. Ground every note in something SPECIFIC — a dish, a scene, a sound, a moment — not abstract preference-matching.
+You hand-picked each of these results for ${userName}'s search. Everything here made your cut — now tell them why each one is worth trying.
 
-PREFERENCE ACCURACY (CRITICAL):
-- You may ONLY reference interests, genres, artists, cuisines, directors, or other preferences that LITERALLY APPEAR in the Preferences JSON above.
-- If the Preferences JSON says they like "studio ghibli" or "thriller", you can reference those. If it does NOT mention "Radiohead" or "Death Note", you MUST NOT reference them.
-- NEVER infer, guess, or hallucinate additional preferences beyond what is in the JSON. This is the #1 quality issue.
-- If the Preferences JSON is sparse, focus on the item's inherent qualities rather than inventing connections to non-existent preferences.
+RULES (in priority order):
+1. The user's QUERY and the REFINEMENTS are the intent — preferences are secondary. A user searching for "romantic Italian" WANTS Italian; do not write unfavorable descriptions because their preference history is different. Only note if a preference directly contradicts (example: the restaurant specializes in spicy food and the user does not like spicy food) in a positive manner. Example: "This is a neighborhood favorite, and offers a wide range of options for the Szechuan cuisine Amy loves. Just keep in mind it's mostly spicy, which could be a challenge."
+2. Always frame every result as worth considering. Present caveats (noise, price) as helpful "heads up" context — never as a reason to avoid or skip.
+3. You may ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON below. If it's not in the JSON, do not reference it. If the JSON is sparse, focus on the result's inherent qualities.
+4. Ground every note in something specific — a dish, a scene, a sound, a moment — not abstract preference-matching. Look at reviews to help ensure features are real.
+5. 1-2 sentences, punchy, with a DIFFERENT angle for each item.
 
 ${domainGuidance}
 
 VOICE:
-- You're a friend who's been there and is genuinely excited to share
+- You're a friend who hand-picked these and is genuinely excited to share them
 - Warm and direct: "The cacio e pepe here is RIDICULOUS" not "This pasta dish is of high quality"
-- EVERY result was already curated — always lead with what's genuinely great, then flag honest caveats
-- NEVER say "skip this" or "hard pass" — reframe drawbacks as context, not rejections
-- 1-2 sentences, punchy but substantive
-- Use a DIFFERENT angle/framing for each note — don't repeat the same theme, director, or reference across multiple items
+- Use varied angles across items — don't repeat the same theme or reference
 
-Anti-patterns:
-- No hedging: "might be", "could be", "it depends on"
-- No robotic matching language: "aligns with", "matches your profile", "fits your criteria"
-- Avoid lazy recommendation clichés: "right up your alley", "perfect for your taste"
-- No bro-speak: "Dude", "Bro", "fam"
-- No UUIDs, member IDs, or scoring mechanics
-- NEVER reference a preference NOT in the Preferences JSON
+AVOID:
+- Hedging: "might be", "could be", "it depends on"
+- Robotic matching: "aligns with", "matches your profile", "fits your criteria"
+- Lazy clichés: "right up your alley", "perfect for your taste"
+- Bro-speak: "Dude", "Bro", "fam"
+- UUIDs, member IDs, or scoring mechanics
+- Referencing preferences NOT in the Preferences JSON
 
-EXAMPLES OF GREAT NOTES:
+EXAMPLES — WHEN A RESULT DOESN'T MATCH THEIR USUAL PREFERENCES:
+- "Not your usual Thai haunt, but the candlelit vibe you're after is unbeatable — and the burgundy short ribs are worth the detour."
+- "A different world from your jazz picks, but the third movement has the same improvisational energy — the cellist basically solos for six minutes."
+- "Hollywood through and through, but the practical effects set it apart — the helicopter crash was filmed for real at 4AM."
+- "French, not Italian, but the prix fixe is a steal and the sommelier will find you something incredible — trust the house red."
+- "It's loud and buzzy, not the quiet escape you asked about, but the corner booth by the window is its own little world — ask for it."
+
+EXAMPLES — WHEN A RESULT IS A GREAT FIT:
 - "The hand-drawn animation is jaw-dropping, and the way it handles grief will stick with you for days."
-- "If the jazz in your library had a visual equivalent, it'd be this — moody, improvisational, completely absorbing."
-- "It's a slow burn and the first hour drags, but the last 20 minutes are devastating — worth the patience."
-- "The director shoots conversations like heist scenes — tight cuts, no wasted frames. You'll tear through it."
 - "Sound design alone makes this worth it — the score practically becomes a character."
+- "The director shoots conversations like heist scenes — tight cuts, no wasted frames. You'll tear through it."
 
 Items: ${candidateNames}
 
+Preferences: ${prefs}
+
 Return ONLY JSON:
 {
-  "personalizations": {"ItemName": "1-2 sentence personal note for ${userName}"}
+  "personalizations": {"ItemName": "1-2 sentence note explaining what makes this worth trying for ${userName}"}
 }`;
 }
 
@@ -389,24 +400,29 @@ function buildInsiderTakePrompt(
     queryText: string,
     domain: string,
     userName: string,
-    newsMode?: NewsMode
+    newsMode?: NewsMode,
+    conversationContext?: string
 ): string {
     const domainHighlights = domain === 'news' && newsMode
         ? getForUserGuidance(domain, newsMode)
         : getInsiderGuidance(domain);
+    const refinementBlock = conversationContext
+        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your insider tips around how each result fits what the user is looking for. Do NOT independently reject results — they were already curated for this refinement.\n`
+        : '';
 
     return `Query: "${queryText}"
+${refinementBlock}
 
-For each item, give ${userName} the kind of insider tip a well-connected local friend would share. Focus on what makes each one stand out and what to actually DO there — the stuff you only learn from going.
+You hand-picked each of these results for ${userName}'s search. Everything here made your cut — now give the insider take on why each one is worth checking out.
 
 ${domainHighlights}
 
 WHAT TO INCLUDE (pick 1-2 per item):
 - What regulars, critics, or reviewers consistently praise — the standout (a signature dish, the best seat, the moment everyone talks about)
 - The hidden gem angle — what most people miss or don't know about
-- Practical insider knowledge — when to go, what to avoid, what to order
+- Practical insider knowledge — when to go, what to order, where to sit
 - How popular/crowded it gets — is it a scene or a hidden spot?
-- Honest caveats — what disappoints, what's overrated, what to skip
+- Honest context — what to expect, what makes it special, the vibe
 
 ACCURACY (critical):
 - Only name specific items (dishes, songs, drinks) if you are CONFIDENT they are real
@@ -414,17 +430,19 @@ ACCURACY (critical):
 - It's better to say "the desserts here are incredible" than to invent a dessert name
 
 VOICE:
-- You're a local who's been there many times, sharing what you genuinely think
-- Enthusiastic but honest — call out what's overrated as readily as what's great
+- You're a local who hand-picked these and genuinely wants to help
+- Enthusiastic but honest — present caveats as helpful context, not reasons to avoid
 - Specific and concrete — "the window seats have the best view" not "nice atmosphere"
+- Always frame every result as worth considering
 - 1-2 sentences, punchy but substantive
 
-BAD: "A popular spot that many people enjoy visiting." (generic, says nothing)
-BAD: "This aligns with your interest in live music." (inventing preferences — you have NO user preference data!)
-GOOD: "Go on a weeknight — the crowds thin out and you'll actually hear the performers. The house margarita is the move."
-GOOD: "Fair warning: the line wraps around the block on weekends, but the brisket is legitimately the best in the city."
+EXAMPLES:
+- "Go on a weeknight — the crowds thin out and you'll actually hear the performers. The house margarita is the move."
+- "Fair warning: the line wraps around the block on weekends, but the brisket is legitimately the best in the city."
+- "The prix fixe lunch is a steal compared to dinner — same kitchen, half the price, and you'll actually get a table."
+- "It's loud and buzzy, not a quiet date night spot, but the corner booth near the back is its own little world."
 
-CRITICAL: You do NOT have preference data for this user. Do NOT invent or assume preferences. Do NOT say things like "right up your alley" or "perfect for your taste" — you don't know their taste. Instead, tell them what ANYONE would want to know.
+IMPORTANT: You have NO preference data for this user. Focus on what ANYONE would want to know — the insider info, the practical tips, the things that make each place special. Write as a knowledgeable local, not as a recommendation engine.
 
 Items: ${candidateNames}
 

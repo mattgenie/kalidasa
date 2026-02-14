@@ -14,7 +14,7 @@ import type {
 
 export class NewsAPIHook implements EnrichmentHook {
     name = 'newsapi';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains: EnrichmentDomain[] = ['news'];
     priority = 90;
 
     private apiKey: string;
@@ -54,10 +54,12 @@ export class NewsAPIHook implements EnrichmentHook {
             return {
                 verified: true,
                 source: 'newsapi',
-                articles: {
+                news: {
+                    title: article.title,
                     author: article.author,
                     publishedAt: article.publishedAt,
                     source: article.source?.name,
+                    sourceDomain: this.extractDomain(article.url),
                     imageUrl: article.urlToImage,
                     url: article.url,
                     summary: article.description,
@@ -66,6 +68,14 @@ export class NewsAPIHook implements EnrichmentHook {
         } catch (error) {
             console.error('[NewsAPIHook] Error:', error);
             return null;
+        }
+    }
+
+    private extractDomain(url: string): string {
+        try {
+            return new URL(url).hostname.replace(/^www\./, '');
+        } catch {
+            return '';
         }
     }
 

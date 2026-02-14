@@ -11,6 +11,9 @@ export interface DomainDefinition {
     /** Canonical name: places, movies, music, etc. */
     name: string;
 
+    /** Singular result type: place, movie, music, etc. */
+    singularType: string;
+
     /** Human-readable display name */
     displayName: string;
 

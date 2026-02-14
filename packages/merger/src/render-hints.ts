@@ -5,6 +5,7 @@
  */
 
 import type { RenderHints, Domain } from '@kalidasa/types';
+import { getDomain } from '@kalidasa/domain-registry';
 
 /**
  * Generate render hints for a search response
@@ -22,16 +23,7 @@ export function generateRenderHints(domain: Domain, resultCount: number): Render
 }
 
 function getItemRenderer(domain: Domain): RenderHints['itemRenderer'] {
-    const renderers: Record<Domain, RenderHints['itemRenderer']> = {
-        places: 'place_card',
-        movies: 'movie_card',
-        music: 'music_card',
-        events: 'event_card',
-        videos: 'video_card',
-        articles: 'article_card',
-        general: 'generic_card',
-    };
-    return renderers[domain] || 'generic_card';
+    return (getDomain(domain)?.itemRenderer ?? 'generic_card') as RenderHints['itemRenderer'];
 }
 
 function getComponentType(
@@ -53,8 +45,8 @@ function getComponentType(
         return resultCount <= 8 ? 'carousel' : 'search_grid';
     }
 
-    // For articles, detailed list is better
-    if (domain === 'articles') {
+    // For articles and books, detailed list is better
+    if (domain === 'articles' || domain === 'books' || domain === 'news') {
         return 'detailed_list';
     }
 

@@ -72,7 +72,9 @@ export class Merger {
             music: candidate.enrichment?.music,
             events: candidate.enrichment?.events,
             videos: candidate.enrichment?.videos,
+            books: candidate.enrichment?.books,
             articles: candidate.enrichment?.articles,
+            news: candidate.enrichment?.news,
             general: candidate.enrichment?.general,
         };
 
@@ -127,7 +129,9 @@ export class Merger {
             music: 'songs',
             events: 'events',
             videos: 'videos',
+            books: 'books',
             articles: 'articles',
+            news: 'articles',
             general: 'results',
         };
 

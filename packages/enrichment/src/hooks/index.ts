@@ -16,10 +16,13 @@ import { OMDbHook } from './omdb.js';
 import { AppleMusicHook } from './apple-music.js';
 import { MusicBrainzHook } from './musicbrainz.js';
 import { CompositeEventsHook } from './composite-events.js';
-import { NewsAPIHook } from './newsapi.js';
-import { DiffbotHook } from './diffbot.js';
-import { NewsMeshHook } from './newsmesh.js';
 import { WikipediaHook } from './wikipedia.js';
+import { CompositeArticlesHook } from './composite-articles.js';
+import { CompositeBookHook } from './composite-books.js';
+import { ExaHook } from './exa.js';
+import { SerpApiArticlesHook } from './serpapi-articles.js';
+import { NewsAPIHook } from './newsapi.js';
+import { CompositeNewsHook } from './composite-news.js';
 
 /**
  * Create a HookRegistry with all hooks registered.
@@ -46,10 +49,17 @@ export function createHookRegistry(): HookRegistry {
     // registry.register(new YouTubeHook());
     // registry.register(new VimeoHook());
 
-    // News & Articles
+    // Books (composite: OpenLibrary + Google Books + Wikipedia)
+    registry.register(new CompositeBookHook());
+
+    // Articles (Exa neural search → SerpAPI+Diffbot → composite NewsAPI+Wikipedia)
+    registry.register(new ExaHook());
+    registry.register(new SerpApiArticlesHook());
+    registry.register(new CompositeArticlesHook());
+
+    // News (composite: Exa + NewsAPI with source tiering)
+    registry.register(new CompositeNewsHook());
     registry.register(new NewsAPIHook());
-    registry.register(new DiffbotHook());
-    registry.register(new NewsMeshHook());
 
     // Trusted Voices
     registry.register(new WikipediaHook());
@@ -69,8 +79,11 @@ export { EventbriteHook } from './eventbrite.js';
 export { TicketmasterHook } from './ticketmaster.js';
 export { CompositeEventsHook } from './composite-events.js';
 export { SerpApiEventsHook } from './serpapi-events.js';
+export { CompositeArticlesHook } from './composite-articles.js';
+export { CompositeBookHook } from './composite-books.js';
+export { ExaHook } from './exa.js';
+export { SerpApiArticlesHook } from './serpapi-articles.js';
 export { NewsAPIHook } from './newsapi.js';
 export { DiffbotHook } from './diffbot.js';
-export { NewsMeshHook } from './newsmesh.js';
 export { WikipediaHook } from './wikipedia.js';
-
+export { CompositeNewsHook, NewsSearcher } from './composite-news.js';
