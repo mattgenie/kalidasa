@@ -26,6 +26,7 @@ COPY packages/cao-generator/package.json ./packages/cao-generator/
 COPY packages/enrichment/package.json ./packages/enrichment/
 COPY packages/facet-libraries/package.json ./packages/facet-libraries/
 COPY packages/merger/package.json ./packages/merger/
+COPY packages/domain-registry/package.json ./packages/domain-registry/
 
 # Install all dependencies
 RUN pnpm install --frozen-lockfile
@@ -59,6 +60,7 @@ COPY packages/cao-generator/package.json ./packages/cao-generator/
 COPY packages/enrichment/package.json ./packages/enrichment/
 COPY packages/facet-libraries/package.json ./packages/facet-libraries/
 COPY packages/merger/package.json ./packages/merger/
+COPY packages/domain-registry/package.json ./packages/domain-registry/
 
 # Install production dependencies only
 RUN pnpm install --frozen-lockfile --prod
@@ -70,6 +72,7 @@ COPY --from=builder --chown=kalidasa:nodejs /app/packages/cao-generator/dist ./p
 COPY --from=builder --chown=kalidasa:nodejs /app/packages/enrichment/dist ./packages/enrichment/dist
 COPY --from=builder --chown=kalidasa:nodejs /app/packages/facet-libraries/dist ./packages/facet-libraries/dist
 COPY --from=builder --chown=kalidasa:nodejs /app/packages/merger/dist ./packages/merger/dist
+COPY --from=builder --chown=kalidasa:nodejs /app/packages/domain-registry/dist ./packages/domain-registry/dist
 
 # Set production environment
 ENV NODE_ENV=production

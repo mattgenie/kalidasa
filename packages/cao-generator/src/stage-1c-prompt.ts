@@ -334,15 +334,26 @@ function buildPersonalizedPrompt(
     newsMode?: NewsMode,
     conversationContext?: string
 ): string {
-    const prefs = JSON.stringify(capsule.members?.[0]?.preferences || {});
+    const isGroup = capsule.mode === 'group' && (capsule.members?.length || 0) > 1;
+    const prefs = isGroup
+        ? JSON.stringify(
+            Object.fromEntries(
+                (capsule.members || []).map(m => [m.name, m.preferences || {}])
+            )
+        )
+        : JSON.stringify(capsule.members?.[0]?.preferences || {});
+    const memberNames = (capsule.members || []).map(m => m.name);
     const domainGuidance = getForUserGuidance(domain, newsMode);
     const refinementBlock = conversationContext
         ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your notes around how each result satisfies what the user is looking for. Do NOT independently reject results — they were already curated for this refinement.\n`
         : '';
+    const groupBlock = isGroup
+        ? `\nGROUP MODE: This search is for a group: ${memberNames.join(', ')}. Each member has different preferences (shown below). Your job is to find what makes each result work for the GROUP — frame each note around what brings the group together (shared vibes, variety on the menu, something for everyone). Never reject a result because one member's preferences don't match — find the angle that makes it work.\n`
+        : '';
 
     return `Query: "${queryText}"
 User: ${userName}
-${refinementBlock}
+${refinementBlock}${groupBlock}
 
 You hand-picked each of these results for ${userName}'s search. Everything here made your cut — now tell them why each one is worth trying.
 
