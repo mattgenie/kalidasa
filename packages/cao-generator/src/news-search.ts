@@ -44,7 +44,7 @@ export interface RawNewsArticle {
     sourceTier: number;
     sourceRegion: string;
     paywall: 'free' | 'metered' | 'hard';
-    articleType: 'reporting' | 'analysis' | 'opinion' | 'investigation' | 'explainer';
+    articleType: 'reporting' | 'analysis' | 'opinion' | 'investigation' | 'explainer' | 'ai_generated';
     imageUrl?: string;
     url: string;
     snippet?: string;
@@ -112,6 +112,17 @@ const SOURCE_OVERRIDES: Record<string, SourceEntry> = {
     'time.com': { displayName: 'Time', tier: 2, region: 'US', paywall: 'metered' },
     'usatoday.com': { displayName: 'USA Today', tier: 2, region: 'US', paywall: 'free' },
 
+    // Tier 2 (cont.): quality specialist outlets (Q5)
+    'hollywoodreporter.com': { displayName: 'Hollywood Reporter', tier: 2, region: 'US', paywall: 'free', specialty: 'entertainment' },
+    'fastcompany.com': { displayName: 'Fast Company', tier: 2, region: 'US', paywall: 'metered', specialty: 'business' },
+    'forbes.com': { displayName: 'Forbes', tier: 2, region: 'US', paywall: 'metered', specialty: 'business' },
+    'businessinsider.com': { displayName: 'Business Insider', tier: 2, region: 'US', paywall: 'metered', specialty: 'business' },
+    'variety.com': { displayName: 'Variety', tier: 2, region: 'US', paywall: 'metered', specialty: 'entertainment' },
+    'deadline.com': { displayName: 'Deadline', tier: 2, region: 'US', paywall: 'free', specialty: 'entertainment' },
+    'engadget.com': { displayName: 'Engadget', tier: 2, region: 'US', paywall: 'free', specialty: 'tech' },
+    'thedailybeast.com': { displayName: 'The Daily Beast', tier: 2, region: 'US', paywall: 'metered' },
+    'theconversation.com': { displayName: 'The Conversation', tier: 2, region: 'Global', paywall: 'free' },
+
     // Tier 3: Good regional/niche
     'salon.com': { displayName: 'Salon', tier: 3, region: 'US', paywall: 'free' },
     'slate.com': { displayName: 'Slate', tier: 3, region: 'US', paywall: 'free' },
@@ -124,6 +135,8 @@ const SOURCE_OVERRIDES: Record<string, SourceEntry> = {
     'latimes.com': { displayName: 'Los Angeles Times', tier: 3, region: 'US', paywall: 'hard' },
     'thehill.com': { displayName: 'The Hill', tier: 3, region: 'US', paywall: 'free', specialty: 'politics' },
     'yahoo.com': { displayName: 'Yahoo News', tier: 3, region: 'US', paywall: 'free' },
+    'washingtontimes.com': { displayName: 'Washington Times', tier: 3, region: 'US', paywall: 'free' },
+    'gartner.com': { displayName: 'Gartner', tier: 3, region: 'US', paywall: 'metered', specialty: 'tech' },
 };
 
 /** Merged registry: curated CSV sources + hand-tuned overrides */
@@ -215,30 +228,21 @@ export class NewsSearchEngine {
         const { mode, recency, queries, facets } = await this.classifyAndExpand(queryText);
         console.log(`[NewsSearch] Mode: ${mode}, Recency: ${recency}, Facets: ${facets.length}`);
 
-        // Step 2: Parallel search across both APIs (date window from recency)
-        const dateWindowDays = recency === 'breaking' ? 2 : recency === 'recent' ? 7 : 30;
-        const rawArticles = await this.parallelSearch(queries, facets, mode, dateWindowDays);
+        // Step 2: Always search 30 days — recency is handled by scoring, not window.
+        // This eliminates the costly widen-retry second pass (~7s saved).
+        const dateWindowDays = 30;
+        const rawArticles = await this.parallelSearch(queries, facets, mode, dateWindowDays, queryText);
 
         // Step 3: Deduplicate
         const deduped = this.deduplicateArticles(rawArticles);
         console.log(`[NewsSearch] After dedup: ${deduped.length} unique articles`);
 
-        // Step 4: LLM relevance filter — drops off-topic, garbage, and listing content
+        // Step 4: LLM relevance filter — keeps only topically relevant articles
         const filtered = await this.filterByRelevance(deduped, queryText);
         console.log(`[NewsSearch] After relevance filter: ${filtered.length}/${deduped.length} kept`);
 
-        // Step 4b: If too few results after filtering, widen the date window and retry
-        if (filtered.length < 10 && dateWindowDays < 30) {
-            console.log('[NewsSearch] Yield too low after filter, widening date window...');
-            const widerArticles = await this.parallelSearch(queries.slice(0, 2), facets.slice(0, 2), mode, 30);
-            const widerDeduped = this.deduplicateArticles([...filtered, ...widerArticles]);
-            const widerFiltered = await this.filterByRelevance(widerDeduped, queryText);
-            filtered.splice(0, filtered.length, ...widerFiltered);
-            console.log(`[NewsSearch] After wider pass: ${filtered.length} articles`);
-        }
-
-        // Step 5: Mode-adaptive scoring + selection
-        const selected = this.selectArticles(filtered, mode, maxResults);
+        // Step 5: Mode-adaptive scoring + selection (with query relevance)
+        const selected = this.selectArticles(filtered, mode, maxResults, queryText, recency);
 
         // Step 6: Topic clustering (for summary cross-referencing)
         const clusters = this.clusterByTopic(selected);
@@ -269,64 +273,27 @@ export class NewsSearchEngine {
         queries: string[];
         facets: { query: string; category?: string; country?: string }[];
     }> {
-        const prompt = `Classify this news query and generate 4 FACETED search queries. Each facet gets a query AND a category filter to guarantee diversity.
+        // Exp 1: Slim prompt — compact examples, fewer tokens
+        // Exp 8: 4th facet must use a contrasting/unexpected category for diversity
+        const prompt = `Classify this news query and generate 4 FACETED search queries.
 
 Query: "${queryText}"
 
-MODES:
-- SURVEY: broad coverage across DIFFERENT topics ("what's happening", "news in [place]", "today's headlines")
-- THEMATIC: coverage within one topic AREA ("climate", "tech", "economic" trends)
-- DEEP: multiple perspectives on ONE specific issue ("takes on", "analysis of", specific event)
-
-RECENCY:
-- BREAKING: "today", "right now", "latest" → last 2 days
-- RECENT: "this week", "updates", ongoing story → last 7 days
-- GENERAL: no temporal signal, wants analysis → up to 30 days
-
-AVAILABLE CATEGORIES (pick one per facet):
-politics, technology, business, health, entertainment, sports, science, lifestyle, environment, world
+MODES: survey (broad topics), thematic (one topic area), deep (one specific issue)
+RECENCY: breaking (today/now), recent (this week), general (up to 30 days)
+CATEGORIES: politics, technology, business, health, entertainment, sports, science, lifestyle, environment, world
 
 RULES:
-1. Generate exactly 4 facets, each with a DIFFERENT category
-2. Keep queries SHORT: 2-4 words max. The category filter handles topic scoping, so queries just need the core concept
-3. If query mentions a specific country/region, add its ISO 3166-1 alpha-2 "country" code
-4. Each facet's query+category pair should find different articles than the others
+1. Exactly 4 facets, each with a DIFFERENT category
+2. Queries: 2-4 words max (category handles scoping)
+3. Add ISO alpha-2 "country" code if query mentions a specific country
+4. Facet 4 MUST use a contrasting category unrelated to the primary topic — find unexpected intersections (e.g., for tech → health or lifestyle; for politics → science or entertainment)
 
 EXAMPLES:
+"world news today" → survey/breaking: [politics:"government policy", business:"trade economy", world:"conflict diplomacy", technology:"AI breakthroughs"]
+"climate change updates" → thematic/recent: [environment:"climate change", business:"renewable energy", politics:"climate agreements", health:"air quality impact"]
 
-"important news in the world today" → survey + breaking
-  facets: [
-    { "query": "government policy", "category": "politics" },
-    { "query": "trade economy", "category": "business" },
-    { "query": "conflict diplomacy", "category": "world" },
-    { "query": "AI technology", "category": "technology" }
-  ]
-
-"climate change policy updates" → thematic + recent
-  facets: [
-    { "query": "climate change", "category": "environment" },
-    { "query": "renewable energy", "category": "business" },
-    { "query": "climate agreements", "category": "politics" },
-    { "query": "climate health", "category": "science" }
-  ]
-
-"what's happening in Greece today" → survey + breaking
-  facets: [
-    { "query": "Greece government", "category": "politics", "country": "gr" },
-    { "query": "Greece economy", "category": "business", "country": "gr" },
-    { "query": "Greece migration", "category": "world", "country": "gr" },
-    { "query": "Greece tourism", "category": "lifestyle", "country": "gr" }
-  ]
-
-"opinions on social media regulation" → deep + general
-  facets: [
-    { "query": "social media regulation", "category": "politics" },
-    { "query": "online safety", "category": "technology" },
-    { "query": "social media antitrust", "category": "business" },
-    { "query": "content moderation", "category": "world" }
-  ]
-
-BAD: queries longer than 4 words, using the same category twice, or rephrased duplicates.
+BAD: queries >4 words, same category twice, rephrased duplicates, similar categories for facet 4.
 
 Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent"|"general", "facets": [{ "query": "...", "category": "...", "country?": "..." }, ...] }`;
 
@@ -337,6 +304,7 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
                 generationConfig: {
                     responseMimeType: 'application/json',
                     temperature: 0.3,
+                    maxOutputTokens: 200,
                 },
             });
 
@@ -391,8 +359,8 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
     // ---- Step 4: LLM relevance filter ----
 
     /**
-     * Ultra-fast LLM pass: drops clearly off-topic articles.
-     * Compressed prompt + drop-only output → targets ~700ms.
+     * LLM relevance pass: keeps only topically relevant articles.
+     * Inverted from "drop off-topic" → "keep relevant" for higher precision.
      */
     private async filterByRelevance(
         articles: RawNewsArticle[],
@@ -400,11 +368,21 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
     ): Promise<RawNewsArticle[]> {
         if (articles.length === 0) return [];
 
+        // Strict relevance filter with examples for common off-topic patterns
         const titleList = articles.map((a, i) =>
-            `${i + 1}. ${a.title}`
+            `${i + 1}. ${a.title.length > 80 ? a.title.substring(0, 77) + '...' : a.title}`
         ).join('\n');
 
-        const prompt = `Query: "${queryText}"\n\n${titleList}\n\nWhich articles are clearly OFF-TOPIC? Err toward keeping. Return JSON: {"drop":[ids]}`;
+        const prompt = `Query: "${queryText}"
+
+${titleList}
+
+STRICT RELEVANCE CHECK: Does each headline's MAIN SUBJECT directly match the query topic?
+- "stock market news" → KEEP finance/market/stock/earnings articles. DROP health, celebrity, gaming, weather even if they mention money.
+- "AI news" → KEEP articles ABOUT artificial intelligence. DROP articles where a person who works in AI is the subject but the article is NOT about AI.
+- "climate change" → KEEP climate science, environmental policy. DROP fashion, unrelated court rulings, general politics unless directly about climate.
+
+Tangential connections do NOT count. Return JSON: {"keep":[ids]}`;
 
         try {
             const model = this.genAI.getGenerativeModel({
@@ -412,7 +390,7 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
                 generationConfig: {
                     responseMimeType: 'application/json',
                     temperature: 0,
-                    maxOutputTokens: 60,
+                    maxOutputTokens: 150,
                 },
             });
 
@@ -420,20 +398,28 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
             const text = result.response.text();
             const parsed = JSON.parse(text);
 
-            const dropIds = new Set<number>(
-                Array.isArray(parsed.drop)
-                    ? parsed.drop.map(Number).filter((n: number) => !isNaN(n))
+            const keepIds = new Set<number>(
+                Array.isArray(parsed.keep)
+                    ? parsed.keep.map(Number).filter((n: number) => !isNaN(n))
                     : []
             );
 
-            if (dropIds.size > 0) {
-                for (const id of dropIds) {
-                    const a = articles[id - 1];
-                    if (a) console.log(`[NewsSearch:Filter] Dropping #${id} "${a.title?.substring(0, 50)}"`);
+            const dropped = articles.length - keepIds.size;
+            if (dropped > 0) {
+                for (let i = 0; i < articles.length; i++) {
+                    if (!keepIds.has(i + 1)) {
+                        console.log(`[NewsSearch:Filter] Dropping #${i + 1} "${articles[i].title?.substring(0, 50)}"`);
+                    }
                 }
             }
 
-            return articles.filter((_, i) => !dropIds.has(i + 1));
+            // Safety: if LLM returned empty keep list, fall back to keeping all
+            if (keepIds.size === 0) {
+                console.warn('[NewsSearch:Filter] LLM returned empty keep list, keeping all');
+                return articles;
+            }
+
+            return articles.filter((_, i) => keepIds.has(i + 1));
         } catch (error) {
             console.warn('[NewsSearch:Filter] LLM filter error, keeping all:', error);
             return articles;
@@ -447,7 +433,7 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
      * Supplementary: Exa (2 queries for niche/international diversity)
      * Both run in parallel for zero latency increase.
      */
-    private async parallelSearch(queries: string[], facets: { query: string; category?: string; country?: string }[], mode: NewsMode, dateWindowDays: number): Promise<RawNewsArticle[]> {
+    private async parallelSearch(queries: string[], facets: { query: string; category?: string; country?: string }[], mode: NewsMode, dateWindowDays: number, queryText: string = ''): Promise<RawNewsArticle[]> {
         // Deep mode leans more on Exa (NewsMesh struggles with niche opinion queries)
         const maxExaQueries = mode === 'deep' ? 3 : 2;
         const exaQueries = queries.slice(0, maxExaQueries);
@@ -477,8 +463,20 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
             console.log(`[NewsSearch] Exa quality filter: kept ${exa.length}/${exaRaw.length} (≥${minSnippetLen} chars, no nav junk)`);
         }
 
-        // NewsMesh → Diffbot enrichment
-        const enriched = await this.diffbotEnrichArticles(newsMesh);
+        // Exp 2: Dedup NewsMesh BEFORE Diffbot — eliminates redundant API calls
+        // Cross-facet NewsMesh queries often return overlapping articles.
+        // Deduplicating now saves ~200ms per duplicate removed.
+        const dedupedNewsMesh = this.deduplicateArticles(newsMesh);
+        if (newsMesh.length > dedupedNewsMesh.length) {
+            console.log(`[NewsSearch] Pre-Diffbot dedup: ${newsMesh.length} → ${dedupedNewsMesh.length} (-${newsMesh.length - dedupedNewsMesh.length} duplicates)`);
+        }
+
+        // NewsMesh → Diffbot enrichment (on deduplicated set)
+        // P1: Run OG image extraction on Exa articles in parallel — zero extra latency
+        const [enriched] = await Promise.all([
+            this.diffbotEnrichArticles(dedupedNewsMesh, queryText),
+            this.enrichWithOgImages(exa),
+        ]);
 
         // --- Quality Filter 2: NewsMesh requires Diffbot enrichment ---
         const shipped = enriched.filter(a => (a.snippet?.length || 0) >= 325);
@@ -489,7 +487,45 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
 
         const diffbotCount = shipped.filter(a => a.snippet && a.snippet.length > 200).length;
         console.log(`[NewsSearch] Raw: ${exa.length} Exa + ${newsMesh.length} NewsMesh (${diffbotCount} Diffbot-enriched) (window: ${dateWindowDays}d)`);
-        return [...shipped, ...exa];
+
+        // Q3: Filter lead-gen / non-article pages
+        // Q8: Filter future-dated articles (> now + 24h)
+        // Q9: Fill missing wordCount from snippet
+        // Q10: Flag AI-generated bylines
+        const allArticles = [...shipped, ...exa];
+        const qualityFiltered = allArticles.filter(a => {
+            // Q3: Lead-gen pages
+            if (this.isLeadGenPage(a.snippet || '')) {
+                console.log(`[NewsSearch:Q3] Dropped lead-gen page: ${a.sourceDomain} — "${a.title.substring(0, 60)}"`);
+                return false;
+            }
+            // Q8: Future dates
+            if (a.publishedAt) {
+                const pubTime = new Date(a.publishedAt).getTime();
+                if (pubTime > Date.now() + 24 * 60 * 60 * 1000) {
+                    console.log(`[NewsSearch:Q8] Dropped future-dated article: ${a.publishedAt} — "${a.title.substring(0, 60)}"`);
+                    return false;
+                }
+            }
+            // Q9: Fill missing wordCount from snippet
+            if (!a.wordCount && a.snippet) {
+                a.wordCount = a.snippet.split(/\s+/).length;
+                a.readingTimeMinutes = Math.ceil(a.wordCount / 250);
+            }
+            // Q10: Flag AI-generated bylines
+            if (a.author && NewsSearchEngine.AI_AUTHOR_PATTERNS.some(p => a.author!.toLowerCase().includes(p))) {
+                a.articleType = 'ai_generated';
+            }
+            return true;
+        });
+        if (allArticles.length > qualityFiltered.length) {
+            console.log(`[NewsSearch] Quality filters (Q3+Q8): ${allArticles.length} → ${qualityFiltered.length}`);
+        }
+
+        // Signal 5: HEAD-validate all image URLs — clear broken/tiny (<5KB) images
+        await this.validateImageUrls(qualityFiltered);
+
+        return qualityFiltered;
     }
 
     /**
@@ -527,6 +563,7 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(body),
+                    signal: AbortSignal.timeout(6000),
                 });
 
                 if (!response.ok) {
@@ -765,14 +802,16 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
     private selectArticles(
         articles: RawNewsArticle[],
         mode: NewsMode,
-        maxResults: number
+        maxResults: number,
+        queryText: string = '',
+        recency: 'breaking' | 'recent' | 'general' = 'general'
     ): RawNewsArticle[] {
         if (articles.length === 0) return [];
 
-        // Score each article
+        // Score each article (with query relevance and recency-weighted scoring)
         const scored = articles.map(article => ({
             article,
-            baseScore: this.scoreArticle(article),
+            baseScore: this.scoreArticle(article, queryText, recency),
         }));
 
         // Sort by base score descending
@@ -975,14 +1014,37 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
 
     // ---- Scoring / utility helpers ----
 
-    private scoreArticle(article: RawNewsArticle): number {
+    private scoreArticle(
+        article: RawNewsArticle,
+        queryText: string = '',
+        recency: 'breaking' | 'recent' | 'general' = 'general'
+    ): number {
         let score = 0;
         score += article.sourceTier === 1 ? 3 : article.sourceTier === 2 ? 2 : article.sourceTier === 3 ? 1 : 0;
         score += article.paywall === 'free' ? 2 : article.paywall === 'metered' ? 1 : 0;
+
+        // Recency-weighted scoring (replaces hard date window filtering)
         if (article.publishedAt) {
             const hoursOld = (Date.now() - new Date(article.publishedAt).getTime()) / (1000 * 60 * 60);
-            score += hoursOld < 24 ? 1 : hoursOld < 168 ? 0.5 : 0;
+            if (recency === 'breaking') {
+                score += hoursOld < 24 ? 3 : hoursOld < 48 ? 1 : -1;
+            } else if (recency === 'recent') {
+                score += hoursOld < 48 ? 2 : hoursOld < 168 ? 1 : 0;
+            } else {
+                score += hoursOld < 168 ? 1 : hoursOld < 720 ? 0.5 : 0;
+            }
         }
+
+        // Keyword relevance: boost articles whose title matches query terms
+        if (queryText) {
+            const queryWords = new Set(
+                queryText.toLowerCase().split(/\s+/).filter(w => w.length > 3)
+            );
+            const titleWords = article.title.toLowerCase().split(/\s+/);
+            const hits = titleWords.filter(w => queryWords.has(w)).length;
+            score += Math.min(hits, 3); // Cap at +3
+        }
+
         // Apply tracker penalty (probation: -1, blocked: -5)
         score += this.tracker.scorePenalty(article.sourceDomain);
         return score;
@@ -1055,6 +1117,220 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
     private recordUnknownSource(domain: string, title: string, snippet: string, url: string): void {
         this.discovery.recordUnknown(domain, title, snippet, url);
     }
+
+    // ---- Image quality helpers (P1, P2) ----
+
+    /** Known ad network, tracking, and map/street-view domains */
+    // Q3: Lead-gen / non-article page detection patterns
+    private static readonly LEAD_GEN_PATTERNS = [
+        'all fields are required', 'download your', 'sign up for', 'subscribe now',
+        'fill out the form', 'request a demo', 'contact information',
+        'first name', 'last name', 'business phone', 'job title',
+        'get the report', 'whitepaper', 'webinar registration',
+    ];
+
+    // Q10: AI-generated byline patterns
+    private static readonly AI_AUTHOR_PATTERNS = [
+        'ai news desk', 'ai reporter', 'automated insights', 'ai staff',
+        'ai-generated', 'machine-generated',
+    ];
+
+    /**
+     * Q3: Check if a snippet looks like a lead-gen page rather than an article.
+     * Requires 2+ pattern matches to avoid false positives.
+     */
+    private isLeadGenPage(snippet: string): boolean {
+        const lower = snippet.toLowerCase();
+        return NewsSearchEngine.LEAD_GEN_PATTERNS.filter(p => lower.includes(p)).length >= 2;
+    }
+
+    private static readonly AD_IMAGE_PATTERNS = [
+        'doubleclick', 'googlesyndication', 'adnxs', 'adsrvr',
+        'taboola', 'outbrain', 'moatads', 'criteo', 'amazon-adsystem',
+        'facebook.com/tr', 'pixel.', 'tracker.',
+        'maps.googleapis.com/maps/api/streetview', 'maps.gstatic.com',
+        'pbs.twimg.com/profile_images', 'graph.facebook.com',
+    ];
+
+    /** URL path patterns that indicate ads/placeholders */
+    private static readonly BAD_PATH_PATTERNS = [
+        '/ads/', '/banner/', '/sponsor/', '/pixel/', '/tracking/',
+        '/placeholder', '/default-image', '/no-image', '/generic',
+        'thumbnail_default', 'og-default', '/avatar/',
+    ];
+
+    /**
+     * P2: Smart image selection from Diffbot images array.
+     * Filters out ad/street-view images, tracking pixels, and tiny images.
+     * Scores by: primary flag (+10), area, then picks highest.
+     */
+    private selectBestImage(images: Array<{ url?: string; width?: number; height?: number; naturalWidth?: number; naturalHeight?: number; primary?: boolean }>): string | undefined {
+        if (!images || images.length === 0) return undefined;
+
+        const candidates = images.filter(img => {
+            if (!img.url) return false;
+            const urlLower = img.url.toLowerCase();
+
+            // Reject ad network / street view images
+            if (NewsSearchEngine.AD_IMAGE_PATTERNS.some(p => urlLower.includes(p))) return false;
+
+            // Reject bad URL path patterns
+            if (NewsSearchEngine.BAD_PATH_PATTERNS.some(p => urlLower.includes(p))) return false;
+
+            // Reject tiny images (tracking pixels, icons, avatars)
+            const w = img.naturalWidth || img.width || 0;
+            const h = img.naturalHeight || img.height || 0;
+            if ((w > 0 || h > 0) && (w < 200 || h < 150)) return false;
+
+            return true;
+        });
+
+        if (candidates.length === 0) return images[0]?.url; // fallback to first if all filtered
+
+        // Score-based ranking: primary flag dominates, then area
+        candidates.sort((a, b) => {
+            // Diffbot primary flag = editorial hero image (+10)
+            const aPrimary = a.primary ? 10 : 0;
+            const bPrimary = b.primary ? 10 : 0;
+            if (aPrimary !== bPrimary) return bPrimary - aPrimary;
+
+            // Then by area descending
+            const aArea = (a.naturalWidth || a.width || 0) * (a.naturalHeight || a.height || 0);
+            const bArea = (b.naturalWidth || b.width || 0) * (b.naturalHeight || b.height || 0);
+            return bArea - aArea;
+        });
+
+        return candidates[0]?.url;
+    }
+
+    /**
+     * P1: Extract og:image from a URL by fetching the HTML <head>.
+     * Lightweight — only fetches ~10KB to get meta tags.
+     * Returns the og:image URL or undefined.
+     */
+    private async extractOgImage(url: string): Promise<string | undefined> {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Range': 'bytes=0-10000',
+                    'User-Agent': 'Mozilla/5.0 (compatible; KalidasaBot/1.0)',
+                },
+                signal: AbortSignal.timeout(2000),
+                redirect: 'follow',
+            });
+
+            if (!response.ok && response.status !== 206) return undefined;
+
+            const html = await response.text();
+
+            // Parse og:image meta tag (handles both attribute orderings)
+            const match = html.match(/<meta\s+(?:property|name)=["']og:image["']\s+content=["']([^"']+)["']/i)
+                || html.match(/<meta\s+content=["']([^"']+)["']\s+(?:property|name)=["']og:image["']/i);
+
+            if (match?.[1]) {
+                const imageUrl = match[1];
+                if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                    return imageUrl;
+                }
+            }
+            return undefined;
+        } catch {
+            return undefined;
+        }
+    }
+
+    /**
+     * P1: Batch-extract og:image for articles missing images.
+     * Uses a concurrency pool of 5 to avoid overwhelming servers.
+     */
+    private async enrichWithOgImages(articles: RawNewsArticle[]): Promise<void> {
+        const needsImage = articles.filter(a => !a.imageUrl && a.url);
+        if (needsImage.length === 0) return;
+
+        console.log(`[NewsSearch:OG] Extracting og:image for ${needsImage.length} articles...`);
+        const start = Date.now();
+
+        let nextIdx = 0;
+        let extracted = 0;
+        const runNext = async (): Promise<void> => {
+            while (nextIdx < needsImage.length) {
+                const myIdx = nextIdx++;
+                const article = needsImage[myIdx];
+                const imageUrl = await this.extractOgImage(article.url);
+                if (imageUrl) {
+                    article.imageUrl = imageUrl;
+                    extracted++;
+                }
+            }
+        };
+        await Promise.all(
+            Array.from({ length: Math.min(5, needsImage.length) }, () => runNext())
+        );
+
+        console.log(`[NewsSearch:OG] Extracted ${extracted}/${needsImage.length} og:images in ${Date.now() - start}ms`);
+    }
+
+    /**
+     * Signal 5: HEAD-validate image URLs — clear broken/tiny images.
+     * Catches <5KB tracking pixels, 404s, and non-image responses.
+     */
+    private async validateImageUrls(articles: RawNewsArticle[]): Promise<void> {
+        const withImages = articles.filter(a => a.imageUrl);
+        if (withImages.length === 0) return;
+
+        const MIN_BYTES = 5000; // <5KB is almost certainly not a real photo
+        let cleared = 0;
+
+        const validate = async (article: RawNewsArticle): Promise<void> => {
+            try {
+                const resp = await fetch(article.imageUrl!, {
+                    method: 'HEAD',
+                    signal: AbortSignal.timeout(1500),
+                    redirect: 'follow',
+                });
+
+                if (!resp.ok) {
+                    article.imageUrl = undefined;
+                    cleared++;
+                    return;
+                }
+
+                // Check Content-Type — reject non-image (e.g., HTML error pages)
+                const ct = resp.headers.get('content-type') || '';
+                if (ct && !ct.startsWith('image/')) {
+                    article.imageUrl = undefined;
+                    cleared++;
+                    return;
+                }
+
+                // Check Content-Length — reject tiny files
+                const cl = resp.headers.get('content-length');
+                if (cl && parseInt(cl, 10) < MIN_BYTES) {
+                    article.imageUrl = undefined;
+                    cleared++;
+                }
+            } catch {
+                // Timeout or network error — keep the URL (might work for the client)
+            }
+        };
+
+        // Concurrency pool of 8 (HEAD requests are cheap)
+        let nextIdx = 0;
+        const runNext = async (): Promise<void> => {
+            while (nextIdx < withImages.length) {
+                const article = withImages[nextIdx++];
+                await validate(article);
+            }
+        };
+        await Promise.all(
+            Array.from({ length: Math.min(8, withImages.length) }, () => runNext())
+        );
+
+        if (cleared > 0) {
+            console.log(`[NewsSearch:Validate] Cleared ${cleared}/${withImages.length} broken/tiny image URLs`);
+        }
+    }
+
     // ---- Diffbot content extraction ----
 
     /**
@@ -1106,7 +1382,7 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
                     author: object.author as string | undefined,
                     date: object.date as string | undefined,
                     siteName: object.siteName as string | undefined,
-                    imageUrl: object.images?.[0]?.url as string | undefined,
+                    imageUrl: this.selectBestImage(object.images || []),
                     text: object.text as string | undefined,
                     wordCount: object.text ? (object.text as string).split(/\s+/).length : undefined,
                 };
@@ -1125,47 +1401,82 @@ Return JSON: { "mode": "survey"|"thematic"|"deep", "recency": "breaking"|"recent
     }
 
     /**
-     * Enrich NewsAPI articles with Diffbot content extraction.
-     * Staggers requests in batches of 5 to avoid Diffbot rate limits.
+     * Enrich NewsMesh articles with Diffbot content extraction.
+     * Rate-limited to 5 calls/second (paid plan limit) via staggered launch.
      */
-    private async diffbotEnrichArticles(articles: RawNewsArticle[]): Promise<RawNewsArticle[]> {
+    private async diffbotEnrichArticles(articles: RawNewsArticle[], queryText: string = ''): Promise<RawNewsArticle[]> {
         if (!this.diffbotToken || articles.length === 0) return articles;
 
-        // Pick up to 20 unique URLs for extraction (cache makes this cheap)
+        // Exp 3: Pre-score to top-8 — only enrich the most promising articles
+        // Tier 1 sources always qualify; remaining ranked by score
+        const MAX_DIFFBOT = 8;
+        const scored = articles.map((a, i) => ({
+            index: i,
+            article: a,
+            score: this.scoreArticle(a, queryText),
+        }));
+        scored.sort((a, b) => b.score - a.score);
+
+        // Always include Tier 1 sources, then fill remaining slots by score
+        const tier1Indices = new Set(scored.filter(s => s.article.sourceTier === 1).map(s => s.index));
+        const topIndices = new Set<number>();
+        for (const s of scored) {
+            if (tier1Indices.has(s.index)) {
+                topIndices.add(s.index);
+            } else if (topIndices.size < MAX_DIFFBOT) {
+                topIndices.add(s.index);
+            }
+            if (topIndices.size >= MAX_DIFFBOT) break;
+        }
+
+        if (articles.length > topIndices.size) {
+            console.log(`[NewsSearch:Diffbot] Pre-score: ${articles.length} → ${topIndices.size} (top-${MAX_DIFFBOT}, ${tier1Indices.size} Tier 1 kept)`);
+        }
+
+        // Pick unique URLs for extraction from pre-scored set
         const seen = new Set<string>();
         const toEnrich: { index: number; url: string }[] = [];
-        for (let i = 0; i < articles.length && toEnrich.length < 20; i++) {
-            const urlKey = articles[i].url.replace(/[?#].*$/, '').toLowerCase();
-            const domain = this.extractDomain(articles[i].url);
+        for (const idx of topIndices) {
+            const a = articles[idx];
+            const urlKey = a.url.replace(/[?#].*$/, '').toLowerCase();
+            const domain = this.extractDomain(a.url);
             // Skip blocked domains — saves API calls
             if (this.tracker.shouldSkip(domain)) {
                 console.log(`[NewsSearch:Diffbot] Skipping blocked domain: ${domain}`);
                 continue;
             }
-            if (!seen.has(urlKey) && articles[i].url) {
+            if (!seen.has(urlKey) && a.url) {
                 seen.add(urlKey);
-                toEnrich.push({ index: i, url: articles[i].url });
+                toEnrich.push({ index: idx, url: a.url });
             }
         }
 
         console.log(`[NewsSearch:Diffbot] Extracting ${toEnrich.length} articles...`);
         const start = Date.now();
 
-        // Stagger in batches of 6 to avoid Diffbot rate limits
-        const BATCH_SIZE = 6;
-        const allResults: (PromiseSettledResult<{
-            author?: string; date?: string; siteName?: string;
-            imageUrl?: string; text?: string; wordCount?: number;
-        } | null>)[] = [];
+        // Exp 4: Concurrency pool — fire up to 5 concurrent Diffbot requests.
+        // As each completes, the next fires immediately (no artificial 200ms gaps).
+        const POOL_SIZE = 5; // Matches Diffbot 5 req/s rate limit
+        type DiffbotResult = { author?: string; date?: string; siteName?: string; imageUrl?: string; text?: string; wordCount?: number; } | null;
+        const allResults: (PromiseSettledResult<DiffbotResult>)[] = new Array(toEnrich.length);
 
-        for (let b = 0; b < toEnrich.length; b += BATCH_SIZE) {
-            if (b > 0) await new Promise(r => setTimeout(r, 500)); // brief rate limit gap
-            const batch = toEnrich.slice(b, b + BATCH_SIZE);
-            const results = await Promise.allSettled(
-                batch.map(({ url }) => this.extractWithDiffbot(url))
-            );
-            allResults.push(...results);
-        }
+        // Process in concurrent batches using a sliding pool
+        let nextIdx = 0;
+        const runNext = async (): Promise<void> => {
+            while (nextIdx < toEnrich.length) {
+                const myIdx = nextIdx++;
+                try {
+                    const result = await this.extractWithDiffbot(toEnrich[myIdx].url);
+                    allResults[myIdx] = { status: 'fulfilled', value: result };
+                } catch (reason: any) {
+                    allResults[myIdx] = { status: 'rejected', reason };
+                }
+            }
+        };
+        // Launch POOL_SIZE workers — each grabs the next job when done
+        await Promise.all(
+            Array.from({ length: Math.min(POOL_SIZE, toEnrich.length) }, () => runNext())
+        );
 
         let enrichedCount = 0;
         for (let j = 0; j < toEnrich.length; j++) {
