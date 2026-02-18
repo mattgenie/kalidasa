@@ -900,7 +900,31 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
                 return;
             }
             verifiedCount++;
-            const { candidate, enriched, summary, forUser, startMs } = result;
+            const { candidate, enriched, summary, startMs } = result;
+            let { forUser } = result;
+
+            // ForUser fallback: if LLM returned empty, build a note from enrichment
+            if (!forUser || forUser.trim().length === 0) {
+                const e = enriched.enrichment as any;
+                const fuParts: string[] = [];
+                if (e?.books) {
+                    if (e.books.author) fuParts.push(`By ${e.books.author}`);
+                    if (e.books.pageCount) fuParts.push(`${e.books.pageCount} pages`);
+                    if (e.books.year) fuParts.push(`published ${e.books.year}`);
+                } else if (e?.music) {
+                    if (e.music.artist) fuParts.push(`By ${e.music.artist}`);
+                    if (e.music.genre) fuParts.push(e.music.genre);
+                } else if (e?.movies) {
+                    if (e.movies.director) fuParts.push(`Directed by ${e.movies.director}`);
+                    if (e.movies.year) fuParts.push(`${e.movies.year}`);
+                }
+                if (fuParts.length > 0) {
+                    forUser = fuParts.join('. ') + '.';
+                } else {
+                    forUser = `Worth checking out — see details for ${candidate.name}.`;
+                }
+                console.log(`[${requestId}] ⚠️ Empty forUser for "${candidate.name}" — used fallback`);
+            }
 
             // Q2: Derive whyRecommended from forUser's first sentence
             const whyRecommended = forUser ? (forUser.split(/[.!?]\s/)[0] + '.') : '';
