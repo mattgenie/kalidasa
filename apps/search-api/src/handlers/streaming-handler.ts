@@ -232,7 +232,7 @@ async function handleNewsStream(
     console.log(`[${requestId}] 📰 News domain: using NewsSearchEngine (NewsMesh + Exa + Diffbot)`);
 
     const newsEngine = new NewsSearchEngine(genAI, 'gemini-2.0-flash');
-    const maxResults = searchRequest.options?.maxResults || 8;
+    const maxResults = Math.max(searchRequest.options?.maxResults || 10, 10);
 
     // Run the full news search pipeline
     const { mode, candidates: newsCandidates, clusters } = await newsEngine.search(
@@ -807,7 +807,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
         // ==== ALL OTHER DOMAINS: Standard streaming pipeline ====
 
         // Oversample: generate extra candidates, emit only verified.
-        const maxResults = searchRequest.options?.maxResults || 4;
+        const maxResults = Math.max(searchRequest.options?.maxResults || 10, 10);
         const oversampleTarget = Math.ceil(maxResults * 2);
         const enrichTimeout = 5000;
 
