@@ -301,29 +301,42 @@ export function buildForUserPrompt(
 
         const domainGuidance = getForUserGuidance(domain, newsMode);
 
-        return `Query: "${queryText}"
-User: ${userName}
+        // Build member/group context
+        const isGroup = capsule.mode === 'group' && (capsule.members?.length || 0) > 1;
+        const memberBlock = isGroup
+            ? `Group members:\n${(capsule.members || []).map(m => {
+                const prefs = m.preferences ? JSON.stringify(m.preferences) : 'no specific preferences';
+                return `- ${m.name}: ${prefs}`;
+            }).join('\n')}`
+            : `User: ${userName}${capsule.members?.[0]?.preferences ? `\nPreferences: ${JSON.stringify(capsule.members[0].preferences)}` : ''}`;
 
-For each article, give ${userName} a brief reading tip: why this piece is worth their time, what angle the outlet brings, and any caveats(paywall, editorial lean, early reporting).
+        const groupInstruction = isGroup
+            ? `This is a GROUP search. Reference members BY NAME. For each article, mention which member(s) would find it most valuable and why, based on their stated preferences. Flag tensions honestly: "This deep-dive into the data is perfect for Jordan's analytical side, though Sam might prefer the narrative version from [Source]."`
+            : `For each article, give ${userName} a brief reading tip: why this piece is worth their time, what angle the outlet brings, and any caveats (paywall, editorial lean, early reporting).`;
+
+        return `Query: "${queryText}"
+${memberBlock}
+
+${groupInstruction}
 
     ${domainGuidance}
 
 VOICE:
-- You are a well - informed friend who reads widely and shares what's actually useful
+- You are a well-informed friend who reads widely and shares what's actually useful
     - Be direct: "Worth reading for the data" or "Old news if you already follow this beat"
         - Every note MUST make a CONCRETE recommendation: read / bookmark / skim, and say WHY in specific terms
             - Name what is specifically interesting or redundant — not generalities
                 - NEVER say "skip this" — reframe as context: "covers ground you've likely seen" NOT "skip this"
-                    - If the article is from a live blog or live - updates page, add: "Live page — content may have changed since this summary was written."
-                        - 1 - 2 sentences, substantive
+                    - If the article is from a live blog or live-updates page, add: "Live page — content may have changed since this summary was written."
+                        - 1-2 sentences, substantive
                             - Vary your openings
 
-ANTI - PATTERNS(never use these):
-- "the perspective might be different"(different from what ? be specific)
-    - "the other side of the argument"(which side ? name the position)
-    - "if you're interested"(say what makes it interesting instead)
-    - "the big tech" → say "Big Tech"(no article)
-        - "Read it if you want to know"(tell them what they'd learn instead)
+ANTI-PATTERNS (never use these):
+- "the perspective might be different" (different from what? be specific)
+    - "the other side of the argument" (which side? name the position)
+    - "if you're interested" (say what makes it interesting instead)
+    - "the big tech" → say "Big Tech" (no article)
+        - "Read it if you want to know" (tell them what they'd learn instead)
 
 Items:
             ${itemList}
@@ -333,7 +346,7 @@ Return ONLY JSON with numeric keys:
     "personalizations": { "1": "note for item 1", "2": "note for item 2", ... }
 }
 
-You MUST return a note for EVERY item.An empty value is never acceptable.`;
+You MUST return a note for EVERY item. An empty value is never acceptable.`;
     }
 
     // ---- Non-news domains: indexed format ----

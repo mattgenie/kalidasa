@@ -287,9 +287,26 @@ async function handleNewsStream(
     const summaryPrompt = buildSummaryPrompt(newsCandidates, searchRequest.query.text, 'news', mode as any, clusters as any);
     const forUserPrompt = buildForUserPrompt(newsCandidates, searchRequest.capsule, searchRequest.query.text, 'news', mode as any, conversationContext);
 
+    // Retry helper for rate-limited LLM calls
+    const retryGenerate = async (mdl: any, prompt: string, maxRetries = 2): Promise<any> => {
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                return await mdl.generateContent(prompt);
+            } catch (e: any) {
+                if (attempt < maxRetries && e.message?.includes('429')) {
+                    const delay = (attempt + 1) * 2000;
+                    console.log(`[${requestId}] ⏳ Rate limited, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`);
+                    await new Promise(r => setTimeout(r, delay));
+                } else {
+                    throw e;
+                }
+            }
+        }
+    };
+
     const [summaryResult, forUserResult] = await Promise.all([
-        model.generateContent(summaryPrompt).then(r => parseSummaryResponse(r.response.text())).catch(() => ({ summaries: {} as Record<string, string> })),
-        forUserModel.generateContent(forUserPrompt).then(r => parseForUserResponse(r.response.text())).catch(() => ({ personalizations: {} as Record<string, string> })),
+        retryGenerate(model, summaryPrompt).then(r => parseSummaryResponse(r.response.text())).catch((e) => { console.error(`[${requestId}] ❌ Summary LLM error:`, e.message); return { summaries: {} as Record<string, string> }; }),
+        retryGenerate(forUserModel, forUserPrompt).then(r => parseForUserResponse(r.response.text())).catch((e) => { console.error(`[${requestId}] ❌ ForUser LLM error:`, e.message); return { personalizations: {} as Record<string, string> }; }),
     ]);
 
     console.log(`[${requestId}] 📰 Batch LLM complete: ${Object.keys(summaryResult.summaries).length} summaries, ${Object.keys(forUserResult.personalizations).length} personalizations`);
