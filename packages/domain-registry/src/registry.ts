@@ -12,7 +12,7 @@
 
 import type { DomainDefinition } from './types.js';
 
-export const REGISTRY_VERSION = '1.1.0';
+export const REGISTRY_VERSION = '1.2.0';
 
 export const DOMAIN_REGISTRY = {
     version: REGISTRY_VERSION,
@@ -81,20 +81,7 @@ export const DOMAIN_REGISTRY = {
                 'this weekend', 'upcoming'
             ],
         },
-        videos: {
-            name: 'videos',
-            singularType: 'video',
-            displayName: 'Videos',
-            enrichmentHooks: ['youtube', 'vimeo'],
-            identifierSpec: { channel: '...', url: '...' },
-            temporalityDefault: 'evergreen',
-            itemRenderer: 'video_card',
-            exclusionCategories: ['channels', 'topics'],
-            detectionKeywords: [
-                'video', 'youtube', 'tutorial', 'clip', 'vlog', 'review',
-                'how to', 'watch video', 'channel', 'subscribe', 'shorts'
-            ],
-        },
+        // videos: DISABLED — domain pipeline not functional yet. Re-enable when YouTube/Vimeo hooks work.
         books: {
             name: 'books',
             singularType: 'book',
@@ -110,21 +97,7 @@ export const DOMAIN_REGISTRY = {
                 'textbook', 'bestseller', 'paperback', 'hardcover',
             ],
         },
-        articles: {
-            name: 'articles',
-            singularType: 'article',
-            displayName: 'Articles & Essays',
-            enrichmentHooks: ['articles_composite'],
-            identifierSpec: { author: '...', source: '...', url: '...' },
-            temporalityDefault: 'evergreen',
-            itemRenderer: 'article_card',
-            exclusionCategories: ['sources', 'topics'],
-            detectionKeywords: [
-                'article', 'essay', 'blog', 'longform', 'post', 'editorial',
-                'opinion', 'paper', 'thesis', 'report', 'journal',
-                'magazine', 'column', 'piece',
-            ],
-        },
+        // articles: DISABLED — domain not ready yet. Re-enable when pipeline is complete.
         news: {
             name: 'news',
             singularType: 'news',
@@ -139,16 +112,6 @@ export const DOMAIN_REGISTRY = {
                 'today', 'yesterday', 'this week', 'recent',
             ],
         },
-        general: {
-            name: 'general',
-            singularType: 'general',
-            displayName: 'General Knowledge',
-            enrichmentHooks: ['wikipedia'],
-            identifierSpec: { wikipedia_title: '...' },
-            temporalityDefault: 'evergreen',
-            itemRenderer: 'generic_card',
-            exclusionCategories: [],
-            detectionKeywords: [],  // Fallback domain - no keywords
-        },
+        // general: DISABLED — domain pipeline not functional yet. Queries that don't match a specific domain will use the best-matching active domain.
     },
 } as const satisfies { version: string; domains: Record<string, DomainDefinition> };

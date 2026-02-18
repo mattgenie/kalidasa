@@ -845,7 +845,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
 
             // 3-way parallel: enrichment + summary + forUser
             // Use display label (with identifiers) for LLM to produce deterministic keys
-            const displayLabel = buildDisplayLabel(searchRequest.query.domain || 'general', candidate);
+            const displayLabel = buildDisplayLabel(searchRequest.query.domain || 'places', candidate);
             const [enriched, summary, forUser] = await Promise.all([
                 streamingEnricher!.enrichOne(rawCandidate, {
                     timeout: enrichTimeout,
@@ -929,7 +929,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             // Q2: Derive whyRecommended from forUser's first sentence
             const whyRecommended = forUser ? (forUser.split(/[.!?]\s/)[0] + '.') : '';
 
-            const domain = searchRequest.query.domain || 'general';
+            const domain = searchRequest.query.domain || 'places';
             sendSSE(res, {
                 type: 'candidate',
                 data: {
@@ -949,7 +949,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
 
         // Composite key deduplication
         const seenKeys = new Set<string>();
-        const domain = searchRequest.query.domain || 'general';
+        const domain = searchRequest.query.domain || 'places';
 
         for await (const candidate of candidateStream) {
             if (verifiedCount >= maxResults) break;

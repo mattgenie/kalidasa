@@ -16,6 +16,7 @@ import {
 } from './stage-1c-prompt.js';
 import { classifyTemporality, type TemporalityResult } from './temporality.js';
 import { NewsSearchEngine, type NewsMode, type ArticleCluster } from './news-search.js';
+import { EventsSearchEngine } from './events-search.js';
 
 /**
  * Enrichment function interface (to avoid circular dependency)
@@ -81,6 +82,11 @@ export class TwoStageGenerator {
         // ==== NEWS DOMAIN: Search-first pipeline ====
         if (request.query.domain === 'news') {
             return this.runNewsPipeline(request, startTime, temporality);
+        }
+
+        // ==== EVENTS DOMAIN: Search-first pipeline ====
+        if (request.query.domain === 'events') {
+            return this.runEventsPipeline(request, startTime, temporality);
         }
 
         // Stage 1a: Generate candidate names
@@ -155,11 +161,6 @@ export class TwoStageGenerator {
         request: KalidasaSearchRequest,
         temporality: TemporalityResult
     ): Promise<Stage1aCandidate[]> {
-        // Videos domain: use specialized grounded search to find real YouTube URLs
-        if (request.query.domain === 'videos') {
-            return this.runVideoSearch(request);
-        }
-
         const prompt = buildStage1aPrompt(request, this.maxCandidates);
 
         const modelConfig: any = {
@@ -182,7 +183,7 @@ export class TwoStageGenerator {
         try {
             const result = await model.generateContent(prompt);
             const text = result.response.text();
-            return parseStage1aResponse(text);
+            return parseStage1aResponse(text, request.query.domain);
         } catch (error) {
             console.error('[TwoStage] Stage 1a error:', error);
             return [];
@@ -376,11 +377,9 @@ Example format:
         // Merge personalization — news uses index-based keys ("1", "2", ...)
         const finalCandidates = enrichedCandidates.map((candidate, i) => {
             const indexKey = String(i + 1);
-            // Try index key first (news indexed format), then name (fallback)
-            const summary = summaryResult.summaries[indexKey]
-                || summaryResult.summaries[candidate.name];
-            const personalization = forUserResult.personalizations[indexKey]
-                || forUserResult.personalizations[candidate.name];
+            // Index-based matching only — no name fallback
+            const summary = summaryResult.summaries[indexKey];
+            const personalization = forUserResult.personalizations[indexKey];
             return {
                 ...candidate,
                 summary: summary || candidate.summary || '',
@@ -395,6 +394,97 @@ Example format:
             answerBundle: {
                 headline: `${finalCandidates.length} news articles found`,
                 summary: `Found ${finalCandidates.length} articles from verified sources.`,
+                facetsApplied: [],
+            },
+        };
+
+        return {
+            cao,
+            enriched: finalCandidates as EnrichedCandidate[],
+            latencyMs: Date.now() - startTime,
+            stage1aMs,
+            enrichmentMs: 0,  // No enrichment executor needed
+            stage1cMs,
+            temporality,
+        };
+    }
+
+    /**
+     * Search-first events pipeline.
+     * Bypasses LLM candidate generation — discovers real events from APIs,
+     * then has the LLM rank and personalize them.
+     */
+    private async runEventsPipeline(
+        request: KalidasaSearchRequest,
+        startTime: number,
+        temporality: TemporalityResult
+    ): Promise<TwoStageResult> {
+        const eventsEngine = new EventsSearchEngine(this.genAI, this.model);
+        const maxResults = this.maxCandidates;
+
+        // Stage 1a: Discover real events from multiple APIs in parallel
+        const stage1aStart = Date.now();
+        const { candidates: eventCandidates, rawEvents } = await eventsEngine.search(
+            request.query.text,
+            {
+                city: request.logistics.searchLocation?.city,
+                coordinates: request.logistics.searchLocation?.coordinates,
+            },
+            {
+                localTime: request.logistics.time?.localTime,
+            },
+            maxResults
+        );
+        const stage1aMs = Date.now() - stage1aStart;
+        console.log(`[TwoStage:Events] Stage 1a complete: ${eventCandidates.length} candidates (${stage1aMs}ms)`);
+
+        if (eventCandidates.length === 0) {
+            return this.emptyResult(startTime, stage1aMs, temporality);
+        }
+
+        // Pre-build enriched candidates (no executor needed — data comes from search APIs)
+        const enrichedCandidates: EnrichedCandidate[] = eventCandidates.map((c, i) => {
+            const eventsData = (c as any)._eventsEnrichment;
+            return {
+                ...c,
+                type: 'event' as const,
+                summary: '',
+                verified: true,
+                enrichment: {
+                    verified: true,
+                    source: eventsData?.source || 'events_composite',
+                    events: eventsData,
+                },
+            };
+        });
+
+        // Stage 1c: Summary + forUser in parallel
+        const stage1cStart = Date.now();
+        const [summaryResult, forUserResult] = await Promise.all([
+            this.runSummaryPass(eventCandidates, request),
+            this.runForUserPass(eventCandidates, request),
+        ]);
+        const stage1cMs = Date.now() - stage1cStart;
+
+        // Merge personalization — events use index-based keys
+        const finalCandidates = enrichedCandidates.map((candidate, i) => {
+            const indexKey = String(i + 1);
+            const summary = summaryResult.summaries[indexKey];
+            const personalization = forUserResult.personalizations[indexKey];
+            return {
+                ...candidate,
+                summary: summary || candidate.summary || '',
+                personalization: personalization ? {
+                    forUser: personalization,
+                } : undefined,
+            };
+        });
+
+        const cao: RawCAO = {
+            candidates: finalCandidates,
+            answerBundle: {
+                headline: `${finalCandidates.length} events found`,
+                summary: `Found ${finalCandidates.length} events from verified sources.`,
                 facetsApplied: [],
             },
         };
@@ -480,6 +570,14 @@ Example format:
 
         const model = this.genAI.getGenerativeModel({
             model: this.model,
+            systemInstruction: `You write personalized recommendation notes. You are direct, opinionated, and concrete — like Anthony Bourdain giving advice.
+
+ABSOLUTE RULES (violating any = failure):
+1. NEVER write "your" followed by a preference label or synonym. No "your adventurous side", "your love of", "your preference for", "your favorite". Describe the RESULT, not the USER.
+2. NEVER use: "aligns with", "resonates with", "caters to", "fitting your", "right up your alley", "sweet spot", "in your wheelhouse", "not exactly a hidden gem"
+3. NEVER invent preferences. Only reference preferences that literally appear in the provided JSON.
+4. Every note must contain a CONCRETE DETAIL specific to that result — a dish name, a scene, a track, a price, a technique.
+5. If something is wrong for this user, say so bluntly. Don't hedge.`,
             generationConfig: {
                 responseMimeType: 'application/json',
                 temperature: 0.4,
@@ -506,9 +604,10 @@ Example format:
         summaries: SummaryResponse,
         forUser: ForUserResponse
     ): RawCAOCandidate[] {
-        return enriched.map(candidate => {
-            const summary = summaries.summaries[candidate.name];
-            const personalization = forUser.personalizations[candidate.name];
+        return enriched.map((candidate, i) => {
+            const indexKey = String(i + 1);
+            const summary = summaries.summaries[indexKey];
+            const personalization = forUser.personalizations[indexKey];
             return {
                 ...candidate,
                 summary: summary || candidate.summary || '',

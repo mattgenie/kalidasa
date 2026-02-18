@@ -49,12 +49,12 @@ export function isKnownDomain(name: string): boolean {
     return name in DOMAIN_REGISTRY.domains;
 }
 
-/** Get domain or fallback to general */
+/** Get domain or fallback to places (most common domain) */
 export function getDomainOrDefault(name: string): DomainDefinition {
     if (name in DOMAIN_REGISTRY.domains) {
         return DOMAIN_REGISTRY.domains[name as DomainName];
     }
-    return DOMAIN_REGISTRY.domains.general;
+    return DOMAIN_REGISTRY.domains.places;
 }
 
 // ============================================================================
@@ -63,17 +63,16 @@ export function getDomainOrDefault(name: string): DomainDefinition {
 
 /**
  * Detect domain from query text (lightweight keyword matching).
- * Returns 'general' if no domain matches.
+ * Returns 'places' if no domain matches.
  */
 export function detectDomainFromQuery(query: string): string {
     const queryLower = query.toLowerCase();
 
     // Score each domain by keyword matches
-    let bestDomain = 'general';
+    let bestDomain = 'places';
     let bestScore = 0;
 
     for (const [name, def] of Object.entries(DOMAIN_REGISTRY.domains)) {
-        if (name === 'general') continue;  // Check last
         const keywords = def.detectionKeywords || [];
 
         let score = 0;
