@@ -468,6 +468,26 @@ async function handleEventsStream(
             console.log(`[${requestId}] ⚠️ Empty summary for "${event.name}" — used fallback`);
         }
 
+        // NEVER emit an empty forUser — fallback chain
+        let finalForUser = forUser;
+        if (!finalForUser || finalForUser.trim().length === 0) {
+            // Build a practical note from event metadata
+            const fuParts: string[] = [];
+            if (event.venue) fuParts.push(`Taking place at ${event.venue}`);
+            if (event.venueAddress) fuParts.push(event.venueAddress);
+            if (event.description) {
+                // Extract a useful snippet from the description
+                const snippet = event.description.length > 150
+                    ? event.description.substring(0, 147) + '...'
+                    : event.description;
+                fuParts.push(snippet);
+            }
+            finalForUser = fuParts.length > 0
+                ? fuParts.join('. ') + '.'
+                : `Check the event page for details on ${event.name}.`;
+            console.log(`[${requestId}] ⚠️ Empty forUser for "${event.name}" — used fallback`);
+        }
+
         if (emittedCount >= maxResults) return false; // Re-check after async LLM
 
         // Build enrichment data
@@ -505,7 +525,7 @@ async function handleEventsStream(
         }
         if (parts.length > 0) subheader = parts.join(' · ');
 
-        const whyRecommended = forUser ? (forUser.split(/[.!?]\s/)[0] + '.') : '';
+        const whyRecommended = finalForUser ? (finalForUser.split(/[.!?]\s/)[0] + '.') : '';
 
         sendSSE(res, {
             type: 'candidate',
@@ -513,7 +533,7 @@ async function handleEventsStream(
                 name: event.name,
                 subheader,
                 summary: finalSummary,
-                personalization: { forUser },
+                personalization: { forUser: finalForUser },
                 reasoning: { whyRecommended, pros: [], cons: [] },
                 enrichment,
                 verified: true,
