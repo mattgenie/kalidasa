@@ -445,7 +445,14 @@ async function handleEventsStream(
         // Catch stubs: empty, refusal, or just the event name echoed back (under 50 useful chars)
         const isStub = finalSummary && finalSummary.trim().length < 50 && finalSummary.replace(/[.!?,;:\s]/g, '').length < 40;
         const isNameEcho = finalSummary && finalSummary.replace(/[.!?,;:\s]/g, '').toLowerCase() === event.name.replace(/[.!?,;:\s]/g, '').toLowerCase();
-        if (!finalSummary || finalSummary.trim().length === 0 || isRefusal || isStub || isNameEcho) {
+        // Catch metadata restatements: "Event Name at Venue on Date" with no actual description
+        const isMetadataOnly = finalSummary && finalSummary.trim().length < 120
+            && finalSummary.toLowerCase().includes(event.name.toLowerCase().substring(0, 20))
+            && (
+                (event.venue && finalSummary.toLowerCase().includes(event.venue.toLowerCase().substring(0, 15)))
+                || /\b(january|february|march|april|may|june|july|august|september|october|november|december|\d{4})\b/i.test(finalSummary)
+            );
+        if (!finalSummary || finalSummary.trim().length === 0 || isRefusal || isStub || isNameEcho || isMetadataOnly) {
             if (event.description && event.description.trim().length > 0) {
                 // Use event description as fallback
                 finalSummary = event.description.length > 300
@@ -683,7 +690,7 @@ async function filterEvent(
     ];
     if (vaguePatterns.some(p => p.test(event.name.trim()))) return false;
 
-    // LLM filter for remaining events (grounded search, LLM festivals)
+    // LLM filter: check BOTH specificity AND query relevance
     try {
         const model = genAI.getGenerativeModel({
             model: 'gemini-2.0-flash',
@@ -694,16 +701,35 @@ async function filterEvent(
             },
         });
 
-        const prompt = `Is "${event.name}" a specific, named event or an vague aggregate category?
-Answer {"relevant": true} if it is a SPECIFIC event (even if not perfectly matching the query).
-Answer {"relevant": false} ONLY if it is a vague aggregate like "Valentine's Day Events" or "History Month Celebrations".
+        const eventContext = event.description
+            ? `\nEvent description: "${event.description.substring(0, 200)}"`
+            : '';
 
-Examples:
-- "Austin Marathon" → true (specific named event)
-- "Rodeo Austin" → true (specific named event)
+        const prompt = `User searched for: "${queryText}"
+Event name: "${event.name}"${eventContext}
+
+Two checks:
+1. Is this a SPECIFIC, named event (not a vague aggregate like "Valentine's Day Events")?
+2. Is this event RELEVANT to what the user searched for? A relevant event matches the type, genre, or category the user is looking for.
+
+Answer {"relevant": true} ONLY if BOTH checks pass.
+Answer {"relevant": false} if EITHER check fails.
+
+Examples for query "comedy shows":
+- "Nashville Boat Show" → false (not comedy)
+- "Funny Bone Comedy Club" → true (comedy)
+- "Zanies Comedy Night" → true (comedy)
 - "Valentine's Day Events" → false (vague aggregate)
-- "Texas Black History Month Celebrations" → false (vague aggregate)
-- "SXSW" → true (specific named event)`;
+
+Examples for query "live music":
+- "Kenny Wayne Shepherd" → true (live music)
+- "Nashville Boat Show" → false (not music)
+- "Farmers Market Pop-Up" → false (not music)
+
+Examples for query "food and drink festivals":
+- "Denver Restaurant Week" → true (food event)
+- "First Friday Art Walk" → false (art, not food)
+- "Great American Beer Festival" → true (drink festival)`;
 
         const result = await model.generateContent(prompt);
         const parsed = JSON.parse(result.response.text());
