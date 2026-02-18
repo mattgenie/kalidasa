@@ -25,7 +25,8 @@ function getSummaryGuidance(domain: string, newsMode?: NewsMode): string {
 Do NOT repeat the address — that's shown separately.`,
         movies: `Focus on: what the experience of watching it feels like, its mood, standout performances or directorial choices.`,
         music: `Focus on: what it sounds like, the feeling it evokes, where it sits in the artist's journey.`,
-        events: `Focus on: what you'd actually experience there, the energy, what makes it worth showing up for.`,
+        events: `Focus on: what you'd actually experience at this event. For PERFORMERS/BANDS: describe their sound, genre, signature style, notable albums or tracks, and live performance reputation — draw from your training data. For FESTIVALS/RECURRING EVENTS: describe the format, what attendees typically do, the atmosphere. For VENUES mentioned in context: note what makes the venue distinctive (intimate, outdoor, historic, etc.).
+NEVER just restate the venue name and date — that information is shown separately. Your job is to tell someone what the EXPERIENCE will be like.`,
         videos: `Focus on: what you'll learn or feel watching it, the creator's approach, what sticks with you after.`,
         books: `Ground in what the book actually argues or shows, not how it makes you feel. Name the key thesis. If it changed how people think about the topic, say how. Reference the author's expertise.`,
         articles: `What does the author observe or argue that you won't find elsewhere? What's the one thing you'd tell someone about this piece? Reference the publication and why this piece matters there.`,
@@ -79,6 +80,7 @@ Flag honestly: pacing, intensity, if it's a very different style from their usua
         music: `Connect to: artists and sounds they already enjoy, the mood they're chasing.
 Flag honestly: if it's a departure from their comfort zone, very experimental, or lyrically intense.`,
         events: `Connect to: the kind of fun they're looking for, energy level, social dynamics.
+Use your knowledge of the artist's music, genre, albums, and live reputation to make SPECIFIC connections to user preferences. Don't just say "it's adventurous" — say WHAT about the artist or event is adventurous (their genre-blending, their experimental live sets, their deep cuts, etc.).
 Flag honestly: timing, crowds, cost, if it's really more of a couples/solo thing.`,
         videos: `Connect to: topics they nerd out about, creator styles they gravitate toward.
 Flag honestly: length, if it's too basic or too advanced for where they are.`,
@@ -175,8 +177,13 @@ Return ONLY JSON with numeric keys:
 You MUST return a summary for EVERY item. Do not skip any.`;
     }
 
-    // ---- Non-news domains: original format ----
-    const candidateNames = candidates.map(c => c.name).join(', ');
+    // ---- Non-news domains: indexed format ----
+    // Include search_hint context when available (e.g. venue/date for events)
+    const candidateList = candidates.map((c, i) => {
+        let entry = `[${i + 1}] "${c.name}"`;
+        if (c.search_hint) entry += `\n    Context: ${c.search_hint}`;
+        return entry;
+    }).join('\n\n');
 
     return `Query: "${queryText}"
 
@@ -192,6 +199,14 @@ STYLE:
 - Vary your energy. Not everything is essential. Some things are just solid, or interesting, or flawed-but-worth-it.
 - It's OK to say "it's good" without saying it's the best thing ever written
 
+ACCURACY RULES:
+- NEVER hedge. Do not write "likely", "probably", "appears to", "seems to", "potentially".
+- Context (venue, date) is provided for GROUNDING, not as the summary content. Do NOT just restate the venue and date — that info is shown separately. Describe the EXPERIENCE.
+- You have extensive training data about artists, bands, festivals, venues, and genres. USE IT. Describe what the artist sounds like, what albums they're known for, what their live shows are like.
+- For UNFAMILIAR performers: describe the venue's character (is it intimate? a dive bar? a major concert hall?), the likely genre based on the event name and context, and what the audience can expect from the format. You know Austin venues — use that knowledge.
+- NEVER write "I don't have enough information" or "I need more context". You always have enough to write a useful sentence.
+- NEVER return null or an empty string. Every item MUST get a real summary.
+
 TONE ANTI-PATTERNS (NEVER use these):
 - No: "gut-wrenching", "must-read", "absolutely essential", "terrifying", "mind-blowing"
 - No: "grabbed you by the throat", "keeps you up at night", "you'll never look at X the same way"
@@ -200,22 +215,21 @@ TONE ANTI-PATTERNS (NEVER use these):
 
 GOOD: "Rich reconstructs the 1979-1989 window where climate action almost happened — who pushed, who blocked, and what we lost."
 GOOD: "Uses game theory to explain why competitive systems produce outcomes nobody actually wants. The Moloch metaphor landed so hard it entered the rationalist lexicon."
-BAD: "A gut-wrenching and absolutely essential exploration that will fundamentally change how you see the world."
-BAD: "This terrifying deep dive grabbed me by the throat and kept me up at night."
+BAD (events): "Lil Tony performing live at Empire Garage on February 28, 2026."
+     (This just restates the logistics — tell me what the EXPERIENCE is like)
+GOOD (events): "Empire Garage books under-the-radar acts across hip-hop and indie — expect a packed, sweaty room with a low stage where you're right up against the performer."
+     (Describes the venue character and experience even when you don't know the specific artist)
+BAD: "A gut-wrenching and absolutely essential exploration that will fundamentally change how you think."
 
-ACCURACY (critical):
-- Only name a specific detail if you are GENUINELY CONFIDENT it exists
-- If unsure, describe the approach or argument instead of fabricating specifics
-- Do NOT invent quotes, statistics, or plot points — say what you know
+Items:
+${candidateList}
 
-Items: ${candidateNames}
-
-Return ONLY JSON:
+Return ONLY JSON with numeric keys matching item numbers:
 {
-  "summaries": {"ItemName": "1-2 sentence summary"}
+  "summaries": {"1": "summary of item 1", "2": "summary of item 2", ...}
 }
 
-If you don't recognize an item or can't write a genuine summary, set its value to null — do NOT write an explanation or apology.`;
+You MUST return a summary for EVERY item. NEVER return null, empty string, or a sentence saying you lack information.`;
 }
 
 // ============================================================================
@@ -225,19 +239,27 @@ If you don't recognize an item or can't write a genuine summary, set its value t
 /**
  * Check if preferences have meaningful content.
  * Returns true if there's at least one non-empty preference value.
+ * Handles both flat shapes ({dietary: "no red meat"}) and
+ * nested domain shapes ({places: {dietaryRestrictions: [...]}}).
  */
 function hasRealPreferences(capsule: PersonalizationCapsule): boolean {
     const prefs = capsule.members?.[0]?.preferences;
     if (!prefs) return false;
 
-    // Check all preference domains for non-empty arrays or actual values
-    for (const domainPrefs of Object.values(prefs)) {
-        if (typeof domainPrefs !== 'object' || domainPrefs === null) continue;
-        for (const val of Object.values(domainPrefs)) {
-            if (Array.isArray(val) && val.length > 0) return true;
-            if (typeof val === 'string' && val.length > 0) return true;
-            if (typeof val === 'number') return true;
-            if (typeof val === 'boolean') return true;
+    for (const val of Object.values(prefs)) {
+        // Flat top-level values (e.g. {dietary: "no red meat"})
+        if (typeof val === 'string' && val.length > 0) return true;
+        if (typeof val === 'number') return true;
+        if (typeof val === 'boolean') return true;
+        if (Array.isArray(val) && val.length > 0) return true;
+        // Nested domain objects (e.g. {places: {dietaryRestrictions: [...]}})
+        if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+            for (const nested of Object.values(val)) {
+                if (Array.isArray(nested) && nested.length > 0) return true;
+                if (typeof nested === 'string' && nested.length > 0) return true;
+                if (typeof nested === 'number') return true;
+                if (typeof nested === 'boolean') return true;
+            }
         }
     }
     return false;
@@ -258,7 +280,9 @@ export function buildForUserPrompt(
     queryText: string,
     domain?: string,
     newsMode?: NewsMode,
-    conversationContext?: string
+    conversationContext?: string,
+    /** Q4: Enrichment data per candidate for factual grounding (Places) */
+    enrichmentContext?: Record<string, string>,
 ): string {
     const userName = capsule.members?.[0]?.name || 'you';
 
@@ -269,9 +293,9 @@ export function buildForUserPrompt(
             const parts = (c.search_hint || c.name).split('\n---\n');
             const title = parts[0] || c.name;
             const snippet = parts[1] || '';
-            let entry = `[${i + 1}] "${title}"`;
+            let entry = `[${i + 1}]"${title}"`;
             if (source) entry += ` (${source})`;
-            if (snippet) entry += `\n    ${snippet.substring(0, 200)}`;
+            if (snippet) entry += `\n    ${snippet.substring(0, 200)} `;
             return entry;
         }).join('\n\n');
 
@@ -280,40 +304,46 @@ export function buildForUserPrompt(
         return `Query: "${queryText}"
 User: ${userName}
 
-For each article, give ${userName} a brief reading tip: why this piece is worth their time, what angle the outlet brings, and any caveats (paywall, editorial lean, early reporting).
+For each article, give ${userName} a brief reading tip: why this piece is worth their time, what angle the outlet brings, and any caveats(paywall, editorial lean, early reporting).
 
-${domainGuidance}
+    ${domainGuidance}
 
 VOICE:
-- You are a well-informed friend who reads widely and shares what's actually useful
-- Be direct: "Worth reading for the data" or "Old news if you already follow this beat"
-- Every note MUST make a CONCRETE recommendation: read/bookmark/skim, and say WHY in specific terms
-- Name what is specifically interesting or redundant — not generalities
-- NEVER say "skip this" — reframe as context: "covers ground you've likely seen" NOT "skip this"
-- If the article is from a live blog or live-updates page, add: "Live page — content may have changed since this summary was written."
-- 1-2 sentences, substantive
-- Vary your openings
+- You are a well - informed friend who reads widely and shares what's actually useful
+    - Be direct: "Worth reading for the data" or "Old news if you already follow this beat"
+        - Every note MUST make a CONCRETE recommendation: read / bookmark / skim, and say WHY in specific terms
+            - Name what is specifically interesting or redundant — not generalities
+                - NEVER say "skip this" — reframe as context: "covers ground you've likely seen" NOT "skip this"
+                    - If the article is from a live blog or live - updates page, add: "Live page — content may have changed since this summary was written."
+                        - 1 - 2 sentences, substantive
+                            - Vary your openings
 
-ANTI-PATTERNS (never use these):
-- "the perspective might be different" (different from what? be specific)
-- "the other side of the argument" (which side? name the position)
-- "if you're interested" (say what makes it interesting instead)
-- "the big tech" → say "Big Tech" (no article)
-- "Read it if you want to know" (tell them what they'd learn instead)
+ANTI - PATTERNS(never use these):
+- "the perspective might be different"(different from what ? be specific)
+    - "the other side of the argument"(which side ? name the position)
+    - "if you're interested"(say what makes it interesting instead)
+    - "the big tech" → say "Big Tech"(no article)
+        - "Read it if you want to know"(tell them what they'd learn instead)
 
 Items:
-${itemList}
+            ${itemList}
 
 Return ONLY JSON with numeric keys:
 {
-  "personalizations": {"1": "note for item 1", "2": "note for item 2", ...}
+    "personalizations": { "1": "note for item 1", "2": "note for item 2", ... }
 }
 
-You MUST return a note for EVERY item. An empty value is never acceptable.`;
+You MUST return a note for EVERY item.An empty value is never acceptable.`;
     }
 
-    // ---- Non-news domains: original format ----
-    const candidateNames = candidates.map(c => c.name).join(', ');
+    // ---- Non-news domains: indexed format ----
+    // Format candidates as indexed list with display labels for context
+    const candidateNames = enrichmentContext
+        ? candidates.map((c, i) => {
+            const ctx = enrichmentContext[c.name];
+            return ctx ? `[${i + 1}]"${c.name}"\n  ${ctx} ` : `[${i + 1}]"${c.name}"`;
+        }).join('\n')
+        : candidates.map((c, i) => `[${i + 1}]"${c.name}"`).join('\n');
 
     if (hasRealPreferences(capsule)) {
         return buildPersonalizedPrompt(candidateNames, capsule, queryText, domain || 'places', userName, newsMode, conversationContext);
@@ -323,7 +353,12 @@ You MUST return a note for EVERY item. An empty value is never acceptable.`;
 }
 
 /**
- * When user HAS real preferences: reference them specifically.
+ * When user HAS real preferences: tell them what THEY specifically
+ * should know about each result given their preferences.
+ * 
+ * The SUMMARY already covers what the result IS and why it fits the query.
+ * This prompt covers the PERSONAL layer: how it connects to their
+ * dietary needs, vibe preferences, budget, and things to be aware of.
  */
 function buildPersonalizedPrompt(
     candidateNames: string,
@@ -345,66 +380,86 @@ function buildPersonalizedPrompt(
     const memberNames = (capsule.members || []).map(m => m.name);
     const domainGuidance = getForUserGuidance(domain, newsMode);
     const refinementBlock = conversationContext
-        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your notes around how each result satisfies what the user is looking for. Do NOT independently reject results — they were already curated for this refinement.\n`
+        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nIncorporate the refinement into your personalized notes.\n`
         : '';
     const groupBlock = isGroup
-        ? `\nGROUP MODE: This search is for a group: ${memberNames.join(', ')}. Each member has different preferences (shown below). Your job is to find what makes each result work for the GROUP — frame each note around what brings the group together (shared vibes, variety on the menu, something for everyone). Never reject a result because one member's preferences don't match — find the angle that makes it work.\n`
+        ? `\nGROUP MODE: This search is for a group: ${memberNames.join(', ')}. Each member has different preferences (shown below). STILL describe the RESULT, not the people — lead with the concrete detail, then mention which members it helps or hurts. Never say "aligns with [Name]'s preferences." Flag real tensions honestly: "The menu is mostly meat-focused, which works for Alex but leaves Jordan with limited vegetarian options."\n`
         : '';
 
     return `Query: "${queryText}"
 User: ${userName}
 ${refinementBlock}${groupBlock}
 
-You hand-picked each of these results for ${userName}'s search. Everything here made your cut — now tell them why each one is worth trying.
+CONTEXT: A separate summary already describes what each result IS. Your job is DIFFERENT — you add the PERSONAL layer that ONLY matters because of who ${userName} is. If your note would be equally useful for any random person, you've failed.
 
-RULES (in priority order):
-1. The user's QUERY and the REFINEMENTS are the intent — preferences are secondary. A user searching for "romantic Italian" WANTS Italian; do not write unfavorable descriptions because their preference history is different. Only note if a preference directly contradicts (example: the restaurant specializes in spicy food and the user does not like spicy food) in a positive manner. Example: "This is a neighborhood favorite, and offers a wide range of options for the Szechuan cuisine Amy loves. Just keep in mind it's mostly spicy, which could be a challenge."
-2. Always frame every result as worth considering. Present caveats (noise, price) as helpful "heads up" context — never as a reason to avoid or skip.
-3. You may ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON below. If it's not in the JSON, do not reference it. If the JSON is sparse, focus on the result's inherent qualities.
-4. Ground every note in something specific — a dish, a scene, a sound, a moment — not abstract preference-matching. Look at reviews to help ensure features are real.
-5. 1-2 sentences, punchy, with a DIFFERENT angle for each item.
+STRUCTURE (follow this pattern for EVERY note):
+1. Start with a CONCRETE DETAIL about the result (a specific dish, scene, track, technique, feature)
+2. Connect that detail to a SPECIFIC PREFERENCE from the JSON below
+3. Optionally add a practical heads-up
+
+RULES:
+1. Every note MUST follow the DETAIL → PREFERENCE structure. Lead with what's specific about the result, then explain why it matters for this user.
+2. You may ONLY reference preferences that LITERALLY APPEAR in the Preferences JSON. Before writing each note, identify the EXACT key you're referencing. Never infer preferences.
+3. Tensions should name the specific alternative: "The menu is heavy on steak, but the grilled swordfish and the mushroom risotto are both excellent no-red-meat options."
+4. Do NOT repeat information from the summary. Your note should be 100% new information.
+5. 1-2 sentences. Every word must earn its place. No filler.
+6. Each note MUST use a completely different angle — if you mentioned "adventurous" for item 1, find a different preference for item 2.
+7. FACTUAL ACCURACY: "no red meat" means ONLY beef, lamb, and pork are restricted. Chicken IS FINE. Fish and seafood ARE FINE. Roast chicken is a perfect "no red meat" choice — never flag it as a concern.
+8. FACTUAL GROUNDING: If context is provided with an item (venue, date, address), you may ONLY reference logistical facts that appear IN THAT CONTEXT. NEVER invent or guess a venue name, location name, date, or address. If no venue context is provided, do NOT mention any venue by name. Subjective observations (e.g. "the energy is high") are fine — invented facts are not.
 
 ${domainGuidance}
 
-VOICE:
-- You're a friend who hand-picked these and is genuinely excited to share them
-- Warm and direct: "The cacio e pepe here is RIDICULOUS" not "This pasta dish is of high quality"
-- Use varied angles across items — don't repeat the same theme or reference
+PERSONA: You are a sharp, opinionated local who has personally tried every result on this list. You give advice the way Anthony Bourdain gave restaurant advice on TV: direct, concrete, with a specific point of view. You never hedge or flatter. If something is wrong for this user, say so bluntly. If something is perfect, call out exactly what detail makes it perfect.
 
-AVOID:
-- Hedging: "might be", "could be", "it depends on"
-- Robotic matching: "aligns with", "matches your profile", "fits your criteria"
-- Lazy clichés: "right up your alley", "perfect for your taste"
-- Bro-speak: "Dude", "Bro", "fam"
-- UUIDs, member IDs, or scoring mechanics
-- Referencing preferences NOT in the Preferences JSON
+CRITICAL SYNTAX RULE: Never write "your" followed by a preference label. Instead of "your adventurous side" → name the specific adventurous detail. Instead of "your love of noir" → describe the noir element. The note describes the RESULT, not the USER.
 
-EXAMPLES — WHEN A RESULT DOESN'T MATCH THEIR USUAL PREFERENCES:
-- "Not your usual Thai haunt, but the candlelit vibe you're after is unbeatable — and the burgundy short ribs are worth the detour."
-- "A different world from your jazz picks, but the third movement has the same improvisational energy — the cellist basically solos for six minutes."
-- "Hollywood through and through, but the practical effects set it apart — the helicopter crash was filmed for real at 4AM."
-- "French, not Italian, but the prix fixe is a steal and the sommelier will find you something incredible — trust the house red."
-- "It's loud and buzzy, not the quiet escape you asked about, but the corner booth by the window is its own little world — ask for it."
+BANNED (hard failures): "right up your alley", "sweet spot", "aligns with", "resonates with", "caters to", "not exactly a hidden gem", "fitting your", "your adventurous side/palate"
 
-EXAMPLES — WHEN A RESULT IS A GREAT FIT:
-- "The hand-drawn animation is jaw-dropping, and the way it handles grief will stick with you for days."
-- "Sound design alone makes this worth it — the score practically becomes a character."
-- "The director shoots conversations like heist scenes — tight cuts, no wasted frames. You'll tear through it."
+Learn from these BAD → GOOD pairs. Each pair shows the SAME result; the GOOD version is what to write:
 
-Items: ${candidateNames}
+Places (prefs: {dietary: "no red meat", vibes: "adventurous", budget: "moderate"}):
+  BAD: "This restaurant suits your adventurous palate."
+  GOOD: "The tasting menu changes weekly and the chef picks everything — exactly the kind of culinary surprise you chase."
+  BAD: "Good for someone who avoids red meat."
+  GOOD: "The menu is mostly red-meat-centric, but their pan-seared halibut and the mushroom pappardelle are standouts."
+  BAD: "Affordable for a moderate budget."
+  GOOD: "Heads up: it gets loud after 9pm, so plan for earlier if you want to actually talk."
+
+Movies (prefs: {genres: "psychological thriller, noir", directors: "Denis Villeneuve"}):
+  BAD: "Aligns with your preference for psychological thrillers."
+  GOOD: "The unreliable narrator structure peels back layers for two hours before the gut-punch reveal — pure psychological thriller."
+  BAD: "You'll enjoy this if you like noir films."
+  GOOD: "The single-location setting amplifies the claustrophobia as reality unravels — a technique straight out of classic noir."
+  BAD: "Fits your taste in directors."
+  GOOD: "Villeneuve directed this — expect the same deliberate pacing and architectural shots as Sicario and Blade Runner 2049."
+
+Music (prefs: {genres: "jazz, ambient", vibes: "mellow, late-night"}):
+  BAD: "Mellow and atmospheric."
+  GOOD: "The near-silence between notes on 'Blue in Green' pushes this into ambient territory — ideal for 3AM focus sessions."
+  BAD: "This doesn't match your mellow preference."
+  GOOD: "The tempo picks up hard in the second half, so it's less mellow background and more active listening."
+  BAD: "A good choice for late-night listening."
+  GOOD: "Recorded live in a tiny club, the creaking chairs and whispered applause give it a genuine late-night intimacy."
+
+Items:
+${candidateNames}
 
 Preferences: ${prefs}
 
-Return ONLY JSON:
+Return ONLY JSON with numeric keys matching item numbers:
 {
-  "personalizations": {"ItemName": "1-2 sentence note explaining what makes this worth trying for ${userName}"}
-}`;
+    "personalizations": { "1": "note for item 1", "2": "note for item 2", ... }
+}
+
+You MUST return a note for EVERY item. An empty value is never acceptable.`;
 }
 
 /**
- * When user has NO preferences: give review-grounded insider takes.
- * This replaces forced personalization with genuinely useful guidance
- * drawn from reviews, local knowledge, and popular opinion.
+ * When user has NO preferences: give practical insider knowledge.
+ * 
+ * A separate summary already covers what each result IS.
+ * This prompt covers what someone should KNOW — practical tips,
+ * caveats, insider context that the summary doesn't cover.
  */
 function buildInsiderTakePrompt(
     candidateNames: string,
@@ -418,34 +473,31 @@ function buildInsiderTakePrompt(
         ? getForUserGuidance(domain, newsMode)
         : getInsiderGuidance(domain);
     const refinementBlock = conversationContext
-        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your insider tips around how each result fits what the user is looking for. Do NOT independently reject results — they were already curated for this refinement.\n`
+        ? `\nCONVERSATION CONTEXT:\n${conversationContext}\nFrame your insider tips around the refinement context.\n`
         : '';
 
     return `Query: "${queryText}"
 ${refinementBlock}
 
-You hand-picked each of these results for ${userName}'s search. Everything here made your cut — now give the insider take on why each one is worth checking out.
+CONTEXT: A separate summary already describes what each result IS and how it fits the search. Your job is DIFFERENT — you provide the practical insider knowledge:
+- What should someone KNOW before trying this? (crowds, waits, noise, budget, pacing)
+- What's the insider move? (what to order, where to sit, when to go, what to skip)
+- What do regulars or critics consistently say that a newcomer wouldn't know?
 
 ${domainHighlights}
 
-WHAT TO INCLUDE (pick 1-2 per item):
-- What regulars, critics, or reviewers consistently praise — the standout (a signature dish, the best seat, the moment everyone talks about)
-- The hidden gem angle — what most people miss or don't know about
-- Practical insider knowledge — when to go, what to order, where to sit
-- How popular/crowded it gets — is it a scene or a hidden spot?
-- Honest context — what to expect, what makes it special, the vibe
-
-ACCURACY (critical):
-- Only name specific items (dishes, songs, drinks) if you are CONFIDENT they are real
-- When in doubt, describe the TYPE of thing instead: "the signature cocktail" not "the lavender gin fizz"
-- It's better to say "the desserts here are incredible" than to invent a dessert name
+RULES:
+1. Do NOT restate what the result IS — the summary already covers that
+2. Focus on practical, actionable insider knowledge
+3. Only name specific items (dishes, tracks, scenes) if you are CONFIDENT they are real
+4. When in doubt, describe the TYPE instead: "the signature cocktail" not "the lavender gin fizz"
+5. Present caveats as helpful heads-ups, not reasons to avoid
+6. 1-2 sentences, punchy but substantive
 
 VOICE:
-- You're a local who hand-picked these and genuinely wants to help
-- Enthusiastic but honest — present caveats as helpful context, not reasons to avoid
-- Specific and concrete — "the window seats have the best view" not "nice atmosphere"
-- Always frame every result as worth considering
-- 1-2 sentences, punchy but substantive
+- You're a local who knows the scene and genuinely wants to help
+- Specific and concrete: "the window seats have the best view" not "nice atmosphere"
+- Honest: "the wait can be brutal on weekends" not false enthusiasm
 
 EXAMPLES:
 - "Go on a weeknight — the crowds thin out and you'll actually hear the performers. The house margarita is the move."
@@ -453,14 +505,15 @@ EXAMPLES:
 - "The prix fixe lunch is a steal compared to dinner — same kitchen, half the price, and you'll actually get a table."
 - "It's loud and buzzy, not a quiet date night spot, but the corner booth near the back is its own little world."
 
-IMPORTANT: You have NO preference data for this user. Focus on what ANYONE would want to know — the insider info, the practical tips, the things that make each place special. Write as a knowledgeable local, not as a recommendation engine.
+Items:
+${candidateNames}
 
-Items: ${candidateNames}
-
-Return ONLY JSON:
+Return ONLY JSON with numeric keys matching item numbers:
 {
-  "personalizations": {"ItemName": "1-2 sentence insider take for ${userName}"}
-}`;
+    "personalizations": { "1": "insider tip for item 1", "2": "insider tip for item 2", ... }
+}
+
+You MUST return a note for EVERY item. An empty value is never acceptable.`;
 }
 
 /**
@@ -468,7 +521,7 @@ Return ONLY JSON:
  */
 function getInsiderGuidance(domain: string): string {
     const guidance: Record<string, string> = {
-        places: `Think like a food critic or local regular. What dish is the star? What's the vibe on a Friday night vs Tuesday? Is it worth the wait or is it overhyped?`,
+        places: `Think like a food critic or local regular.What dish is the star ? What's the vibe on a Friday night vs Tuesday? Is it worth the wait or is it overhyped?`,
         movies: `Think like a film buff friend. What's the standout performance? Is it a crowd-pleaser or a divisive one? What kind of mood should you be in to watch it?`,
         music: `Think like a music journalist. What's the signature sound? Where does this fit in their discography? Is this an entry point or deep cut territory?`,
         events: `Think like a local who's been to this event before. What's the energy like? What should you not miss? Is it worth the ticket price? Any pro tips (parking, where to stand, what to eat)?`,
