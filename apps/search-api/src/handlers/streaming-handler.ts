@@ -22,7 +22,8 @@ import {
     buildSummaryPrompt, parseSummaryResponse,
     buildForUserPrompt, parseForUserResponse,
 } from '@kalidasa/cao-generator';
-import { StreamingEnricher, createHookRegistry, HookHealthMonitor, geocodeAddress } from '@kalidasa/enrichment';
+import { StreamingEnricher } from '@kalidasa/enrichment';
+import { sharedRegistry } from '../services.js';
 import { generateSubheader } from '@kalidasa/merger';
 import type { Stage1aCandidate } from '@kalidasa/cao-generator';
 
@@ -172,47 +173,20 @@ function sendSSE(res: Response, event: SSEEvent): void {
     res.write(`data: ${JSON.stringify(event.data)}\n\n`);
 }
 
-// Singletons
+// Singletons — registry and health monitor are shared from index.ts (boot-time init)
 let streamingGenerator: StreamingCAOGenerator | null = null;
 let streamingEnricher: StreamingEnricher | null = null;
 let genAI: GoogleGenerativeAI | null = null;
-let healthMonitor: HookHealthMonitor | null = null;
 
 function getStreamingServices() {
     if (!streamingGenerator) {
         streamingGenerator = new StreamingCAOGenerator();
     }
     if (!streamingEnricher) {
-        const registry = createHookRegistry();
-        streamingEnricher = new StreamingEnricher(registry);
-
-        // Start background health monitoring (every 5 minutes)
-        if (!healthMonitor) {
-            healthMonitor = new HookHealthMonitor();
-            healthMonitor.start(registry);
-        }
+        streamingEnricher = new StreamingEnricher(sharedRegistry);
     }
     if (!genAI) {
         genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
-        // Register non-hook external dependency checks
-        if (healthMonitor) {
-            const ai = genAI;
-            healthMonitor.registerExternalCheck('gemini', async () => {
-                try {
-                    const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash' });
-                    const result = await model.generateContent('Say "ok"');
-                    return !!result.response.text();
-                } catch {
-                    return false;
-                }
-            });
-
-            healthMonitor.registerExternalCheck('google_geocoding', async () => {
-                const result = await geocodeAddress('Times Square, New York');
-                return result !== null;
-            });
-        }
     }
     return { streamingGenerator, streamingEnricher, genAI };
 }

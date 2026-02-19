@@ -164,6 +164,7 @@ fi
 # Build runtime environment config as proper JSON dict (not array)
 # App Runner expects: {"KEY": "value", "KEY2": "value2"}
 ENV_VARS="{"
+ENV_WARNINGS=0
 while IFS='=' read -r key value; do
     # Skip comments and empty lines
     [[ -z "$key" || "$key" =~ ^# ]] && continue
@@ -178,6 +179,40 @@ done < .env
 
 # Remove trailing comma and close brace
 ENV_VARS="${ENV_VARS%,}}"
+
+# ── Validate .env contents ──
+echo ""
+echo "  ┌─────────────────────────────────────────────────────────┐"
+echo "  │  .env Summary (values redacted)                        │"
+echo "  ├─────────────────────────────────────────────────────────┤"
+
+while IFS='=' read -r key value; do
+    [[ -z "$key" || "$key" =~ ^# ]] && continue
+    value="${value%\"}"
+    value="${value#\"}"
+
+    if [ -z "$value" ] || [[ "$value" == your-* ]]; then
+        echo "  │  ⚠️  $key = (empty)"
+        ENV_WARNINGS=$((ENV_WARNINGS + 1))
+    elif [[ "$key" == *"KEY"* ]] || [[ "$key" == *"TOKEN"* ]] || [[ "$key" == *"SECRET"* ]]; then
+        LAST4="${value: -4}"
+        echo "  │  ✅ $key = ...${LAST4}"
+    else
+        echo "  │  ✅ $key = $value"
+    fi
+done < .env
+
+echo "  └─────────────────────────────────────────────────────────┘"
+
+if [ $ENV_WARNINGS -gt 0 ]; then
+    log_warn "$ENV_WARNINGS env var(s) are empty or placeholder."
+fi
+
+# Fatal: GEMINI_API_KEY is absolutely required
+GEMINI_CHECK=$(grep '^GEMINI_API_KEY=' .env | cut -d= -f2- | tr -d '"')
+if [ -z "$GEMINI_CHECK" ] || [[ "$GEMINI_CHECK" == your-* ]]; then
+    log_error "GEMINI_API_KEY is missing or placeholder in .env — deploy aborted."
+fi
 
 # ----------------------------------------------------------------------------
 # Create or update App Runner service
@@ -285,6 +320,35 @@ else
     log_success "Service URL: https://${SERVICE_URL}"
     echo "  Health: https://${SERVICE_URL}/health"
     echo "  API:    POST https://${SERVICE_URL}/api/search"
+
+    # ── Post-deploy health verification ──
+    echo ""
+    log_info "Waiting 30s for App Runner deployment to propagate..."
+    sleep 30
+
+    log_info "Verifying service health..."
+    HEALTH_ATTEMPTS=0
+    MAX_HEALTH_ATTEMPTS=6
+    while [ $HEALTH_ATTEMPTS -lt $MAX_HEALTH_ATTEMPTS ]; do
+        HEALTH_ATTEMPTS=$((HEALTH_ATTEMPTS + 1))
+        HEALTH_RESPONSE=$(curl -s --max-time 10 "https://${SERVICE_URL}/health" 2>/dev/null || echo '{}')
+        HEALTH_STATUS=$(echo "$HEALTH_RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))" 2>/dev/null || echo '')
+
+        if [ "$HEALTH_STATUS" = "ok" ] || [ "$HEALTH_STATUS" = "degraded" ]; then
+            log_success "Health check passed: $HEALTH_RESPONSE"
+            break
+        fi
+
+        if [ $HEALTH_ATTEMPTS -lt $MAX_HEALTH_ATTEMPTS ]; then
+            log_warn "Health check attempt $HEALTH_ATTEMPTS/$MAX_HEALTH_ATTEMPTS failed, retrying in 15s..."
+            sleep 15
+        else
+            log_warn "Health check did not pass after $MAX_HEALTH_ATTEMPTS attempts."
+            log_warn "Response: $HEALTH_RESPONSE"
+            log_warn "The deployment may still be in progress. Check manually:"
+            echo "  curl https://${SERVICE_URL}/health"
+        fi
+    done
 fi
 
 echo ""
