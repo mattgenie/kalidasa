@@ -16,6 +16,8 @@ export const REGISTRY_VERSION = '1.2.0';
 
 export const DOMAIN_REGISTRY = {
     version: REGISTRY_VERSION,
+    /** The domain to use when no specific domain matches or as a fallback */
+    defaultDomain: 'places' as const,
     domains: {
         places: {
             name: 'places',
@@ -114,4 +116,4 @@ export const DOMAIN_REGISTRY = {
         },
         // general: DISABLED — domain pipeline not functional yet. Queries that don't match a specific domain will use the best-matching active domain.
     },
-} as const satisfies { version: string; domains: Record<string, DomainDefinition> };
+} as const satisfies { version: string; defaultDomain: string; domains: Record<string, DomainDefinition> };

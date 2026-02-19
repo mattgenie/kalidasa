@@ -45,6 +45,12 @@ export class Merger {
             this.toCAOResult(candidate, index, options.domain)
         );
 
+        // P3 + P5: Deduplicate photos within this stack (and across stacks if global set provided)
+        this.deduplicatePhotos(results);
+
+        // P7: Upgrade Wikipedia thumbnails from 100px/220px to 400px
+        this.upgradeWikiThumbnails(results);
+
         // Generate answer bundle
         const answerBundle = this.buildAnswerBundle(rawCAO, results, options.domain);
 
@@ -142,5 +148,90 @@ export class Merger {
             summary: `Found ${results.length} verified ${label} matching your search.`,
             facetsApplied: [],
         };
+    }
+
+    /**
+     * P3 + P5: Remove duplicate photos within a result set.
+     * Walks all domain-specific image fields and clears any URL already used by a prior result.
+     */
+    private deduplicatePhotos(results: CAOResult[]): void {
+        const usedUrls = new Set<string>();
+
+        for (const result of results) {
+            const e = result.enrichment;
+            if (!e) continue;
+
+            // Collect all image URLs from this result and dedup against prior results
+            const imageFields: Array<{ get: () => string | undefined; clear: () => void }> = [];
+
+            // Places: photos array
+            if (e.places?.photos) {
+                for (let i = 0; i < e.places.photos.length; i++) {
+                    const idx = i;
+                    imageFields.push({
+                        get: () => e.places!.photos![idx],
+                        clear: () => { e.places!.photos!.splice(idx, 1); },
+                    });
+                }
+            }
+
+            // Movies: posterUrl, backdropUrl
+            if (e.movies?.posterUrl) imageFields.push({ get: () => e.movies!.posterUrl, clear: () => { e.movies!.posterUrl = undefined; } });
+            if (e.movies?.backdropUrl) imageFields.push({ get: () => e.movies!.backdropUrl, clear: () => { e.movies!.backdropUrl = undefined; } });
+
+            // Events: imageUrl
+            if (e.events?.imageUrl) imageFields.push({ get: () => e.events!.imageUrl, clear: () => { e.events!.imageUrl = undefined; } });
+
+            // Videos: thumbnailUrl
+            if (e.videos?.thumbnailUrl) imageFields.push({ get: () => e.videos!.thumbnailUrl, clear: () => { e.videos!.thumbnailUrl = undefined; } });
+
+            // Articles: imageUrl
+            if (e.articles?.imageUrl) imageFields.push({ get: () => e.articles!.imageUrl, clear: () => { e.articles!.imageUrl = undefined; } });
+
+            // News: imageUrl
+            if (e.news?.imageUrl) imageFields.push({ get: () => e.news!.imageUrl, clear: () => { e.news!.imageUrl = undefined; } });
+
+            // Books: coverUrl
+            if (e.books?.coverUrl) imageFields.push({ get: () => e.books!.coverUrl, clear: () => { e.books!.coverUrl = undefined; } });
+
+            // General: thumbnail
+            if (e.general?.thumbnail) imageFields.push({ get: () => e.general!.thumbnail, clear: () => { e.general!.thumbnail = undefined; } });
+
+            // Music: albumArt
+            if (e.music?.albumArt) imageFields.push({ get: () => e.music!.albumArt, clear: () => { e.music!.albumArt = undefined; } });
+
+            // Check each image — if already used, clear it
+            for (const field of imageFields) {
+                const url = field.get();
+                if (url && usedUrls.has(url)) {
+                    field.clear();
+                } else if (url) {
+                    usedUrls.add(url);
+                }
+            }
+        }
+    }
+
+    /**
+     * P7: Upgrade Wikipedia thumbnail URLs from low-res (100px/220px) to 400px.
+     * Wikipedia URLs follow: .../thumb/.../NNNpx-Filename → replace NNN with 400.
+     */
+    private upgradeWikiThumbnails(results: CAOResult[]): void {
+        const upgrade = (url: string | undefined): string | undefined => {
+            if (!url) return url;
+            // Match Wikipedia thumbnail URLs and upgrade resolution
+            if (url.includes('upload.wikimedia.org') && url.includes('/thumb/')) {
+                return url.replace(/\/(\d+)px-([^/]+)$/, '/400px-$2');
+            }
+            return url;
+        };
+
+        for (const result of results) {
+            const e = result.enrichment;
+            if (!e) continue;
+            if (e.events?.imageUrl) e.events.imageUrl = upgrade(e.events.imageUrl);
+            if (e.general?.thumbnail) e.general.thumbnail = upgrade(e.general.thumbnail);
+            if (e.books?.coverUrl) e.books.coverUrl = upgrade(e.books.coverUrl);
+        }
     }
 }

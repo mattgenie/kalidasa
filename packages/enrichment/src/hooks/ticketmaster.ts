@@ -74,6 +74,8 @@ export class TicketmasterHook implements EnrichmentHook {
                     venueAddress: venue?.address?.line1
                         ? `${venue.address.line1}, ${venue.city?.name}, ${venue.state?.stateCode}`
                         : undefined,
+                    venueLatitude: venue?.location?.latitude ? parseFloat(venue.location.latitude) : undefined,
+                    venueLongitude: venue?.location?.longitude ? parseFloat(venue.location.longitude) : undefined,
                     startDate: event.dates?.start?.dateTime || event.dates?.start?.localDate,
                     ticketUrl: event.url,
                     priceRange: priceRanges

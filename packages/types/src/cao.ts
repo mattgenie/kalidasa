@@ -150,11 +150,14 @@ export interface MusicEnrichment {
     explicit?: boolean;
     genres?: string[];
     releaseDate?: string;
+    musicType?: string;  // 'Album', 'Song', 'Single', 'EP', etc.
 }
 
 export interface EventsEnrichment {
     venue?: string;
     venueAddress?: string;
+    venueLatitude?: number;
+    venueLongitude?: number;
     startDate?: string;
     endDate?: string;
     ticketUrl?: string;

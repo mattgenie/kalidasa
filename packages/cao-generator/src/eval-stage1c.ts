@@ -68,10 +68,10 @@ async function generate(fixture: EvalFixture): Promise<GeneratedOutput[]> {
     const summaries = parseSummaryResponse(summaryResult.response.text());
     const personalizations = parseForUserResponse(forUserResult.response.text());
 
-    return fixture.candidates.map(c => ({
+    return fixture.candidates.map((c, i) => ({
         candidateName: c.name,
-        summary: summaries.summaries[c.name] || '[MISSING]',
-        forUser: personalizations.personalizations[c.name] || '[MISSING]',
+        summary: summaries.summaries[String(i + 1)] || '[MISSING]',
+        forUser: personalizations.personalizations[String(i + 1)] || '[MISSING]',
     }));
 }
 

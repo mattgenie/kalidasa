@@ -10,8 +10,11 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
+import { parseRetryAfter } from '../health-monitor.js';
+import { geocodeAddress } from '../geo-utils.js';
 
 export class SerpApiEventsHook implements EnrichmentHook {
     name = 'serpapi_events';
@@ -80,6 +83,15 @@ export class SerpApiEventsHook implements EnrichmentHook {
             // Parse the date — SerpApi provides natural language dates
             const startDate = this.parseEventDate(bestEvent.date);
 
+            // Geocode venue address to get coordinates (SerpApi doesn't provide them)
+            let venueLatitude: number | undefined;
+            let venueLongitude: number | undefined;
+            if (venueAddress) {
+                const coords = await geocodeAddress(venueAddress);
+                venueLatitude = coords?.lat;
+                venueLongitude = coords?.lng;
+            }
+
             return {
                 verified: true,
                 source: 'serpapi_events',
@@ -90,6 +102,8 @@ export class SerpApiEventsHook implements EnrichmentHook {
                 events: {
                     venue: bestEvent.venue?.name,
                     venueAddress,
+                    venueLatitude,
+                    venueLongitude,
                     startDate,
                     ticketUrl,
                     imageUrl: bestEvent.image || bestEvent.thumbnail,
@@ -256,7 +270,7 @@ export class SerpApiEventsHook implements EnrichmentHook {
         return undefined;
     }
 
-    async healthCheck(): Promise<boolean> {
+    async healthCheck(): Promise<HealthCheckResult> {
         try {
             const params = new URLSearchParams({
                 engine: 'google_events',
@@ -266,9 +280,20 @@ export class SerpApiEventsHook implements EnrichmentHook {
                 gl: 'us',
             });
             const response = await fetch(`${this.baseUrl}?${params.toString()}`);
-            return response.ok;
-        } catch {
-            return false;
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `SerpAPI Events: ${response.status} ${response.statusText}`,
+                    retryAfterMs: parseRetryAfter(response.headers.get('Retry-After')),
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
         }
     }
 }

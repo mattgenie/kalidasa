@@ -9,7 +9,8 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
 
 export class TMDBHook implements EnrichmentHook {
@@ -108,16 +109,26 @@ export class TMDBHook implements EnrichmentHook {
         };
     }
 
-    async healthCheck(): Promise<boolean> {
+    async healthCheck(): Promise<HealthCheckResult> {
         try {
             const testTmdbUrl = 'https://api.themoviedb.org/3/search/movie?query=test';
             const url = new URL(`${this.lbBaseUrl}/api/v1/load-balancer/proxy`);
             url.searchParams.set('service_url', testTmdbUrl);
             url.searchParams.set('provider', 'tmdb');
             const response = await fetch(url);
-            return response.ok;
-        } catch {
-            return false;
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `TMDB LB: ${response.status} ${response.statusText}`,
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
         }
     }
 }

@@ -12,7 +12,8 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
 
 export class CompositeBookHook implements EnrichmentHook {
@@ -365,7 +366,26 @@ export class CompositeBookHook implements EnrichmentHook {
         return (2 * fwd * bwd) / (fwd + bwd);
     }
 
-    async healthCheck(): Promise<boolean> {
-        return true; // OpenLibrary doesn't need a key
+    async healthCheck(): Promise<HealthCheckResult> {
+        // Lookthrough: probe OpenLibrary search API — the actual data source
+        try {
+            const response = await fetch(
+                'https://openlibrary.org/search.json?q=test&limit=1',
+                { headers: { 'User-Agent': 'Kalidasa/1.0' } }
+            );
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `OpenLibrary: ${response.status} ${response.statusText}`,
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
+        }
     }
 }

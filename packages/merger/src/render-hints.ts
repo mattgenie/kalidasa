@@ -45,8 +45,8 @@ function getComponentType(
         return resultCount <= 8 ? 'carousel' : 'search_grid';
     }
 
-    // For articles and books, detailed list is better
-    if (domain === 'articles' || domain === 'books' || domain === 'news') {
+    // For books and news, detailed list is better
+    if (domain === 'books' || domain === 'news') {
         return 'detailed_list';
     }
 

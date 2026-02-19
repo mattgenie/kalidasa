@@ -7,8 +7,10 @@
 import type { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 
-// Domain enum
-const DomainSchema = z.enum(['places', 'movies', 'music', 'events', 'videos', 'articles', 'books', 'news', 'general']);
+import { DOMAIN_NAMES } from '@kalidasa/domain-registry';
+
+// Domain validation — derived from registry, never hardcoded
+const DomainSchema = z.enum(DOMAIN_NAMES as [string, ...string[]]);
 
 // Query schema
 const QuerySchema = z.object({
@@ -46,7 +48,7 @@ const MemberPreferencesSchema = z.object({
     places: PlacesPreferencesSchema,
     movies: MoviesPreferencesSchema,
     music: MusicPreferencesSchema,
-});
+}).passthrough(); // Allow flat preference keys like {dietary: "no red meat", vibes: "adventurous"}
 
 // Capsule member schema
 const CapsuleMemberSchema = z.object({

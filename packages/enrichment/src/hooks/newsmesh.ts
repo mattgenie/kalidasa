@@ -14,7 +14,7 @@ import type {
 
 export class NewsMeshHook implements EnrichmentHook {
     name = 'newsmesh';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains = ['articles' as EnrichmentDomain]; // DISABLED — not registered in createHookRegistry()
     priority = 80;
 
     private apiKey: string;

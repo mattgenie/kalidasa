@@ -36,6 +36,11 @@ export type ItemRendererType = typeof DOMAIN_REGISTRY.domains[DomainName]['itemR
 /** Typed domain names array for runtime iteration */
 export const DOMAIN_NAMES = Object.keys(DOMAIN_REGISTRY.domains) as DomainName[];
 
+/** Get the default fallback domain name (explicitly declared in the registry) */
+export function getDefaultDomain(): DomainName {
+    return DOMAIN_REGISTRY.defaultDomain;
+}
+
 /** Get domain definition by name */
 export function getDomain(name: string): DomainDefinition | undefined {
     if (name in DOMAIN_REGISTRY.domains) {
@@ -49,12 +54,12 @@ export function isKnownDomain(name: string): boolean {
     return name in DOMAIN_REGISTRY.domains;
 }
 
-/** Get domain or fallback to places (most common domain) */
+/** Get domain or fallback to the registry's declared default */
 export function getDomainOrDefault(name: string): DomainDefinition {
     if (name in DOMAIN_REGISTRY.domains) {
         return DOMAIN_REGISTRY.domains[name as DomainName];
     }
-    return DOMAIN_REGISTRY.domains.places;
+    return DOMAIN_REGISTRY.domains[DOMAIN_REGISTRY.defaultDomain];
 }
 
 // ============================================================================
@@ -63,13 +68,13 @@ export function getDomainOrDefault(name: string): DomainDefinition {
 
 /**
  * Detect domain from query text (lightweight keyword matching).
- * Returns 'places' if no domain matches.
+ * Returns the registry's default domain if no domain matches.
  */
 export function detectDomainFromQuery(query: string): string {
     const queryLower = query.toLowerCase();
 
     // Score each domain by keyword matches
-    let bestDomain = 'places';
+    let bestDomain: string = DOMAIN_REGISTRY.defaultDomain;
     let bestScore = 0;
 
     for (const [name, def] of Object.entries(DOMAIN_REGISTRY.domains)) {

@@ -19,7 +19,9 @@ export const sharedHealthMonitor = new HookHealthMonitor();
 // Start background health checks (every 5 minutes)
 sharedHealthMonitor.start(sharedRegistry);
 
-// Register external dependency checks
+// Register external dependency checks with core/enhancement classification.
+// "core" → 503 on failure (App Runner restart).
+// "enhancement" → degrade gracefully, report in /health, keep serving.
 const geminiApiKey = process.env.GEMINI_API_KEY || '';
 if (geminiApiKey) {
     const genAI = new GoogleGenerativeAI(geminiApiKey);
@@ -31,12 +33,17 @@ if (geminiApiKey) {
         } catch {
             return false;
         }
-    });
+    }, 'core');  // Gemini is core — can't generate results without it
 }
 
 sharedHealthMonitor.registerExternalCheck('google_geocoding', async () => {
     const result = await geocodeAddress('Times Square, New York');
     return result !== null;
-});
+}, 'enhancement');  // Geocoding enriches location data but search works without it
+
+// SerpAPI charges per search credit — check hourly instead of every 5 min.
+// At 5-min intervals: 288 checks/day = ~100% of free tier in 8 hours.
+// At 1-hour intervals: 24 checks/day = sustainable.
+sharedHealthMonitor.setHookCheckInterval('serpapi_events', 3_600_000);
 
 export const bootTime = Date.now();

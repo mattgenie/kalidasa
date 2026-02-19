@@ -16,10 +16,12 @@ export { OMDbHook } from './hooks/omdb.js';
 export { YouTubeHook } from './hooks/youtube.js';
 export { VimeoHook } from './hooks/vimeo.js';
 export { AppleMusicHook } from './hooks/apple-music.js';
-export { EventbriteHook } from './hooks/eventbrite.js';
+// EventbriteHook removed — Eventbrite Search API killed Dec 2019
 export { TicketmasterHook } from './hooks/ticketmaster.js';
 export { NewsAPIHook } from './hooks/newsapi.js';
 export { DiffbotHook } from './hooks/diffbot.js';
 export { NewsMeshHook } from './hooks/newsmesh.js';
 export { WikipediaHook } from './hooks/wikipedia.js';
+export { HookHealthMonitor, parseRetryAfter, type DependencyClass } from './health-monitor.js';
+export { haversineKm, geocodeAddress } from './geo-utils.js';
 

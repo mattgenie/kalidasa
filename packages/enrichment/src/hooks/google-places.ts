@@ -9,8 +9,10 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
+import { parseRetryAfter } from '../health-monitor.js';
 
 export class GooglePlacesHook implements EnrichmentHook {
     name = 'google_places';
@@ -34,6 +36,9 @@ export class GooglePlacesHook implements EnrichmentHook {
             'places.nationalPhoneNumber',
             'places.googleMapsUri',
             'places.photos',
+            'places.photos.authorAttributions',
+            'places.photos.widthPx',
+            'places.photos.heightPx',
             'places.reviews',
             'places.location',
         ].join(',');
@@ -79,6 +84,12 @@ export class GooglePlacesHook implements EnrichmentHook {
             // Find the best-matching place instead of blindly taking [0]
             const place = this.findBestMatch(candidate.name, places);
 
+            // Q7+Q13: Misresolution guard — findBestMatch returns null if no good match
+            if (!place) {
+                console.log(`[GooglePlacesHook] ✗ No match for "${candidate.name}" — all ${places.length} results too distant (name similarity < 0.3)`);
+                return null;
+            }
+
             // City validation: reject cross-city misresolutions using coordinates
             if (context.searchLocation?.city && place.location) {
                 const expectedCenter = this.getCityCenter(context.searchLocation.city);
@@ -87,7 +98,7 @@ export class GooglePlacesHook implements EnrichmentHook {
                         place.location.latitude, place.location.longitude,
                         expectedCenter.lat, expectedCenter.lng
                     );
-                    if (dist > 100) { // >100km = definitely wrong city
+                    if (dist > 50) { // >50km = wrong city (narrowed from 100km per Q1)
                         console.log(`[GooglePlacesHook] ✗ City mismatch for "${candidate.name}": ${dist.toFixed(0)}km from ${context.searchLocation.city} (${place.formattedAddress})`);
                         return null;
                     }
@@ -124,7 +135,7 @@ export class GooglePlacesHook implements EnrichmentHook {
         }
     }
 
-    async healthCheck(): Promise<boolean> {
+    async healthCheck(): Promise<HealthCheckResult> {
         try {
             const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
                 method: 'POST',
@@ -138,9 +149,20 @@ export class GooglePlacesHook implements EnrichmentHook {
                     languageCode: 'en',
                 }),
             });
-            return response.ok;
-        } catch {
-            return false;
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `Places API: ${response.status} ${response.statusText}`,
+                    retryAfterMs: parseRetryAfter(response.headers.get('Retry-After')),
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
         }
     }
 
@@ -175,15 +197,16 @@ export class GooglePlacesHook implements EnrichmentHook {
 
     /**
      * Find the best-matching place from Google's results using name similarity.
-     * Falls back to the first result if no good match is found.
+     * Q7: Returns null if no match meets the minimum threshold (0.3).
      */
     private findBestMatch(
         candidateName: string,
         places: Array<{ id: string; displayName?: { text: string };[key: string]: any }>
-    ): typeof places[0] {
-        if (places.length === 1) return places[0];
+    ): typeof places[0] | null {
+        if (places.length === 0) return null;
 
         const target = candidateName.toLowerCase().trim();
+        const MIN_SIMILARITY = 0.1; // Q7: Very low floor — only reject complete mismatches
 
         let bestPlace = places[0];
         let bestScore = -1;
@@ -211,6 +234,12 @@ export class GooglePlacesHook implements EnrichmentHook {
                 bestScore = score;
                 bestPlace = place;
             }
+        }
+
+        // Q7: Reject if best match is below minimum threshold
+        if (bestScore >= 0 && bestScore < MIN_SIMILARITY) {
+            console.log(`[GooglePlacesHook] ✗ Best match for "${candidateName}" is "${bestPlace.displayName?.text}" (score=${bestScore.toFixed(2)} < ${MIN_SIMILARITY})`);
+            return null;
         }
 
         // Log if best match differs from first result
@@ -252,11 +281,54 @@ export class GooglePlacesHook implements EnrichmentHook {
         return mapping[priceLevel] || '$$';
     }
 
-    private extractPhotos(photos?: Array<{ name: string }>): string[] {
+    /**
+     * P4: Smart photo selection — prefer user-uploaded, landscape, larger images.
+     * Filters out tiny images and ranks by quality signals.
+     */
+    private extractPhotos(photos?: Array<{
+        name: string;
+        widthPx?: number;
+        heightPx?: number;
+        authorAttributions?: Array<{ displayName?: string; uri?: string }>;
+    }>): string[] {
         if (!photos || photos.length === 0) return [];
 
-        return photos.slice(0, 5).map(
-            photo =>
+        // Score each photo by quality signals
+        const scored = photos
+            .filter(p => {
+                // Filter out tiny images that are likely icons/logos
+                const w = p.widthPx || 0;
+                const h = p.heightPx || 0;
+                if ((w > 0 || h > 0) && (w < 200 || h < 200)) return false;
+                return true;
+            })
+            .map(photo => {
+                let score = 0;
+
+                // User-uploaded photos have real author attributions (not "Google")
+                const hasRealAuthor = photo.authorAttributions?.some(
+                    a => a.displayName && a.displayName !== 'Google' && a.displayName !== 'Google Maps'
+                );
+                if (hasRealAuthor) score += 3;
+
+                // Landscape orientation is better for cards/UI
+                const w = photo.widthPx || 0;
+                const h = photo.heightPx || 0;
+                if (w > h && w > 0) score += 1;
+
+                // Larger images are generally higher quality
+                const area = w * h;
+                if (area > 1_000_000) score += 1;       // >1MP
+                else if (area > 500_000) score += 0.5;  // >0.5MP
+
+                return { photo, score };
+            });
+
+        // Sort by score descending, take top 5
+        scored.sort((a, b) => b.score - a.score);
+
+        return scored.slice(0, 5).map(
+            ({ photo }) =>
                 `https://places.googleapis.com/v1/${photo.name}/media?key=${this.apiKey}&maxHeightPx=800&maxWidthPx=800`
         );
     }

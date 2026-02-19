@@ -15,7 +15,7 @@ import type {
 
 export class SerpApiArticlesHook implements EnrichmentHook {
     name = 'serpapi_articles';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains = ['articles' as EnrichmentDomain]; // DISABLED — not registered in createHookRegistry()
     priority = 80;  // Lower than Exa — used as fallback
 
     private apiKey: string;

@@ -51,7 +51,7 @@ export class StreamingEnricher {
                     };
                 }
             } catch (error) {
-                console.log(`[StreamEnricher] Hook ${hookName} failed for ${candidate.name}`);
+                console.log(`[StreamEnricher] Hook ${hookName} failed for ${candidate.name}: ${error instanceof Error ? error.message : String(error)}`);
             }
         }
 

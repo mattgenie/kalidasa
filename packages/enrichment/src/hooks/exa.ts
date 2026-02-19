@@ -15,7 +15,7 @@ import type {
 
 export class ExaHook implements EnrichmentHook {
     name = 'exa';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains = ['articles' as EnrichmentDomain]; // DISABLED — not registered in createHookRegistry()
     priority = 95;
 
     private apiKey: string;

@@ -178,6 +178,9 @@ while IFS='=' read -r key value; do
 done < .env
 
 # Remove trailing comma and close brace
+# But first, inject GIT_SHA from current commit (not from .env)
+GIT_SHA=$(git rev-parse --short HEAD)
+ENV_VARS="${ENV_VARS}\"GIT_SHA\":\"${GIT_SHA}\","
 ENV_VARS="${ENV_VARS%,}}"
 
 # ── Validate .env contents ──

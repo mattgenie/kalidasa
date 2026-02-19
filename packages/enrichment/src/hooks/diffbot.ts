@@ -16,7 +16,7 @@ import type {
 
 export class DiffbotHook implements EnrichmentHook {
     name = 'diffbot';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains = ['articles' as EnrichmentDomain]; // DISABLED — not registered in createHookRegistry()
     priority = 85;
 
     private token: string;

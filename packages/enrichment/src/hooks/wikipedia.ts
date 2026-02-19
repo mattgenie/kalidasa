@@ -10,12 +10,13 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
 
 export class WikipediaHook implements EnrichmentHook {
     name = 'wikipedia';
-    domains: EnrichmentDomain[] = ['general', 'articles'];
+    domains: EnrichmentDomain[] = ['general'];
     priority = 100;
 
     private baseUrl = 'https://en.wikipedia.org/api/rest_v1';
@@ -98,14 +99,24 @@ export class WikipediaHook implements EnrichmentHook {
         }
     }
 
-    async healthCheck(): Promise<boolean> {
+    async healthCheck(): Promise<HealthCheckResult> {
         try {
             const response = await fetch(`${this.baseUrl}/page/summary/Main_Page`, {
                 headers: { 'User-Agent': this.userAgent },
             });
-            return response.ok;
-        } catch {
-            return false;
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `Wikipedia REST: ${response.status} ${response.statusText}`,
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
         }
     }
 

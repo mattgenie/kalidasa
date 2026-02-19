@@ -34,7 +34,7 @@ interface ArticleMatch {
 
 export class CompositeArticlesHook implements EnrichmentHook {
     name = 'articles_composite';
-    domains: EnrichmentDomain[] = ['articles'];
+    domains = ['articles' as EnrichmentDomain]; // DISABLED — not registered in createHookRegistry()
     priority = 95;
 
     private newsapiKey: string;

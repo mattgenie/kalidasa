@@ -21,7 +21,7 @@ const SEP = ' · ';
  * Returns undefined if no meaningful subheader can be built.
  */
 export function generateSubheader(
-    domain: Domain,
+    domain: string,  // Domain name — may include disabled/future domains
     enrichment: EnrichmentResult
 ): string | undefined {
     switch (domain) {
@@ -35,8 +35,9 @@ export function generateSubheader(
             return buildEventsSubheader(enrichment);
         case 'videos':
             return buildVideosSubheader(enrichment);
-        case 'articles':
-            return buildArticlesSubheader(enrichment);
+        // articles: DISABLED — domain not ready yet
+        // case 'articles':
+        //     return buildArticlesSubheader(enrichment);
         case 'books':
             return buildBooksSubheader(enrichment);
         case 'news':

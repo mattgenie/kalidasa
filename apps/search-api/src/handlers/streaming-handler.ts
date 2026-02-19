@@ -163,7 +163,15 @@ interface SSEErrorEvent {
     data: { message: string };
 }
 
-type SSEEvent = SSECandidateEvent | SSEBundleEvent | SSEDoneEvent | SSEErrorEvent;
+interface SSEDomainUnavailableEvent {
+    type: 'domain_unavailable';
+    data: {
+        domain: string;
+        reason: string;
+    };
+}
+
+type SSEEvent = SSECandidateEvent | SSEBundleEvent | SSEDoneEvent | SSEErrorEvent | SSEDomainUnavailableEvent;
 
 /**
  * Send SSE event to response
@@ -754,6 +762,13 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
 
     console.log(`[${requestId}] 🔄 Streaming search: "${searchRequest.query.text}" (domain=${searchRequest.query.domain})`);
 
+    // SSE completion logging — loggingMiddleware patches res.send but SSE uses
+    // res.write + res.end, so streaming responses are invisible to it.
+    res.on('finish', () => {
+        const duration = Date.now() - startTime;
+        console.log(`← ✅ SSE ${req.method} ${req.url} ${res.statusCode} (${duration}ms)`);
+    });
+
     // Set SSE headers
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -762,6 +777,30 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
     res.flushHeaders();
 
     const { streamingGenerator, streamingEnricher, genAI } = getStreamingServices();
+
+    // ── Domain availability gate ──
+    // If the circuit breaker has disabled this domain (primary hook down),
+    // emit domain_unavailable immediately instead of wasting LLM tokens.
+    const requestedDomain = searchRequest.query.domain;
+    if (requestedDomain) {
+        const availability = sharedRegistry.isDomainAvailable(requestedDomain);
+        if (!availability.available) {
+            console.warn(`[${requestId}] 🚫 Domain "${requestedDomain}" unavailable: ${availability.reason}`);
+            sendSSE(res, {
+                type: 'domain_unavailable',
+                data: {
+                    domain: requestedDomain,
+                    reason: availability.reason || 'Service temporarily unavailable',
+                },
+            });
+            sendSSE(res, {
+                type: 'done',
+                data: { totalMs: Date.now() - startTime, count: 0 },
+            });
+            res.end();
+            return;
+        }
+    }
 
     try {
         // ==== NEWS DOMAIN: Search-first pipeline via NewsSearchEngine ====

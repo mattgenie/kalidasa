@@ -9,8 +9,10 @@ import type {
     RawCAOCandidate,
     EnrichmentContext,
     EnrichmentData,
-    EnrichmentDomain
+    EnrichmentDomain,
+    HealthCheckResult
 } from '@kalidasa/types';
+import { parseRetryAfter } from '../health-monitor.js';
 
 export class AppleMusicHook implements EnrichmentHook {
     name = 'apple_music';
@@ -86,7 +88,7 @@ export class AppleMusicHook implements EnrichmentHook {
         }
     }
 
-    async healthCheck(): Promise<boolean> {
+    async healthCheck(): Promise<HealthCheckResult> {
         try {
             const response = await fetch(`${this.baseUrl}/catalog/us/search?term=test&types=songs&limit=1`, {
                 headers: {
@@ -95,9 +97,20 @@ export class AppleMusicHook implements EnrichmentHook {
                     Accept: 'application/json',
                 },
             });
-            return response.ok;
-        } catch {
-            return false;
+            if (response.ok) return { healthy: true };
+            return {
+                healthy: false,
+                error: {
+                    httpStatus: response.status,
+                    message: `Apple Music: ${response.status} ${response.statusText}`,
+                    retryAfterMs: parseRetryAfter(response.headers.get('Retry-After')),
+                },
+            };
+        } catch (e) {
+            return {
+                healthy: false,
+                error: { message: e instanceof Error ? e.message : 'Connection failed' },
+            };
         }
     }
 }
