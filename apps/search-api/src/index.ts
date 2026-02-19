@@ -40,23 +40,11 @@ app.use(loggingMiddleware);
 // Routes
 app.use('/api', searchRouter);
 
-// ── DIAGNOSTIC: independent health check with ZERO dependency imports ──
-app.get('/health2', (_req, res) => {
-  res.json({
-    version: 'v2-diagnostic-bf32a68',
-    status: 'alive',
-    timestamp: new Date().toISOString(),
-    pid: process.pid,
-    nodeVersion: process.version,
-  });
-});
-
 // Health check — reads cached results from background HookHealthMonitor.
 // Core failures (Gemini) → HTTP 503 (App Runner restart).
 // Domain circuit breaker failures → HTTP 200 + disabledDomains.
 // Enhancement failures → HTTP 200 with degraded info.
 app.get('/health', (_req, res) => {
-  console.log('[/health] Handler entered — v2 rich response');
   const { hooks, externals, checkedAt, hasCriticalFailure } = sharedHealthMonitor.getLastResults();
 
   const uptimeMs = Date.now() - bootTime;
