@@ -131,8 +131,8 @@ fi
 # ----------------------------------------------------------------------------
 # Build Docker image
 # ----------------------------------------------------------------------------
-log_info "Building Docker image..."
-docker build --platform linux/amd64 -t "${ECR_REPO}:${IMAGE_TAG}" .
+log_info "Building Docker image (no-cache to ensure fresh build)..."
+docker build --no-cache --platform linux/amd64 -t "${ECR_REPO}:${IMAGE_TAG}" .
 log_success "Docker image built: ${ECR_REPO}:${IMAGE_TAG} (linux/amd64)"
 
 # ----------------------------------------------------------------------------
