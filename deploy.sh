@@ -211,7 +211,10 @@ if [ $ENV_WARNINGS -gt 0 ]; then
     log_warn "$ENV_WARNINGS env var(s) are empty or placeholder."
 fi
 
-# Fatal: GEMINI_API_KEY is absolutely required
+# Fatal: GEMINI_API_KEY is the only system-fatal key.
+# Without Gemini, Kalidasa cannot generate any results at all.
+# Domain-critical keys (Places, Movies, News, Events) are validated
+# at runtime by validate-env.ts and handled by the circuit breaker.
 GEMINI_CHECK=$(grep '^GEMINI_API_KEY=' .env | cut -d= -f2- | tr -d '"')
 if [ -z "$GEMINI_CHECK" ] || [[ "$GEMINI_CHECK" == your-* ]]; then
     log_error "GEMINI_API_KEY is missing or placeholder in .env — deploy aborted."

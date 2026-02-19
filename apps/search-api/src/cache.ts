@@ -196,7 +196,23 @@ export class SearchCache {
             newest: newest === 0 ? null : newest,
         };
     }
+
+    /**
+     * Start automatic pruning on a fixed interval.
+     * Uses .unref() so the timer doesn't prevent graceful shutdown.
+     */
+    startAutoPrune(intervalMs: number = 15 * 60 * 1000): void {
+        const timer = setInterval(() => {
+            const pruned = this.prune();
+            if (pruned > 0) {
+                console.log(`[SearchCache] Auto-pruned ${pruned} expired entries (${this.cache.size} remaining)`);
+            }
+        }, intervalMs);
+        timer.unref();
+    }
 }
 
 // Singleton instance for the application
 export const searchCache = new SearchCache();
+searchCache.startAutoPrune();
+

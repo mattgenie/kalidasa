@@ -184,19 +184,27 @@ function sendSSE(res: Response, event: SSEEvent): void {
 // Singletons — registry and health monitor are shared from index.ts (boot-time init)
 let streamingGenerator: StreamingCAOGenerator | null = null;
 let streamingEnricher: StreamingEnricher | null = null;
-let genAI: GoogleGenerativeAI | null = null;
+let _genAI: GoogleGenerativeAI | null = null;
 
-function getStreamingServices() {
+function getStreamingServices(): {
+    streamingGenerator: StreamingCAOGenerator;
+    streamingEnricher: StreamingEnricher;
+    genAI: GoogleGenerativeAI;
+} {
     if (!streamingGenerator) {
         streamingGenerator = new StreamingCAOGenerator();
     }
     if (!streamingEnricher) {
         streamingEnricher = new StreamingEnricher(sharedRegistry);
     }
-    if (!genAI) {
-        genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+    if (!_genAI) {
+        const key = process.env.GEMINI_API_KEY;
+        if (!key) {
+            throw new Error('GEMINI_API_KEY is not set — boot probe should have caught this');
+        }
+        _genAI = new GoogleGenerativeAI(key);
     }
-    return { streamingGenerator, streamingEnricher, genAI };
+    return { streamingGenerator, streamingEnricher, genAI: _genAI };
 }
 
 /**
@@ -776,6 +784,17 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.flushHeaders();
 
+    // ── Client disconnect detection ──
+    // When the client closes the SSE connection (e.g., cancels the request),
+    // stop all further LLM work to avoid wasting tokens.
+    let clientDisconnected = false;
+    res.on('close', () => {
+        if (!clientDisconnected) {
+            clientDisconnected = true;
+            console.log(`[${requestId}] 🔌 Client disconnected — stopping LLM work`);
+        }
+    });
+
     const { streamingGenerator, streamingEnricher, genAI } = getStreamingServices();
 
     // ── Domain availability gate ──
@@ -805,14 +824,14 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
     try {
         // ==== NEWS DOMAIN: Search-first pipeline via NewsSearchEngine ====
         if (searchRequest.query.domain === 'news') {
-            await handleNewsStream(searchRequest, res, requestId, startTime, genAI!);
+            await handleNewsStream(searchRequest, res, requestId, startTime, genAI);
             res.end();
             return;
         }
 
         // ==== EVENTS DOMAIN: Search-first pipeline via EventsSearchEngine ====
         if (searchRequest.query.domain === 'events') {
-            await handleEventsStream(searchRequest, res, requestId, startTime, genAI!);
+            await handleEventsStream(searchRequest, res, requestId, startTime, genAI);
             res.end();
             return;
         }
@@ -825,7 +844,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
         const enrichTimeout = 5000;
 
         // Start streaming generation with oversample target
-        const candidateStream = streamingGenerator!.generateStream({
+        const candidateStream = streamingGenerator.generateStream({
             ...searchRequest,
             options: { ...searchRequest.options, maxResults: oversampleTarget },
         });
@@ -860,7 +879,7 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             // Use display label (with identifiers) for LLM to produce deterministic keys
             const displayLabel = buildDisplayLabel(searchRequest.query.domain || 'places', candidate);
             const [enriched, summary, forUser] = await Promise.all([
-                streamingEnricher!.enrichOne(rawCandidate, {
+                streamingEnricher.enrichOne(rawCandidate, {
                     timeout: enrichTimeout,
                     requestId,
                     searchLocation: searchRequest.logistics.searchLocation,
@@ -869,14 +888,14 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
                     displayLabel,
                     searchRequest.query.text,
                     searchRequest.query.domain,
-                    genAI!
+                    genAI
                 ),
                 generateForUser(
                     displayLabel,
                     searchRequest.query.text,
                     searchRequest.query.domain,
                     searchRequest.capsule,
-                    genAI!,
+                    genAI,
                     searchRequest.conversation
                 ),
             ]);
@@ -976,6 +995,12 @@ export async function streamingSearchHandler(req: Request, res: Response): Promi
             seenKeys.add(key);
 
             candidateCount++;
+
+            // Stop processing if client disconnected
+            if (clientDisconnected) {
+                console.log(`[${requestId}] ⏹️ Client gone — aborting pipeline after ${candidateCount} candidates`);
+                break;
+            }
 
             // Launch candidate processing
             inFlight.push(processCandidate(candidate));

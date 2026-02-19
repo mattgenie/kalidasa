@@ -96,9 +96,42 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log(`
+// ── Async boot with Gemini reachability check ──
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+async function boot() {
+  // ── Gemini reachability probe ──
+  // Catch bad API keys *before* App Runner routes traffic here.
+  const geminiKey = process.env.GEMINI_API_KEY || '';
+  if (geminiKey) {
+    const keyHint = geminiKey.length >= 4 ? `...${geminiKey.slice(-4)}` : '(too short)';
+    console.log(`[Boot] Probing Gemini API (key: ${keyHint})...`);
+    try {
+      const genAI = new GoogleGenerativeAI(geminiKey);
+      const model = genAI.getGenerativeModel({ model: process.env.LLM_MODEL || 'gemini-2.0-flash' });
+      const result = await model.generateContent('Say "ok"');
+      const text = result.response.text().trim();
+      console.log(`[Boot] ✅ Gemini reachable (response: "${text.slice(0, 20)}")`);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error('');
+      console.error('╔═══════════════════════════════════════════════════════════╗');
+      console.error('║  💀 GEMINI API UNREACHABLE — CANNOT START                ║');
+      console.error('╠═══════════════════════════════════════════════════════════╣');
+      console.error(`║  Key: ${keyHint.padEnd(51)}║`);
+      console.error(`║  Error: ${msg.slice(0, 49).padEnd(49)}║`);
+      console.error('║                                                           ║');
+      console.error('║  Fix: Check GEMINI_API_KEY in .env or App Runner config.  ║');
+      console.error('╚═══════════════════════════════════════════════════════════╝');
+      console.error('');
+      process.exit(1);
+    }
+  }
+
+  // ── Start HTTP server ──
+  const server = app.listen(PORT, () => {
+    console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║                     🏛️  KALIDASA                          ║
@@ -108,25 +141,32 @@ const server = app.listen(PORT, () => {
 ║   API endpoint: POST /api/search                          ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
-  `);
-});
-
-// ── Graceful shutdown ──
-function shutdown(signal: string) {
-  console.log(`\n⏹️  ${signal} received — shutting down gracefully...`);
-  sharedHealthMonitor.stop();
-  server.close(() => {
-    console.log('✅ Server closed. All in-flight requests completed.');
-    process.exit(0);
+    `);
   });
-  // Force exit after 10s if connections don't drain
-  setTimeout(() => {
-    console.error('⚠️  Forced exit after 10s timeout');
-    process.exit(1);
-  }, 10_000).unref();
+
+  // ── Graceful shutdown ──
+  function shutdown(signal: string) {
+    console.log(`\n⏹️  ${signal} received — shutting down gracefully...`);
+    sharedHealthMonitor.stop();
+    server.close(() => {
+      console.log('✅ Server closed. All in-flight requests completed.');
+      process.exit(0);
+    });
+    // Force exit after 10s if connections don't drain
+    setTimeout(() => {
+      console.error('⚠️  Forced exit after 10s timeout');
+      process.exit(1);
+    }, 10_000).unref();
+  }
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+boot().catch(err => {
+  console.error('💀 Boot failed:', err);
+  process.exit(1);
+});
 
 export default app;
+

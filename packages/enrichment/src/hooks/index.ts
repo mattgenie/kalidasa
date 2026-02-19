@@ -31,6 +31,28 @@ import { CompositeNewsHook } from './composite-news.js';
 // import { SerpApiArticlesHook } from './serpapi-articles.js';
 
 /**
+ * Safely construct and register a hook. If the constructor throws,
+ * log the failure and continue — never crash the boot process.
+ */
+function safeRegister(
+    registry: HookRegistry,
+    failures: string[],
+    name: string,
+    factory: () => import('@kalidasa/types').EnrichmentHook,
+    impact?: string,
+): void {
+    try {
+        registry.register(factory());
+    } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error);
+        failures.push(`${name}: ${msg}`);
+        console.error(`🚨 [HOOK REGISTRY] ${name} FAILED TO INITIALIZE`);
+        console.error(`    Reason: ${msg}`);
+        if (impact) console.error(`    Impact: ${impact}`);
+    }
+}
+
+/**
  * Create a HookRegistry with all hooks registered.
  * This is the main entry point for setting up enrichment.
  */
@@ -39,24 +61,20 @@ export function createHookRegistry(): HookRegistry {
     const failures: string[] = [];
 
     // Places
-    registry.register(new GooglePlacesHook());
+    safeRegister(registry, failures, 'GooglePlaces', () => new GooglePlacesHook(),
+        'Places domain enrichment unavailable.');
 
     // Movies & TV
-    registry.register(new TMDBHook());
-    registry.register(new OMDbHook());
+    safeRegister(registry, failures, 'TMDB', () => new TMDBHook(),
+        'Movies domain enrichment unavailable.');
+    safeRegister(registry, failures, 'OMDb', () => new OMDbHook(),
+        'Supplementary movie data (Rotten Tomatoes) unavailable.');
 
-    // Music — AppleMusicHook throws on missing/invalid token
-    try {
-        registry.register(new AppleMusicHook());
-    } catch (error) {
-        const msg = error instanceof Error ? error.message : String(error);
-        failures.push(`APPLE_MUSIC: ${msg}`);
-        console.error('🚨🚨🚨 [HOOK REGISTRY] APPLE MUSIC HOOK FAILED TO INITIALIZE 🚨🚨🚨');
-        console.error(`    Reason: ${msg}`);
-        console.error('    Impact: ALL music enrichment will fall back to MusicBrainz only.');
-        console.error('    Fix: Regenerate APPLE_MUSIC_TOKEN (JWT expires every 6 months).');
-    }
-    registry.register(new MusicBrainzHook());
+    // Music
+    safeRegister(registry, failures, 'AppleMusic', () => new AppleMusicHook(),
+        'Music enrichment will fall back to MusicBrainz only. Fix: regenerate APPLE_MUSIC_TOKEN (JWT expires every 6 months).');
+    safeRegister(registry, failures, 'MusicBrainz', () => new MusicBrainzHook(),
+        'MusicBrainz fallback unavailable.');
 
     // Events — now handled by search-first pipeline in cao-generator
     // (Ticketmaster + LLM/Wikipedia + Gemini grounded search → LLM ranking)
@@ -67,7 +85,8 @@ export function createHookRegistry(): HookRegistry {
     // registry.register(new VimeoHook());
 
     // Books (composite: OpenLibrary + Google Books + Wikipedia)
-    registry.register(new CompositeBookHook());
+    safeRegister(registry, failures, 'CompositeBooks', () => new CompositeBookHook(),
+        'Books domain enrichment unavailable.');
 
     // Articles — DISABLED, domain not ready yet
     // registry.register(new ExaHook());
@@ -75,10 +94,12 @@ export function createHookRegistry(): HookRegistry {
     // registry.register(new CompositeArticlesHook());
 
     // News (composite: Exa + NewsAPI with source tiering)
-    registry.register(new CompositeNewsHook());
+    safeRegister(registry, failures, 'CompositeNews', () => new CompositeNewsHook(),
+        'News domain enrichment unavailable.');
 
     // Trusted Voices
-    registry.register(new WikipediaHook());
+    safeRegister(registry, failures, 'Wikipedia', () => new WikipediaHook(),
+        'Wikipedia enrichment for all domains unavailable.');
 
     // ── Startup health summary ──
     if (failures.length > 0) {
