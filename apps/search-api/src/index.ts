@@ -45,6 +45,7 @@ app.use('/api', searchRouter);
 // Domain circuit breaker failures → HTTP 200 + disabledDomains.
 // Enhancement failures → HTTP 200 with degraded info.
 app.get('/health', (_req, res) => {
+  console.log('[/health] Handler entered — v2 rich response');
   const { hooks, externals, checkedAt, hasCriticalFailure } = sharedHealthMonitor.getLastResults();
 
   const uptimeMs = Date.now() - bootTime;
