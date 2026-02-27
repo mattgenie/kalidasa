@@ -35,6 +35,9 @@ export interface DomainDefinition {
     /** Keywords for domain detection (optional) */
     detectionKeywords?: string[];
 
+    /** Short description clarifying what this domain covers (rendered in domain hints) */
+    description?: string;
+
     /** Domain-specific prompt hints (optional) */
     promptHints?: string;
 }
